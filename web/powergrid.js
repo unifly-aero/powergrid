@@ -1116,7 +1116,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 var record = this.dataSource.getRecordById(rowId),
                     column = this.getColumnForKey(key);
                 cell.empty().append(this.renderCellContent(record, column));
-                this.afterCellRendered(record, column, cell);
+                this.afterCellRendered(record, column, cell[0]);
             }
         },
 

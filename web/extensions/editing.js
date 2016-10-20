@@ -21,20 +21,22 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     
                     $super.init();
 
-                    this.container.on("click", ".pg-cell.pg-editable", function(event) {
-                        var targetCell = event.target;
-                        while(targetCell && !$(targetCell).is('.pg-cell')) {
-                            targetCell = targetCell.parentNode;
-                        }
-                        
-                        var key = $(targetCell).attr('data-column-key');
-                        var rowId = $(targetCell).parents(".pg-row:eq(0)").data('row-id');
-                        var rowIdx = $(targetCell).parents(".pg-row:eq(0)").data('row-idx');
-                        var record = grid.dataSource.getRecordById(rowId);
-                        
-                        grid.editing.startEdit(targetCell, key, record, rowIdx);
-                    });
-                    
+                    if(pluginOptions.editOnClick !== false) {
+                        this.container.on("click", ".pg-cell.pg-editable:not(.pg-editing)", function (event) {
+                            var targetCell = event.target;
+                            while(targetCell && !$(targetCell).is('.pg-cell')) {
+                                targetCell = targetCell.parentNode;
+                            }
+
+                            var key = $(targetCell).attr('data-column-key');
+                            var rowId = $(targetCell).parents(".pg-row:eq(0)").data('row-id');
+                            var rowIdx = $(targetCell).parents(".pg-row:eq(0)").data('row-idx');
+                            var record = grid.dataSource.getRecordById(rowId);
+
+                            grid.editing.startEdit(targetCell, key, record, rowIdx);
+                        });
+                    }
+
                     $(this.dataSource).on('editabilitychanged', function(event, attr) {
                         grid.editing.updateEditability(attr.values);
                     });
@@ -149,7 +151,9 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     createEditor: function(record, column, value) {
                         var editor;
                         if (pluginOptions.editors && pluginOptions.editors[column.type]) {
-                            editor = pluginOptions.editors[column.type](record, column, value);
+                            editor = $(pluginOptions.editors[column.type](record, column, value));
+                        } else if(column.editor) {
+                            editor = $(column.editor(record, column, value));
                         } else {
                             editor = $("<input>").attr("type", column.type).val(value);
                         }

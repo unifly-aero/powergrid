@@ -4,6 +4,8 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
     
     return function(grid, pluginOptions) {
         override(grid, function($super) {
+            var editedRowIndexes = [];
+
             return {
                 renderCell: function(record, column, rowIndex, columnIndex) {
                     var cell = $super.renderCell.apply(this, arguments);
@@ -16,6 +18,19 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     return cell;
                 },
                 
+                rowHeight: function(start, end) {
+                    if(pluginOptions.additionalRowHeight !== undefined) {
+                        if(end !== undefined) {
+                            var editedRowCountInWindow = Object.keys(editedRowIndexes).filter(i => start <= parseInt(i) && parseInt(i) < end).length;
+                            return $super.rowHeight(start, end) + editedRowCountInWindow * pluginOptions.additionalRowHeight;
+                        } else {
+                            return $super.rowHeight(start) + (editedRowIndexes[start] ? pluginOptions.additionalRowHeight : 0);
+                        }
+                    } else {
+                        return $super.rowHeight(start, end);
+                    }
+                },
+
                 init: function() {
                     var grid = this;
                     
@@ -34,6 +49,16 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             var record = grid.dataSource.getRecordById(rowId);
 
                             grid.editing.startEdit(targetCell, key, record, rowIdx);
+                        });
+                    }
+
+                    if(pluginOptions.mode == 'row') {
+                        this.container.on("click", "[role='pg-edit-row']", function(event) {
+                            var rowId = $(event.target).parents(".pg-row:eq(0)").data('row-id');
+                            var rowIdx = $(event.target).parents(".pg-row:eq(0)").data('row-idx');
+                            var record = grid.dataSource.getRecordById(rowId);
+
+                            grid.editing.startRowEdit(record, rowIdx);
                         });
                     }
 
@@ -58,6 +83,23 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         return editable;
                     },
 
+                    startRowEdit: function(record, rowIdx) {
+                        var columns = grid.getVisibleColumns(),
+                            rowParts = grid.getRowPartsForIndex(rowIdx);
+
+                        for(var x=0,l=columns.length; x < l; x++) {
+                            var column = columns[x];
+                            if(this.isEditable(record, column)) {
+                                var cell = rowParts.find(".pg-cell[data-column-key='" + column.key + "']");
+                                this.startEdit(cell, column.key, record, rowIdx);
+                            }
+                        }
+
+                        if(pluginOptions.additionalRowHeight !== undefined) {
+                            grid.updateRowHeight(rowIdx);
+                        }
+                    },
+
                     startEdit: function(target, key, record, rowIdx) {
                         var column = grid.getColumnForKey(key);
                         var oldValue = utils.getValue(record, key);
@@ -68,7 +110,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         
                         if($(target).is('.pg-editing')) return;
                         
-                        if(!column.editable) return;
+                        if(!this.isEditable(record, column)) return;
                         
                         var opts = {
                             cell: target,
@@ -95,6 +137,8 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             });
                         });
                         $(target).addClass('pg-editing').empty().append(editor);
+
+                        editedRowIndexes[rowIdx] = true;
                     },
                     
                     commit: function(target, record, rowIdx, column, value, oldValue, move) {
@@ -146,6 +190,12 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     endEdit: function(target, record, rowIdx, column, value) {
                         $(target).removeClass('pg-editing');
                         grid.updateCellValue(record.id, column.key);
+
+                        delete editedRowIndexes[rowIdx];
+
+                        if(pluginOptions.additionalRowHeight !== undefined) {
+                            grid.updateRowHeight(rowIdx);
+                        }
                     },
 
                     createEditor: function(record, column, value) {
@@ -175,7 +225,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         editor.on("blur", function(event) {
                             if(pluginOptions.commitOnBlur !== false && hasChanged) {
                                 $(this).trigger('commit', [editor.val()]);
-                            } else if(pluginOptions.abortOnBlur === true || !hasChanged) {
+                            } else if(pluginOptions.abortOnBlur === true || (pluginOptions.commitOnBlur !== false && !hasChanged)) {
                                 $(this).trigger('abort');
                             }
                         }).on("change", function(event) {

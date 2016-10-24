@@ -1283,6 +1283,11 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return rows.map(function(r) {
                 return $(r).attr('data-row-id');
             });
+        },
+
+        updateRowHeight: function(rowIndex) {
+            var parts = this.getRowPartsForIndex(rowIndex);
+            parts.css({height: this.rowHeight(rowIndex) + "px"});
         }
     };
 

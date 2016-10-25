@@ -198,6 +198,14 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         }
                     },
 
+                    createDefaultEditor: function(record, column, value) {
+                        if(typeof pluginOptions.defaultEditor === 'function') {
+                            return pluginOptions.defaultEditor(record, column, value);
+                        } else {
+                            return $("<input>").attr("type", column.type).val(value)
+                        }
+                    },
+
                     createEditor: function(record, column, value) {
                         var editor;
                         if (pluginOptions.editors && pluginOptions.editors[column.type]) {
@@ -205,7 +213,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         } else if(column.editor) {
                             editor = $(column.editor(record, column, value));
                         } else {
-                            editor = $("<input>").attr("type", column.type).val(value);
+                            editor = this.createDefaultEditor(record, column, value);
                         }
                         var grid = this, hasChanged = false;
                         editor.on("keydown", function(event) {

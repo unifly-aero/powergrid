@@ -4,7 +4,8 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
     
     return function(grid, pluginOptions) {
         override(grid, function($super) {
-            var editedRowIndexes = [];
+            var editedCellMap = [];
+            var editedRowMap = {};
 
             return {
                 renderCell: function(record, column, rowIndex, columnIndex) {
@@ -21,13 +22,19 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                 rowHeight: function(start, end) {
                     if(pluginOptions.additionalRowHeight !== undefined) {
                         if(end !== undefined) {
-                            var editedRowCountInWindow = Object.keys(editedRowIndexes).filter(i => start <= parseInt(i) && parseInt(i) < end).length;
+                            var editedRowCountInWindow = Object.keys(editedCellMap).filter(i => start <= parseInt(i) && parseInt(i) < end).length;
                             return $super.rowHeight(start, end) + editedRowCountInWindow * pluginOptions.additionalRowHeight;
                         } else {
-                            return $super.rowHeight(start) + (editedRowIndexes[start] ? pluginOptions.additionalRowHeight : 0);
+                            return $super.rowHeight(start) + (editedCellMap[start] ? pluginOptions.additionalRowHeight : 0);
                         }
                     } else {
                         return $super.rowHeight(start, end);
+                    }
+                },
+
+                updateCellValue: function(rowId, key) {
+                    if(!grid.editing.isEditing(rowId, key)) {
+                        return $super.updateCellValue(rowId, key);
                     }
                 },
 
@@ -53,12 +60,23 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     }
 
                     if(pluginOptions.mode == 'row') {
-                        this.container.on("click", "[role='pg-edit-row']", function(event) {
+                        this.container.on("click", "[pg-role='edit-row'],[pg-role='commit-row']", function(event) {
                             var rowId = $(event.target).parents(".pg-row:eq(0)").data('row-id');
                             var rowIdx = $(event.target).parents(".pg-row:eq(0)").data('row-idx');
+                            var role = $(event.target).parents("[pg-role]").first().attr("pg-role");
                             var record = grid.dataSource.getRecordById(rowId);
 
-                            grid.editing.startRowEdit(record, rowIdx);
+                            switch(role) {
+                                case 'edit-row':
+                                    grid.editing.startRowEdit(record, rowIdx);
+                                    break;
+                                case 'commit-row':
+                                    grid.editing.commitRow(record, rowIdx);
+                                    break;
+                                case 'abort-row-edit':
+                                    grid.editing.abortRowEdit(record, rowIdx);
+                                    break;
+                            }
                         });
                     }
 
@@ -83,6 +101,10 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         return editable;
                     },
 
+                    isEditing: function(rowId, key) {
+                        return (editedCellMap[rowId] && (editedCellMap[rowId].indexOf(key) > -1)) === true;
+                    },
+
                     startRowEdit: function(record, rowIdx) {
                         var columns = grid.getVisibleColumns(),
                             rowParts = grid.getRowPartsForIndex(rowIdx);
@@ -95,9 +117,45 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             }
                         }
 
+                        rowParts.addClass("pg-editing");
+
                         if(pluginOptions.additionalRowHeight !== undefined) {
                             grid.updateRowHeight(rowIdx);
                         }
+
+                        grid.trigger('startrowedit', record.id);
+
+                        editedRowMap[record.id] = true;
+                    },
+
+                    endRowEdit: function(record, rowIdx) {
+                        var rowId = record.id;
+                        if(editedRowMap[rowId]) {
+                            delete editedRowMap[rowId];
+
+                            var rowParts = grid.getRowPartsForIndex(rowIdx);
+                            rowParts.removeClass("pg-editing");
+
+                            if(editedCellMap[rowId]) {
+                                var editedCells = editedCellMap[rowId];
+                                for(var x=0,l=editedCells.length;x<l;x++) {
+                                    var column = grid.getColumnForKey(editedCells[x]),
+                                        cell = rowParts.find(".pg-cell[data-column-key='" + column.key + "']");
+
+                                    this.endEdit(cell, record, rowIdx, column);
+                                }
+                            }
+
+                            grid.trigger('endrowedit', record.id);
+                        }
+                    },
+
+                    commitRow: function(record, rowIdx) {
+                        this.endRowEdit(record, rowIdx);
+                    },
+
+                    abortRowEdit: function(record, rowIdx) {
+                        this.endRowEdit(record, rowIdx);
                     },
 
                     startEdit: function(target, key, record, rowIdx) {
@@ -105,13 +163,13 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         var oldValue = utils.getValue(record, key);
                         var editor = this.createEditor(record, column, oldValue);
                         var editing = this;
-                        
+
                         grid.scrollToCell(rowIdx, key);
-                        
+
                         if($(target).is('.pg-editing')) return;
-                        
+
                         if(!this.isEditable(record, column)) return;
-                        
+
                         var opts = {
                             cell: target,
                             key: key,
@@ -119,14 +177,14 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             rowIdx: rowIdx,
                             column: column
                         };
-                        
+
                         var beforeEditEvent = new $.Event('beforeedit', opts);
                         grid.trigger(beforeEditEvent);
                         
                         if(beforeEditEvent.isDefaultPrevented()) {
                             return;
                         }
-                        
+
                         $(editor).on('commit', function(event, value, move) {
                             utils.inAnimationFrame(function() {
                                 editing.commit(target, record, rowIdx, column, value, oldValue, move);
@@ -138,7 +196,9 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         });
                         $(target).addClass('pg-editing').empty().append(editor);
 
-                        editedRowIndexes[rowIdx] = true;
+                        editedCellMap[rowIdx] = (editedCellMap[rowIdx] || []).concat(key);
+
+                        grid.trigger('startedit', record.id, key);
                     },
                     
                     commit: function(target, record, rowIdx, column, value, oldValue, move) {
@@ -189,9 +249,13 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     
                     endEdit: function(target, record, rowIdx, column, value) {
                         $(target).removeClass('pg-editing');
-                        grid.updateCellValue(record.id, column.key);
 
-                        delete editedRowIndexes[rowIdx];
+                        editedCellMap[rowIdx] = editedCellMap[rowIdx].filter(function(k) { return k !== column.key });
+                        if(editedCellMap[rowIdx].length == 0) {
+                            delete editedCellMap[rowIdx];
+                        }
+
+                        grid.updateCellValue(record.id, column.key);
 
                         if(pluginOptions.additionalRowHeight !== undefined) {
                             grid.updateRowHeight(rowIdx);
@@ -199,53 +263,70 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
 
                     createDefaultEditor: function(record, column, value) {
-                        if(typeof pluginOptions.defaultEditor === 'function') {
-                            return pluginOptions.defaultEditor(record, column, value);
-                        } else {
-                            return $("<input>").attr("type", column.type).val(value)
-                        }
+                        return $("<input>").attr("type", column.type).val(value)
                     },
 
                     createEditor: function(record, column, value) {
                         var editor;
                         if (pluginOptions.editors && pluginOptions.editors[column.type]) {
-                            editor = $(pluginOptions.editors[column.type](record, column, value));
+                            editor = pluginOptions.editors[column.type](record, column, value);
                         } else if(column.editor) {
-                            editor = $(column.editor(record, column, value));
+                            editor = column.editor(record, column, value);
+                        } else if(typeof pluginOptions.defaultEditor === 'function') {
+                            editor = pluginOptions.defaultEditor(record, column, value);
                         } else {
                             editor = this.createDefaultEditor(record, column, value);
                         }
-                        var grid = this, hasChanged = false;
-                        editor.on("keydown", function(event) {
+
+                        if(editor instanceof Element || editor instanceof DocumentFragment || $.isArray(editor)) {
+                            editor = {
+                                editor: editor,
+                                value: function() {
+                                    return $(editor).val();
+                                }
+                            }
+                        }
+
+                        var hasChanged = false;
+                        $(editor.editor).on("keydown", function(event) {
                             switch(event.keyCode) {
                             case 13:
                                 event.preventDefault();
-                                $(this).trigger('commit', [editor.val(), event.shiftKey ? -1 : 1]); break;
+                                $(this).trigger('commit', [editor.value(), event.shiftKey ? -1 : 1]); break;
                             case 27:
                                 event.preventDefault();
                                 $(this).trigger('abort'); break;
                             case 9:
                                 event.preventDefault();
-                                $(this).trigger('commit', [editor.val(), event.shiftKey ? -2 : 2]); break;
+                                $(this).trigger('commit', [editor.value(), event.shiftKey ? -2 : 2]); break;
                             }
                         });
 
-                        editor.on("blur", function(event) {
+                        $(editor.editor).on("blur", function(event) {
                             if(pluginOptions.commitOnBlur !== false && hasChanged) {
-                                $(this).trigger('commit', [editor.val()]);
+                                $(this).trigger('commit', [editor.value()]);
                             } else if(pluginOptions.abortOnBlur === true || (pluginOptions.commitOnBlur !== false && !hasChanged)) {
                                 $(this).trigger('abort');
                             }
                         }).on("change", function(event) {
                             hasChanged = true;
+                            if(pluginOptions.liveUpdate === true) {
+                                try {
+                                    grid.dataSource.setValue(record.id, column.key, editor.value());
+                                } catch(e) {
+                                    console.error("Exception while committing value", record, column, editor.value(), e);
+                                }
+                            }
                         });
 
-                        if (editor[0].select) {
-                            setTimeout(editor[0].select.bind(editor[0]), 10);
-                        } else if (editor[0].focus) {
-                            setTimeout(editor[0].focus.bind(editor[0]), 10);
+                        var editorNode = $(editor.editor)[0];
+
+                        if (editorNode.select) {
+                            setTimeout(editorNode.select.bind(editor.editor), 10);
+                        } else if (editorNode.focus) {
+                            setTimeout(editorNode.focus.bind(editor.editor), 10);
                         }
-                        return editor;
+                        return editor.editor;
                     },
                     
                     updateEditability: function(cells) {

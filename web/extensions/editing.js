@@ -61,9 +61,13 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
 
                     if(pluginOptions.mode == 'row') {
                         this.container.on("click", "[pg-role='edit-row'],[pg-role='commit-row']", function(event) {
-                            var rowId = $(event.target).parents(".pg-row:eq(0)").data('row-id');
-                            var rowIdx = $(event.target).parents(".pg-row:eq(0)").data('row-idx');
-                            var role = $(event.target).parents("[pg-role]").first().attr("pg-role");
+                            var target = $(event.target);
+                            if(!target.is("[pg-role]")) {
+                                target = target.parents("[pg-role]").first();
+                            }
+                            var rowId = target.parents(".pg-row:eq(0)").data('row-id');
+                            var rowIdx = target.parents(".pg-row:eq(0)").data('row-idx');
+                            var role = target.first().attr("pg-role");
                             var record = grid.dataSource.getRecordById(rowId);
 
                             switch(role) {

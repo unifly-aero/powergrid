@@ -4,8 +4,9 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
     
     return function(grid, pluginOptions) {
         override(grid, function($super) {
-            var editedCellMap = [];
-            var editedRowMap = {};
+            var editedCellMapByRowId = {};
+            var editedCellMapByRowIdx = [];
+            var editedRowIdMap = {};
 
             return {
                 renderCell: function(record, column, rowIndex, columnIndex) {
@@ -22,10 +23,10 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                 rowHeight: function(start, end) {
                     if(pluginOptions.additionalRowHeight !== undefined) {
                         if(end !== undefined) {
-                            var editedRowCountInWindow = Object.keys(editedCellMap).filter(i => start <= parseInt(i) && parseInt(i) < end).length;
+                            var editedRowCountInWindow = Object.keys(editedCellMapByRowIdx).filter(i => start <= parseInt(i) && parseInt(i) < end).length;
                             return $super.rowHeight(start, end) + editedRowCountInWindow * pluginOptions.additionalRowHeight;
                         } else {
-                            return $super.rowHeight(start) + (editedCellMap[start] ? pluginOptions.additionalRowHeight : 0);
+                            return $super.rowHeight(start) + (editedCellMapByRowIdx[start] ? pluginOptions.additionalRowHeight : 0);
                         }
                     } else {
                         return $super.rowHeight(start, end);
@@ -106,7 +107,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
 
                     isEditing: function(rowId, key) {
-                        return (editedCellMap[rowId] && (editedCellMap[rowId].indexOf(key) > -1)) === true;
+                        return (editedCellMapByRowId[rowId] && (editedCellMapByRowId[rowId].indexOf(key) > -1)) === true;
                     },
 
                     startRowEdit: function(record, rowIdx) {
@@ -129,19 +130,19 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
 
                         grid.trigger('startrowedit', record.id);
 
-                        editedRowMap[record.id] = true;
+                        editedRowIdMap[record.id] = true;
                     },
 
                     endRowEdit: function(record, rowIdx) {
                         var rowId = record.id;
-                        if(editedRowMap[rowId]) {
-                            delete editedRowMap[rowId];
+                        if(editedRowIdMap[rowId]) {
+                            delete editedRowIdMap[rowId];
 
                             var rowParts = grid.getRowPartsForIndex(rowIdx);
                             rowParts.removeClass("pg-editing");
 
-                            if(editedCellMap[rowId]) {
-                                var editedCells = editedCellMap[rowId];
+                            if(editedCellMapByRowId[rowId]) {
+                                var editedCells = editedCellMapByRowId[rowId];
                                 for(var x=0,l=editedCells.length;x<l;x++) {
                                     var column = grid.getColumnForKey(editedCells[x]),
                                         cell = rowParts.find(".pg-cell[data-column-key='" + column.key + "']");
@@ -163,6 +164,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
 
                     startEdit: function(target, key, record, rowIdx) {
+                        var rowId = record.id;
                         var column = grid.getColumnForKey(key);
                         var oldValue = utils.getValue(record, key);
                         var editor = this.createEditor(record, column, oldValue);
@@ -200,7 +202,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         });
                         $(target).addClass('pg-editing').empty().append(editor);
 
-                        editedCellMap[rowIdx] = (editedCellMap[rowIdx] || []).concat(key);
+                        editedCellMapByRowId[rowId] = editedCellMapByRowIdx[rowIdx] = (editedCellMapByRowIdx[rowIdx] || []).concat(key);
 
                         grid.trigger('startedit', record.id, key);
                     },
@@ -252,11 +254,13 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
                     
                     endEdit: function(target, record, rowIdx, column, value) {
+                        var rowId = record.id;
                         $(target).removeClass('pg-editing');
 
-                        editedCellMap[rowIdx] = editedCellMap[rowIdx].filter(function(k) { return k !== column.key });
-                        if(editedCellMap[rowIdx].length == 0) {
-                            delete editedCellMap[rowIdx];
+                        editedCellMapByRowId[rowId] = editedCellMapByRowIdx[rowIdx] = editedCellMapByRowIdx[rowIdx].filter(function(k) { return k !== column.key });
+                        if(editedCellMapByRowIdx[rowIdx].length == 0) {
+                            delete editedCellMapByRowIdx[rowIdx];
+                            delete editedCellMapByRowId[rowId]
                         }
 
                         grid.updateCellValue(record.id, column.key);

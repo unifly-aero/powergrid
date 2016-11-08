@@ -1280,9 +1280,9 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         },
 
         getIdsFromRows: function(rows) {
-            return rows.map(function(r) {
+            return rows.map(function(i, r) {
                 return $(r).attr('data-row-id');
-            });
+            }).toArray();
         },
 
         updateRowHeight: function(rowIndex) {

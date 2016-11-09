@@ -291,12 +291,15 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                                 editor: editor,
                                 value: function() {
                                     return $(editor).val();
+                                },
+                                on: function(eventName, handler) {
+                                    $(editor).on(eventName, handler);
                                 }
                             }
                         }
 
                         var hasChanged = false;
-                        $(editor.editor).on("keydown", function(event) {
+                        editor.on("keydown", function(event) {
                             switch(event.keyCode) {
                             case 13:
                                 event.preventDefault();
@@ -310,13 +313,15 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             }
                         });
 
-                        $(editor.editor).on("blur", function(event) {
+                        editor.on("blur", function(event) {
                             if(pluginOptions.commitOnBlur !== false && hasChanged) {
                                 $(this).trigger('commit', [editor.value()]);
                             } else if(pluginOptions.abortOnBlur === true || (pluginOptions.commitOnBlur !== false && !hasChanged)) {
                                 $(this).trigger('abort');
                             }
-                        }).on("change", function(event) {
+                        });
+
+                        editor.on("change", function(event) {
                             hasChanged = true;
                             if(pluginOptions.liveUpdate === true) {
                                 try {

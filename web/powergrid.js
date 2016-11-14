@@ -455,6 +455,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             this.footergroup && this.footergroup.all.empty();
             this.scrollinggroup.all.empty();
 
+            this.allRowsDisposed();
+
             this.setViewport({
                 begin: 0,
                 end: 0
@@ -775,6 +777,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 } else {
                     // no overlap, just clear the entire thing and rebuild
                     allParts.empty();
+                    this.allRowsDisposed();
                     this.renderRowGroupContents(Math.max(start, range.begin), Math.min(range.end, end), this.scrollinggroup, false);
                 }
 
@@ -1279,8 +1282,15 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             // hook for extensions to be notified when a cell's content is removed from the DOM.
         },
 
+        allRowsDisposed: function() {
+            // hook for extensions to be notified when the whole grid's contents are removed from the DOM.
+        },
+
         destroyRows: function(rows) {
             rows.remove();
+            if(typeof this.rowsDisposed === 'function') {
+                this.rowsDisposed(this.getIdsFromRows(rows));
+            }
         },
 
         getIdsFromRows: function(rows) {

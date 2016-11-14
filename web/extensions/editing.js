@@ -156,11 +156,17 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
 
                     commitRow: function(record, rowIdx) {
-                        this.endRowEdit(record, rowIdx);
+                        if(typeof grid.dataSource.commitRow === 'function') {
+                            Promise.resolve(grid.dataSource.commitRow(record)).then(function() {
+                                grid.editing.endRowEdit(record, rowIdx);
+                            })
+                        } else {
+                            throw "DataSource does not implement commitRow(record)";
+                        }
                     },
 
                     abortRowEdit: function(record, rowIdx) {
-                        this.endRowEdit(record, rowIdx);
+                        grid.editing.endRowEdit(record, rowIdx);
                     },
 
                     startEdit: function(target, key, record, rowIdx) {

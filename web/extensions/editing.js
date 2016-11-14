@@ -202,6 +202,8 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         });
                         $(target).addClass('pg-editing').empty().append(editor);
 
+                        grid.cellContentDisposed(record, column);
+
                         editedCellMapByRowId[rowId] = editedCellMapByRowIdx[rowIdx] = (editedCellMapByRowIdx[rowIdx] || []).concat(key);
 
                         grid.trigger('startedit', record.id, key);

@@ -1275,6 +1275,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return c.replace(/[^a-zA-Z0-9]/g, '_');
         },
 
+        cellContentDisposed: function(record, column) {
+            // hook for extensions to be notified when a cell's content is removed from the DOM.
+        },
+
         destroyRows: function(rows) {
             rows.remove();
         },

@@ -285,6 +285,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                         grid.updateCellValues(data.values);
                         grid.trigger('change');
                     }
+                    if(data.rows) {
+                        grid.updateRows(data.rows);
+                        grid.trigger('change');
+                    }
                     grid.trigger('datachanged', data);
                     grid.trigger('viewchanged');
                 });
@@ -1108,6 +1112,15 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        updateRows: function(list) {
+            let columns = this.getVisibleColumns();
+            for(var x=0,l=list.length;x<l;x++) {
+                for(var y=0, cl=columns.length; y<cl; y++) {
+                    this.updateCellValue(list[x].id, columns[y].key);
+                }
+            }
+        },
+
         afterCellRendered: function(record, column, cell) {
 
         },
@@ -1118,7 +1131,9 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             if(cell.length) {
                 var record = this.dataSource.getRecordById(rowId),
                     column = this.getColumnForKey(key);
-                cell.empty().append(this.renderCellContent(record, column));
+                cell.empty();
+                this.cellContentDisposed(record, column);
+                cell.append(this.renderCellContent(record, column));
                 this.afterCellRendered(record, column, cell[0]);
             }
         },

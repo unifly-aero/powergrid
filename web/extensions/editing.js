@@ -61,7 +61,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     }
 
                     if(pluginOptions.mode == 'row') {
-                        this.container.on("click", "[pg-role='edit-row'],[pg-role='commit-row']", function(event) {
+                        this.container.on("click", "[pg-role]", function(event) {
                             var target = $(event.target);
                             if(!target.is("[pg-role]")) {
                                 target = target.parents("[pg-role]").first();
@@ -78,7 +78,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                                 case 'commit-row':
                                     grid.editing.commitRow(record, rowIdx);
                                     break;
-                                case 'abort-row-edit':
+                                case 'rollback-row':
                                     grid.editing.abortRowEdit(record, rowIdx);
                                     break;
                             }
@@ -166,7 +166,13 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
 
                     abortRowEdit: function(record, rowIdx) {
-                        grid.editing.endRowEdit(record, rowIdx);
+                        if(typeof grid.dataSource.rollbackRow === 'function') {
+                            Promise.resolve(grid.dataSource.rollbackRow(record)).then(function() {
+                                grid.editing.endRowEdit(record, rowIdx);
+                            })
+                        } else {
+                            grid.editing.endRowEdit(record, rowIdx);
+                        }
                     },
 
                     startEdit: function(target, key, record, rowIdx) {
@@ -175,6 +181,10 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         var oldValue = utils.getValue(record, key);
                         var editor = this.createEditor(record, column, oldValue);
                         var editing = this;
+
+                        if(!(rowId in editedCellMapByRowId) && typeof grid.dataSource.startEdit == 'function') {
+                            grid.dataSource.startEdit(record);
+                        }
 
                         grid.scrollToCell(rowIdx, key);
 
@@ -321,7 +331,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             }
                         });
 
-                        editor.on("blur", function(event) {
+                        editor.on("blur", function() {
                             if(pluginOptions.commitOnBlur !== false && hasChanged) {
                                 $(this).trigger('commit', [editor.value()]);
                             } else if(pluginOptions.abortOnBlur === true || (pluginOptions.commitOnBlur !== false && !hasChanged)) {
@@ -329,7 +339,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             }
                         });
 
-                        editor.on("change", function(event) {
+                        editor.on("change", function() {
                             hasChanged = true;
                             if(pluginOptions.liveUpdate === true) {
                                 try {

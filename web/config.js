@@ -18,7 +18,8 @@
          qunit: "../bower_components/qunit/qunit/qunit",
          text: "../bower_components/requirejs-text/text",
          "requirejs-text": "../bower_components/requirejs-text/text",
-         w2ui: "../bower_components/w2ui/w2ui-1.4.3.min"
+         w2ui: "../bower_components/w2ui/w2ui-1.4.3.min",
+         filesaver: "../bower_components/file-saver/FileSaver.min"
       },
       packages: [
    

@@ -115,42 +115,48 @@ define(['../override', '../jquery', '../utils',
                                 currentFilterPane = null;
                             }
 
-                            fragment.on("click", ".pg-filter", function(event) {
-                                var $this = $(this),
-                                    key = $this.parents('.pg-columnheader').attr('data-column-key'),
-                                    column = grid.getColumnForKey(key);
+                            var element = fragment[0];
 
-                                if(currentFilterPane) {
-                                    return;
-                                }
+                            element.addEventListener("click", function(event) {
+                                if ($(event.target).is(".pg-filter")){
+                                    var $this = $(this),
+                                        key = $this.parents('.pg-columnheader').attr('data-column-key'),
+                                        column = grid.getColumnForKey(key);
 
-                                currentFilterPane = $("<div class='pg-filter-pane'>");
-
-                                currentFilterPane.html(filterPane);
-                                currentFilterPane.on("click", "[data-filter-method],[data-filter-type]", function(event) {
-                                    filterValue.method = $(this).attr("data-filter-method");
-                                    filterValue.type = $(this).attr("data-filter-type");
-                                    filter.trigger('change', filterValue);
-                                    closeFilterPane();
-                                });
-
-                                currentFilterPane.css("top", $this.offset().top + "px").css("left", $this.offset().left + "px");
-                                $("body").append(currentFilterPane);
-
-                                event.preventDefault();
-                                event.stopPropagation();
-
-                                $("body").one("click", function(event) {
-                                    if(currentFilterPane && $(this).parents(".pg-filter-pane").empty()) {
-                                        closeFilterPane();
+                                    if(currentFilterPane) {
+                                        return;
                                     }
-                                });
+
+                                    currentFilterPane = $("<div class='pg-filter-pane'>");
+
+                                    currentFilterPane.html(filterPane);
+                                    currentFilterPane.on("click", "[data-filter-method],[data-filter-type]", function(event) {
+                                        filterValue.method = $(this).attr("data-filter-method");
+                                        filterValue.type = $(this).attr("data-filter-type");
+                                        filter.trigger('change', filterValue);
+                                        closeFilterPane();
+                                    });
+
+                                    currentFilterPane.css("top", $this.offset().top + "px").css("left", $this.offset().left + "px");
+                                    $("body").append(currentFilterPane);
+
+                                    event.preventDefault();
+                                    event.stopPropagation();
+
+                                    $("body").one("click", function(event) {
+                                        if(currentFilterPane && $(this).parents(".pg-filter-pane").empty()) {
+                                            closeFilterPane();
+                                        }
+                                    });
+                                }
                             });
 
-                            fragment.on("keyup", ".pg-filter-input", function(event) {
-                                var value = this.value;
-                                filterValue.value = value;
-                                filter.trigger('change', filterValue);
+                            element.addEventListener("keyup", function(event) {
+                                if($(event.target).is(".pg-filter-input")) {
+                                    var value = event.target.value;
+                                    filterValue.value = value;
+                                    filter.trigger('change', filterValue);
+                                }
                             });
 
                             return filter;

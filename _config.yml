@@ -20,3 +20,5 @@ authors:
     display_name: Christoph Cantillon
     email: christoph.cantillon@pearlchain.net
     github: ccantill
+
+theme: jekyll-theme-tactile

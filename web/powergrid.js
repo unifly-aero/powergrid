@@ -1,6 +1,32 @@
 define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein, utils, Promise, require) {
     "use strict";
 
+    /**
+     * @typedef PowerGridOptions
+     * @type {object}
+     * @property {number} virtualScrollingExcess - The number of extra rows to render on each side (top/bottom) of the viewport. A higher value results in less flickering during scrolling, but also higher memory usage and longer rendering times.
+     * @property {number} frozenRowsTop - Number of rows at the top of the grid that should not scroll (i.e. header)
+     * @property {number} frozenRowsBottom - Number of rows at the bottom of the grid that should not scroll (i.e. footer)
+     * @property {number} frozenColumnsLeft - Number of columns on the left side of the grid that should not scroll
+     * @property {number} frozenColumnsRight - Number of columns on the right side of the grid that should not scroll
+     * @property {boolean} fullWidth - If true, the last column will stretch to fill the remaining space
+     * @property {number} rowHeight - Default height of each row in pixels. Can be overridden in extensions on a per row basis.
+     * @property {object} extensions - Object listing which extensions to load and their options
+     */
+
+    /**
+     * @typedef CellByRowIdAndColumnKey
+     * @property {string} row id
+     * @property {string} column key
+     */
+
+    /**
+     * Indicates a range of rows
+     * @typedef Range
+     * @property {number} start - The index of the first row in the range
+     * @property {number} end - The index of the first row that's no longer in the range
+     */
+
     var defaultOptions = {
         virtualScrollingExcess: 10, // defines the number of extra rows to render on each side (top/bottom) of the viewport. This reduces flickering when scrolling.
         frozenRowsTop: 0,
@@ -64,6 +90,13 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         if(a.begin <= b.begin && a.end >= b.end) return true;
     }
 
+    /**
+     * Creates a new PowerGrid.
+     * @module PowerGrid
+     * @param {HTMLElement} target - the DOM element that should contain the new grid
+     * @param {PowerGridOptions} options - the options to use in the grid
+     * @constructor
+     */
     function PowerGrid(target, options) {
         var grid = this;
         this.options = options;
@@ -90,11 +123,20 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         });
     }
 
-    PowerGrid.prototype = {
-        then: function(cb) {
-            return this.promise.then(cb);
+    PowerGrid.prototype = /** @lends PowerGrid */ {
+        /**
+         * Queues the callback to invoke when the grid is ready
+         * @param {function} callback - the callback to invoke when the grid is ready
+         */
+        then: function(callback) {
+            return this.promise.then(callback);
         },
 
+        /**
+         * Begins the initialisation of the grid and invokes the given callback when ready
+         * @private
+         * @param callback
+         */
         beginInit: function(callback) {
             var grid = this;
 
@@ -140,6 +182,14 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Recursively load extensions and their dependencies
+         * @private
+         * @param callback
+         * @param keys
+         * @param plugins
+         * @param pluginList
+         */
         loadExtensions: function(callback, keys, plugins, pluginList) {
             var grid = this;
             if(arguments.length < 4) {
@@ -200,6 +250,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             $(this.target).addClass('pg-loading');
         },
 
+        /**
+         * Initializes the grid elements and event listeners
+         * @private
+         */
         init: function init() {
             var grid = this;
             var baseSelector = this.baseSelector = "#" + this.target.attr('id'),
@@ -310,9 +364,6 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
             this.dataSource.on("datachanged", function(data) {
                 utils.inAnimationFrame(function() {
-                    if(data.data) {
-                        grid._dataChanged(data.data, data.oldData);
-                    }
                     if(data.values) {
                         grid.updateCellValues(data.values);
                         grid.trigger('change');
@@ -329,15 +380,28 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             this.initScrollEvents();
         },
 
+        /**
+         * Invokes the given callback immediately if the grid is ready, or queues the callback to be invoked
+         * as soon as the grid is ready.
+         * @deprecated see {@link PowerGrid.then}
+         * @param {function} callback - The callback to invoke.
+         */
         ready: function(callback) {
             if(this.isInited) callback.apply(this, [this]);
             else this.on('inited', callback.bind(this, this));
         },
 
+        /**
+         * Remove the grid from the DOM and clean up.
+         */
         destroy: function() {
             this.target.empty();
         },
 
+        /**
+         * Set up scroll event handler
+         * @private
+         */
         initScrollEvents: function initScrollEvents() {
             var self = this;
             this.target.on("wheel", function(evt) {
@@ -356,6 +420,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             this.initTouchScrollEvents();
         },
 
+        /**
+         * Set up touch event handler. This mimics inertial touch scrolling on touch devices.
+         * @private
+         */
         initTouchScrollEvents: function() {
             // sets up touch scrolling
             var self = this,
@@ -455,6 +523,13 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             });
         },
 
+        /**
+         * Creates a row group in the given container. There are three row groups in the grid: top, scrolling (center), and bottom.
+         * @private
+         * @param container
+         * @param adddummies
+         * @returns {{left: boolean|*|jQuery|HTMLElement, scrolling: *|jQuery|HTMLElement, right: boolean|*|jQuery|HTMLElement, all: *|jQuery|HTMLElement}}
+         */
         createRowGroup: function createRowGroup(container, adddummies) {
             var fixedPartLeft = this.options.frozenColumnsLeft > 0 && $("<div class='pg-container pg-fixed pg-left'>");
             var fixedPartRight = this.options.frozenColumnsRight > 0 && $("<div class='pg-container pg-fixed pg-right'>");
@@ -501,6 +576,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
         /**
          * Resets the grid contents.
+         * @private
          */
         renderData: function() {
             var self = this;
@@ -539,7 +615,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
         /**
          * Returns a row by index from the working set, or undefined if the row wasn't loaded yet.
-         * @param index
+         * @param {number} index
+         * @returns {object}
          */
         getRow: function(index) {
             return this.workingSet[index];
@@ -547,7 +624,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
         /**
          * Returns the index of the given row. Only works if it's in the working set (i.e. the row has been loaded in the grid).
-         * @param row
+         * @param {object} row
          * @returns {number}
          */
         indexOfRow: function(row) {
@@ -556,6 +633,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
         /**
          * Returns the current number of records known to be in the datasource, or throws an Exception if the amount isn't known.
+         * @returns {number}
          */
         getRecordCount: function() {
             if(this.recordCount === undefined) {
@@ -602,6 +680,11 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Renders the column headers to the given rowgroup
+         * @private
+         * @param rowgroup
+         */
         renderColumnHeaderContents: function(rowgroup) {
             var rowFixedPartLeft = rowgroup.left && $("<div class='pg-row pg-fixed'>"),
                 rowScrollingPart = rowgroup.scrolling && $("<div class='pg-row pg-scrolling'>"),
@@ -634,11 +717,25 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Templates for row groups
+         * @private
+         */
         rowGroupTemplates: {
             fixed: elementWithClasses("div", "pg-row pg-fixed"),
             scrolling: elementWithClasses("div", "pg-row pg-scrolling")
         },
 
+        /**
+         * Render contents (indicated by a start and end index) for a given rowgroup, and insert them before or after
+         * the given index.
+         * @private
+         * @param {number} start
+         * @param {number} end
+         * @param {object} rowgroup
+         * @param {boolean} prepend
+         * @param {index} atIndex
+         */
         renderRowGroupContents: function(start, end, rowgroup, prepend, atIndex) {
             var self = this;
 
@@ -719,6 +816,15 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             if(targetRight) targetRight[method](fragmentRight);
         },
 
+        /**
+         * Do not invoke directly. Renders the cells for the given record to the rows parts; each row
+         * can have three parts: the left fixed part, a middle scrolling part and a right fixed part.
+         * @param {object} record - The record to render
+         * @param {number} rowIdx - The index of the row
+         * @param {HTMLElement} rowFixedPartLeft
+         * @param {HTMLElement} rowScrollingPart
+         * @param {HTMLElement} rowFixedPartRight
+         */
         renderRowToParts: function(record, rowIdx, rowFixedPartLeft, rowScrollingPart, rowFixedPartRight) {
             var columns = this.getVisibleColumns();
             for(var y = 0; y < columns.length; y++) {
@@ -739,9 +845,21 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Invoked after a row is rendered to its parts.
+         * @param {object} record - The record that was rendered
+         * @param {number} rowIndex - The index of the row
+         * @param {HTMLElement[]} rowParts - array containing the row parts (left, middle, right)
+         */
         afterRenderRow: function(record, rowIndex, rowParts) {
         },
 
+        /**
+         * Remove the rows from start to end index.
+         * @param start
+         * @param end
+         * @private
+         */
         _removeRows: function(start, end) {
             this.recordCount -= end - start;
             this.workingSet.splice(start, end);
@@ -784,7 +902,11 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return range;
         },
 
-        scrollToCell: function(rowIdx, columnKey) {
+        /**
+         * Scroll the grid to the given row index
+         * @param {number} rowIdx
+         */
+        scrollToCell: function(rowIdx) {
             var self = this,
                 start = this.options.frozenRowsTop,
                 end = this.getRecordCount() - this.options.frozenRowsBottom,
@@ -807,6 +929,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             this.scrollTo(newScrollLeft, newScrollTop);
         },
 
+        /**
+         * Update the column headers and widths, and optionally data
+         * @param {boolean} renderData - true if the data should be rendered as well.
+         */
         updateColumns: function (renderData) {
             if(renderData !== false) {
                 this.renderData();
@@ -816,14 +942,23 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             this.queueAdjustColumnPositions(false);
         },
 
+        /**
+         * Hide the given columns
+         * @param {string[]} keys - array of column keys to hide
+         */
         hideColumns: function(keys) {
             this.saveSetting("hidden", keys);
             this._hideColumns(keys);
             this.updateColumns();
         },
 
+        /**
+         * Check if the given column is hidden
+         * @param {object} column - Column object
+         * @returns {boolean}
+         */
         isColumnHidden: function(column) {
-            return column.hidden;
+            return column.hidden || false
         },
 
         _hideColumns: function(keys) {
@@ -837,6 +972,12 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Increment the row index attributes on the row HTML elements.
+         * @param {number} start - the index of the first row that should be updated. Only this row and rows after this one will be updated
+         * @param {number} offset - value to increment the indexes by
+         * @private
+         */
         _incrementRowIndexes: function(start, offset) {
             this.container.find("> .pg-rowgroup > .pg-container > .pg-row").each(function(idx, row) {
                 var idx = parseInt(row.getAttribute('data-row-idx'));
@@ -846,6 +987,12 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             });
         },
 
+        /**
+         * Handler for the 'rowsadded' event.
+         * @param {number} start - The index of the first row that was added.
+         * @param {number} end - The index of the last row that was added.
+         * @private
+         */
         _addRows: function(start, end) {
             this.recordCount += end - start; // adjust the record count first so viewRange can take the new record count into account
             var range = this.viewRange(),
@@ -881,25 +1028,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
-        _applyDiff: function(diff) {
-            for(var x=0,l=diff.length;x<l;x++) {
-                var d = diff[x];
-                if(d.add) {
-                    this._addRows(d.add[0],d.add[1]);
-                } else if(d.remove) {
-                    this._removeRows(d.remove[0], d.remove[1]);
-                }
-            }
-
-            this.queueUpdateViewport();
-            this.queueAdjustHeights();
-        },
-
-        _dataChanged: function(data, oldData) {
-            var diff = this.diff(oldData, data);
-            this._applyDiff(diff);
-        },
-
+        /**
+         * Invoked when the viewport has changed.
+         * @param {boolean} renderExcess - if true, immediately render excess rows. If false, this is scheduled for a later time.
+         */
         updateViewport: function(renderExcess) {
             var self = this,
                 start = this.options.frozenRowsTop,
@@ -946,6 +1078,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Invoked when the viewport needs to change (e.g. when scrolling)
+         * @param {Range} range
+         */
         setViewport: function(range) {
             var self = this,
                 start = this.options.frozenRowsTop,
@@ -1029,6 +1165,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Update column widths.
+         * @param {boolean} temporary - pass true for performance when a series of changes are expected, but always finalize by passing false.
+         */
         adjustWidths: function adjustWidths(temporary) {
             // Adjusts the widths of onscreen parts. Triggered during init, or when changing column specifications
             var columns = this.options.columns;
@@ -1065,8 +1205,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Adjusts the heights of onscreen parts. Invoked during init, or when changing row heights and such.
+         */
         adjustHeights: function adjustHeights() {
-            // Adjusts the heights of onscreen parts. Triggered during init, or when changing row heights and such
             var columnHeaderHeight = this.headerContainerHeight();
             var headerHeight = this.rowHeight(0, this.options.frozenRowsTop);
             var footerHeight = this.rowHeight(this.getRecordCount() - this.options.frozenRowsBottom, this.getRecordCount());
@@ -1086,16 +1228,30 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Returns the height of the header container. In a default implementation, this is the same as {@link PowerGrid.headerHeight}.
+         * Extensions can however add other elements to the header container, and override this method.
+         * @returns {number} The height in pixels
+         */
         headerContainerHeight: function() {
             return this.headerHeight();
         },
 
+        /**
+         * Returns the height of the header contents
+         * @returns {number} The height in pixels.
+         */
         headerHeight: function headerHeight() {
             return Math.max.apply(undefined, this.target.find(".pg-columnheader span").map(function(i, e) {
                 return $(e).outerHeight();
             }));
         },
 
+        /**
+         * Adjust the grid when the column order has changed.
+         * @param {boolean} temporary - pass true for performance when a series of changes are expected, but always finalize by passing false.
+         * @returns {number[]} the positions of each column in pixels within their parts.
+         */
         adjustColumnPositions: function adjustColumnPositions(temporary) {
             // Repositions all columns horizontal positions
             var columns = this.options.columns;
@@ -1118,6 +1274,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return positions;
         },
 
+        /**
+         * Queues a render update and returns an object on which render queue flags can be set.
+         * @returns {object}
+         */
         queueRenderUpdate: function() {
             var self = this;
             if(this.renderQueue == undefined) {
@@ -1136,6 +1296,11 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return this.renderQueue;
         },
 
+        /**
+         * Process the render queue
+         * @private
+         * @param queue
+         */
         processRenderQueue: function(queue) {
             if(queue.syncScroll) {
                 this.syncScroll(true);
@@ -1154,6 +1319,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Queue an adjustment of column positions.
+         * @param temporary - see {@link PowerGrid.adjustColumnPositions}
+         */
         queueAdjustColumnPositions: function(temporary) {
             var q = this.queueRenderUpdate();
             if(!temporary) {
@@ -1164,28 +1333,54 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             q.adjustColumnPositions = true;
         },
 
+        /**
+         * Queue a height adjustment
+         */
         queueAdjustHeights: function() {
             this.queueRenderUpdate().adjustHeights = true;
         },
 
+        /**
+         * Queue a viewport adjustment
+         */
         queueUpdateViewport: function() {
             this.queueRenderUpdate().updateViewport = true;
         },
 
+        /**
+         * Invoke the given callback after the next render queue is finished
+         * @param f
+         */
         queueAfterRender: function(f) {
             this.queueRenderUpdate().callbacks.push(f);
         },
 
+        /**
+         * Queue a sync scroll
+         */
         queueSyncScroll: function() {
             this.queueRenderUpdate().syncScroll = true;
         },
 
+        /**
+         * Changes the given columns width
+         * @param {object} column - The column whose width needs to be changed
+         * @param {number} width - The width of the column in pixels
+         * @param {boolean} temporary - True for performance, false if the changes need to persist. Use 'true' when changing multiple columns or rapidly changing widths.
+         */
         setColumnWidth: function(column, width, temporary) {
             column.width = width;
             this.queueAdjustColumnPositions(temporary);
             this.queueAdjustHeights();
         },
 
+        /**
+         * Calculates the total width of the given range of columns, or a single column
+         * @param {number} start - Index of the first column
+         * @param {number|undefined} end - Index of the last column + 1, or undefined if only a single column should be measured
+         * @param {function|undefined} transform - A transformation that should be applied to each column's width before adding it
+         * @returns {number} The total column width in pixels
+         */
         columnWidth: function columnWidth(start, end, transform) {
             var self = this;
             function columnWidth(x) {
@@ -1205,6 +1400,12 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Calculates the total height of the given range of rows, or of a single row.
+         * @param {number} start - index of the first row to calculate the height for
+         * @param {number} end - index of the last row to calculate the height for + 1, or undefined if only a single row should be measure
+         * @returns {number} The total row height in pixels
+         */
         rowHeight: function rowHeight(start, end) {
             // if end argument is passed, calculates the accumulative heights of rows start until end (exclusive)
             if(end == undefined) {
@@ -1214,10 +1415,15 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Finds rows within the viewport defined by both coordinates in pixels
+         * @param {number} top - Viewport top coordinate in pixels
+         * @param {number} bottom - Viewport bottom coordinates in pixels
+         * @param {number|undefined} start - If defined, returned row positions are relative to this
+         * @param {number|undefined} end - If defined, stop counting at this index
+         * @returns {*}
+         */
         rowsInView: function(top, bottom, start, end) {
-            // Finds rows within the viewport defined by both coordinates in pixels
-            // If start is defined, row position is measured relative to start index.
-            // If end is defined, counting stops at end index
             var begin=-1, ct=0;
             for(var x=(start||0),l=end||this.getRecordCount();x<l;x++) {
                 ct += this.rowHeight(x);
@@ -1234,8 +1440,13 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Scroll by a specific offset
+         * @param {number} dX - number of pixels the grid contents should shift left
+         * @param {number} dY - number of pixels the grid contents should shift up
+         * @returns {boolean} false if there was no change
+         */
         scrollBy: function(dX, dY) {
-            // Scroll by a specific offset
             var self = this;
 
             if(
@@ -1265,21 +1476,32 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return true;
         },
 
+        /**
+         * Scroll to a specific location
+         * @param {number} x
+         * @param {number} y
+         */
         scrollTo: function(x, y) {
-            // Scroll to a specific location
             this.scroller[0].scrollTop = Math.max(0, y);
             this.scroller[0].scrollLeft = Math.max(0, x);
             this.afterscroll();
         },
 
+        /**
+         * Get the current scroll position
+         * @returns {{left: number, top: number}}
+         */
         getScrollPosition: function() {
-            // Get the current scroll coordinates
             return {
                 left: this.scroller[0].scrollLeft,
                 top: this.scroller[0].scrollTop
             };
         },
 
+        /**
+         * Get the size of the
+         * @returns {{width: number, height: number}}
+         */
         getScrollAreaSize: function() {
             return {
                 width: this.container.children('.pg-rowgroup.pg-scrolling').children('.pg-container.pg-scrolling')[0].offsetWidth,
@@ -1287,9 +1509,13 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             };
         },
 
+        /**
+         * @private
+         * @param source
+         * @param event
+         * @param lazy
+         */
         syncScroll: function syncScroll(source, event, lazy) {
-            // Sync the scrolling between the scrolling divs
-            // tested CSS class injection, but was slower than direct manipulation in this case
             if(arguments.length == 1 && typeof(arguments[0]) == 'boolean') {
                 lazy = arguments[0];
                 source = undefined;
@@ -1302,6 +1528,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Invoked after the grid was scrolled, to schedule a viewport update etc.
+         * @private
+         */
         afterscroll: function() {
             var self = this;
             if(!this.updateViewportTimer) {
@@ -1313,17 +1543,34 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             $(this).trigger('scroll');
         },
 
+        /**
+         * Generates the cell for a given column
+         * @param column
+         * @param columnIdx
+         * @returns {jQuery}
+         */
         renderHeaderCell: function renderHeaderCell(column, columnIdx) {
-            // Render the cell for the header
             return $("<div class='pg-columnheader'>").append($("<span>").text(column.title));
         },
 
+        /**
+         * Template for cells
+         * @private
+         */
         renderCellTemplate: (function() {
             var el = document.createElement("div");
             el.className = 'pg-cell';
             return el;
         })(),
 
+        /**
+         * Renders the cell for a given record and column
+         * @param record
+         * @param column
+         * @param rowIdx
+         * @param columnIdx
+         * @returns {Node}
+         */
         renderCell: function renderCell(record, column, rowIdx, columnIdx) {
             // Render the cell container
             var el = this.renderCellTemplate.cloneNode();
@@ -1334,16 +1581,30 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return el;
         },
 
+        /**
+         * Renders the contents for the cell of a given record and column
+         * @param record
+         * @param column
+         * @returns {*}
+         */
         renderCellContent: function(record, column) {
             return this.renderCellValue(record, column, this.getCellTextValue(utils.getValue(record, column.key), record, column));
         },
 
+        /**
+         * Updates the cell values
+         * @param {CellByRowIdAndColumnKey[]} list - List of row ids and column keys that should be updated
+         */
         updateCellValues: function(list) {
             for(var x=0,l=list.length;x<l;x++) {
                 this.updateCellValue(list[x].id, list[x].key);
             }
         },
 
+        /**
+         * Update the given rows completely
+         * @param {object[]} list - List of records to update
+         */
         updateRows: function(list) {
             var columns = this.getVisibleColumns();
             for(var x=0,l=list.length;x<l;x++) {
@@ -1353,10 +1614,21 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Invoked after a cell is rendered
+         * @param {object} record - Record for which the cell was rendered
+         * @param {object} column - Column for which the cell was rendered
+         * @param {Node} cell - The rendered cell
+         */
         afterCellRendered: function(record, column, cell) {
 
         },
 
+        /**
+         * Update the given cell
+         * @param {string} rowId - id of the row to update
+         * @param {string} key - key of the column to update
+         */
         updateCellValue: function(rowId, key) {
             var row = this.findRow(rowId);
             var cell = row.children(".pg-cell[data-column-key='" + key + "']");
@@ -1370,10 +1642,19 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Shorthand for dataSource.getRecordById(rowId)
+         * @param rowId
+         */
         getRecordById: function(rowId) {
             return this.dataSource.getRecordById(rowId);
         },
 
+        /**
+         * Finds the row element for the given row id
+         * @param {string} rowId
+         * @returns {jQuery}
+         */
         findRow: function(rowId) {
             return this.container.find("> .pg-rowgroup > .pg-container > .pg-row[data-row-id='" + rowId + "']");
         },
@@ -1383,6 +1664,13 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return el;
         })(),
 
+        /**
+         * Render the cell content for the given record, column and value
+         * @param {object} record
+         * @param {object} column
+         * @param {*} value - The value to render.
+         * @returns {Node}
+         */
         renderCellValue: function renderCellValue(record, column, value) {
             // Render the cell content
             var el = this.cellValueTemplate.cloneNode();
@@ -1392,10 +1680,20 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return el;
         },
 
+        /**
+         * Returns a text representation of the given value for the given record and column.
+         * @param {*} value
+         * @param {object} record
+         * @param {object} column
+         * @returns {*}
+         */
         getCellTextValue: function (value, record, column) {
             return value;
         },
 
+        /**
+         * @returns {object[]} - List of visible columns
+         */
         getVisibleColumns: function () {
             var self = this;
             return this.options.columns.filter(function(c) {
@@ -1403,18 +1701,37 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             });
         },
 
+        /**
+         * Returns the column object for the given column key
+         * @param {string} key
+         * @returns {object}
+         */
         getColumnForKey: function(key) {
             return this.getColumnForIndex(this.getColumnIndexForKey(key));
         },
 
+        /**
+         * Returns the column at the given index
+         * @param {number} index
+         * @returns {object}
+         */
         getColumnForIndex: function(index) {
             return this.options.columns[index];
         },
 
+        /**
+         * Returns the number of columns
+         * @returns {number}
+         */
         columnCount: function() {
             return this.options.columns.length;
         },
 
+        /**
+         * Returns the index for the column with the given key
+         * @param {string} key
+         * @returns {number}
+         */
         getColumnIndexForKey: function(key) {
             // Returns the column for the given key
             for(var x=0,l=this.options.columns.length; x<l; x++) {
@@ -1424,19 +1741,42 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Get the DOM node for the given cell
+         * @param {string} rowId - Row id
+         * @param {string} key - Column key
+         * @returns {Node}
+         */
         getCellFor: function(rowId, key) {
             return this.container.find(".pg-row[data-row-id='" + rowId + "'] > .pg-cell[data-column-key='" + key + "']");
         },
 
+        /**
+         * Trigger a jQuery event on the grid and its container element
+         * @param eventName
+         * @param data
+         */
         trigger: function(eventName, data) {
             $(this).trigger(eventName, data);
             $(this.target).trigger(eventName, data);
         },
 
+        /**
+         * Register a event handler
+         * @param eventName
+         * @param handler
+         * @returns {jQuery}
+         */
         on: function(eventName, handler) {
             return $(this).on(eventName, handler);
         },
 
+        /**
+         * Returns the row group for the given index
+         * @private
+         * @param rowIndex
+         * @returns {*}
+         */
         getRowGroupFor: function(rowIndex) {
             if(rowIndex < this.options.frozenRowsTop) {
                 return this.headergroup;
@@ -1447,74 +1787,28 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Returns all the parts for the given row index
+         * @param rowIndex
+         */
         getRowPartsForIndex: function(rowIndex) {
             return this.getRowGroupFor(rowIndex).all.children(".pg-row[data-row-idx='" + rowIndex + "']");
         },
 
-        diff: function(a, b) {
-            // Utility function. Generates a list of actions (add, remove) to take to get from list a to list b.
-            // Extremely useful when doing incremental DOM tree updates from one dataset to another.
-
-            function idMap(a) {
-                var m = {};
-                for(var x=0,l=a.length;x<l;x++) m[a[x].id] = a[x];
-                return m;
-            }
-
-            // special cases
-            if(!a.length && !b.length) return [];
-            if(!a.length) return [{add: [0, b.length]}];
-            if(!b.length) return [{remove: [0, a.length]}];
-
-            var diff = [], lastdiff;
-            var ia = idMap(a);
-            var c = [];
-            // first find rows to remove
-            for(var xa=a.length-1,xb=b.length-1;xa>=0;) {
-                while(xb >= 0 && !ia[b[xb].id]) xb--;
-                if(xb < 0) {
-                    diff.push({remove: [0, xa+1]});
-                    break;
-                } else {
-                    var sa = xa;
-                    while(xa >=0 && a[xa].id !== b[xb].id) xa--;
-                    if(xa >= 0) c.unshift(a[xa]);
-                    if(xa !== sa) diff.push({remove: [xa+1, sa+1]});
-                    xa--;xb--;
-                }
-            }
-
-            // find the ones to add now. since these operations will be done
-            // on a subset of a that only contains the items also in b, we
-            // use c as a base.
-            if(c.length == 0) {
-                // apparently there was no overlap between a and b, so all of b can be added
-                diff.push({add: [0, b.length]});
-            } else {
-                for(var xc=0, xb=0;xb < b.length && xc < c.length;) {
-                    while(xb < b.length && xc < c.length && c[xc].id === b[xb].id) {
-                        xc++; xb++;
-                    }
-
-                    if(xb >= b.length) break;
-
-                    var sb = xb;
-
-                    if(xc >= c.length) {
-                        xb = b.length;
-                    } else {
-                        while(c[xc].id !== b[xb].id) xb++;
-                    }
-                    if(sb !== xb) diff.push({add: [sb, xb]});
-                }
-            }
-
-            return diff;
-        },
+        /**
+         * Stores a setting for this grid
+         * @param {string} id
+         * @param {*} value
+         */
         saveSetting: function (id, value) {
             localStorage[this.options.settingsId + "_" + id] = JSON.stringify(value);
         },
 
+        /**
+         * Loads a setting for this grid
+         * @param {string} id
+         * @returns {any}
+         */
         loadSetting: function(id) {
             var s = localStorage[this.options.settingsId + "_" + id];
             if (s) {
@@ -1522,6 +1816,11 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Returns the CSS class that is used to represent the given identifier (used to transform column keys etc).
+         * @param c
+         * @returns {*}
+         */
         normalizeCssClass: function(c) {
             if (c.replace) {
                 return c.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1529,14 +1828,27 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             return c;
         },
 
+        /**
+         * Invoked when a cell's content is removed from the DOM
+         * @param {object} record
+         * @param {object} column
+         */
         cellContentDisposed: function(record, column) {
             // hook for extensions to be notified when a cell's content is removed from the DOM.
         },
 
+        /**
+         * Invoked when the grids contents is removed from the DOM
+         */
         allRowsDisposed: function() {
             // hook for extensions to be notified when the whole grid's contents are removed from the DOM.
         },
 
+        /**
+         * Remove the given rows from the DOM
+         * @private
+         * @param rows
+         */
         destroyRows: function(rows) {
             rows.remove();
             if(typeof this.rowsDisposed === 'function') {
@@ -1544,21 +1856,35 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             }
         },
 
+        /**
+         * Extract the row id's from the given row DOM nodes
+         * @param {Node[]} rows
+         */
         getIdsFromRows: function(rows) {
             return rows.map(function(i, r) {
                 return $(r).attr('data-row-id');
             }).toArray();
         },
 
+        /**
+         * Updates a single row's height
+         * @param {number} rowIndex
+         */
         updateRowHeight: function(rowIndex) {
             var parts = this.getRowPartsForIndex(rowIndex);
             parts.css({height: this.rowHeight(rowIndex) + "px"});
         },
 
+        /**
+         * @returns {number} the viewports width in pixels
+         */
         viewportWidth: function() {
             return this.container.width() - scrollBarSize.width;
         },
 
+        /**
+         * Invoked when the grid container has resized.
+         */
         resize: function() {
             // indicate that the grid container has resized. used in extensions.
         }

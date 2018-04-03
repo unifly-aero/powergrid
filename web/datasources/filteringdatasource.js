@@ -96,8 +96,7 @@ define(['../utils'], function (utils) {
         },
 
         updateView: function () {
-            var oldview = this.view,
-                sourceData = this.delegate.getData(),
+            var sourceData = this.delegate.getData(),
                 view = new Array(sourceData.length),
                 indexMap = new Array(sourceData.length),
                 c = 0;
@@ -112,17 +111,18 @@ define(['../utils'], function (utils) {
 
             this.view = view;
             this.indexMap = indexMap;
-            return !arrayEqual(oldview, view);
+            return view;
         },
 
         applyFilter: function (settings, filter) {
+            var oldView = this.view;
             this.filter = filter;
             this.settings = settings;
 
-            var hasChanged = this.updateView(filter);
+            var newView = this.updateView();
 
-            if(hasChanged) {
-                this.trigger('datachanged', {data: view, oldData: oldview});
+            if(!arrayEqual(oldView, newView)) {
+                utils.incrementalUpdate(this, oldView, newView);
             }
         },
 

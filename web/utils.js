@@ -80,10 +80,16 @@
     function Evented() {
         var handlers = {};
         this.on = function (eventName, handler) {
+            var self = this;
             if (eventName in handlers) {
                 handlers[eventName] = handlers[eventName].concat(handler);
             } else {
                 handlers[eventName] = [handler];
+            }
+            return {
+                cancel: function() {
+                    self.off(eventName, handler);
+                }
             }
         };
 
@@ -97,13 +103,26 @@
         };
 
         this.one = function(eventName, handler) {
+            var self = this;
             var selfDestructingHandler = (function() {
-                var idx = handlers[eventName].indexOf(selfDestructingHandler);
-                if(idx > -1) handlers[eventName].splice(idx, 1);
+                self.off(eventName, selfDestructingHandler);
                 handler.apply(this, arguments);
             });
 
             this.on(eventName, selfDestructingHandler);
+
+            return {
+                cancel: function() {
+                    self.off(eventName, selfDestructingHandler);
+                }
+            }
+        };
+
+        this.off = function(eventName, handler) {
+            var idx = handlers[eventName].indexOf(handler);
+            if(idx > -1) {
+                handlers[eventName].splice(idx, 1);
+            }
         };
 
         this.passthroughFrom = function (target) {

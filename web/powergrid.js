@@ -21,7 +21,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
      */
 
     /**
-     * Indicates a range of rows
+     * Indicates a range of rows. Indices are 0-based.
      * @typedef Range
      * @property {number} start - The index of the first row in the range
      * @property {number} end - The index of the first row that's no longer in the range
@@ -123,7 +123,11 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         });
     }
 
-    PowerGrid.prototype = /** @lends PowerGrid */ {
+    PowerGrid.prototype =
+        /**
+         * @lends PowerGrid.prototype
+         */
+    {
         /**
          * Queues the callback to invoke when the grid is ready
          * @param {function} callback - the callback to invoke when the grid is ready
@@ -383,7 +387,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         /**
          * Invokes the given callback immediately if the grid is ready, or queues the callback to be invoked
          * as soon as the grid is ready.
-         * @deprecated see {@link PowerGrid.then}
+         * @deprecated see {@link PowerGrid#then}
          * @param {function} callback - The callback to invoke.
          */
         ready: function(callback) {
@@ -1229,7 +1233,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         },
 
         /**
-         * Returns the height of the header container. In a default implementation, this is the same as {@link PowerGrid.headerHeight}.
+         * Returns the height of the header container. In a default implementation, this is the same as {@link PowerGrid#headerHeight}.
          * Extensions can however add other elements to the header container, and override this method.
          * @returns {number} The height in pixels
          */
@@ -1321,7 +1325,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
         /**
          * Queue an adjustment of column positions.
-         * @param temporary - see {@link PowerGrid.adjustColumnPositions}
+         * @param temporary - see {@link PowerGrid#adjustColumnPositions}
          */
         queueAdjustColumnPositions: function(temporary) {
             var q = this.queueRenderUpdate();
@@ -1643,7 +1647,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         },
 
         /**
-         * Shorthand for dataSource.getRecordById(rowId)
+         * Shorthand for dataSource#getRecordById(rowId)
          * @param rowId
          */
         getRecordById: function(rowId) {

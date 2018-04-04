@@ -77,8 +77,25 @@
         }
     }
 
+    /**
+     * Allows event handlers to be registered
+     * @interface EventSource
+     */
+
+    /**
+     * An {@link EventSource} implementation.
+     * @class
+     * @implements {EventSource}
+     */
     function Evented() {
         var handlers = {};
+        /**
+         * Registers an event handler. Use the 'cancel' function in the returned object to remove the event handler.
+         * @function EventSource#on
+         * @param eventName
+         * @param handler
+         * @returns {{cancel: cancel}}
+         */
         this.on = function (eventName, handler) {
             var self = this;
             if (eventName in handlers) {
@@ -93,6 +110,11 @@
             }
         };
 
+        /**
+         * Fires an event
+         * @function Evented#trigger
+         * @param eventName
+         */
         this.trigger = function (eventName) {
             var self = this, args = Array.apply(null, arguments).slice(1);
             if (eventName in handlers) {
@@ -102,6 +124,14 @@
             }
         };
 
+        /**
+         * Registers a one-time event handler. The handler will only be invoked once, the next time the event is fired.
+         * Use the 'cancel' function in the returned object to remove the event handler.
+         * @function EventSource#one
+         * @param eventName
+         * @param handler
+         * @returns {{cancel: cancel}}
+         */
         this.one = function(eventName, handler) {
             var self = this;
             var selfDestructingHandler = (function() {
@@ -118,6 +148,12 @@
             }
         };
 
+        /**
+         * Removes an event handler.
+         * @function EventSource#off
+         * @param eventName
+         * @param handler
+         */
         this.off = function(eventName, handler) {
             var idx = handlers[eventName].indexOf(handler);
             if(idx > -1) {
@@ -125,6 +161,12 @@
             }
         };
 
+        /**
+         * Passes events through from another EventSource
+         * @function EventSource#passthroughFrom
+         * @param {EventSource} target - the other EventSource whose events should be passed through
+         * @param {...string} eventNames - the names of the events that should be passed through
+         */
         this.passthroughFrom = function (target) {
             var self = this;
             for (var x = 1; x < arguments.length; x++) {

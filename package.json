@@ -10,7 +10,7 @@
     "jsdoc": "^3.5.5"
   },
   "scripts": {
-    "generate-docs": "node node_modules/jsdoc/jsdoc.js web/powergrid.js -d 'docs'"
+    "generate-docs": "node node_modules/jsdoc/jsdoc.js web/*.js web/extensions/*.js web/datasources/*.js README.md -d 'docs'"
   },
   "jspm": {
     "directories": {

@@ -1,5 +1,12 @@
 define(['../utils'], function(utils) {
 
+    /**
+     * Takes a TreeSource and adapts it to represent the flat list of expanded nodes. This is a specialised implementation
+     * that is optimised for use with synchronous TreeSources; i.e. it assumes the tree source does not return Promises.
+     * @module SyncTreeGridDataSource
+     * @param {TreeSource} treesource
+     * @constructor
+     */
     function SyncTreeGridDataSource(treesource) {
         utils.Evented.apply(this);
 
@@ -18,7 +25,7 @@ define(['../utils'], function(utils) {
         utils.passthrough(this, treesource, ['hasSubView', 'getSummaryRow']);
     }
 
-    SyncTreeGridDataSource.prototype = {
+    SyncTreeGridDataSource.prototype = /** @lends SyncTreeGridDataSource.prototype */ {
         load: function() {
             this.nodesById = {};
             this.view = this.flattenTree(this.treesource.getRootNodes(), 0);

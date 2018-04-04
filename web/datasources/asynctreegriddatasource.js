@@ -1,8 +1,4 @@
 define(['../utils'], function (utils) {
-    /**
-     * Takes a TreeSource and adapts it to represent the flat list of expanded nodes.
-     */
-
     /*
      * Shadow node object description:
      * {
@@ -13,6 +9,15 @@ define(['../utils'], function (utils) {
      *   parentId: id of the parent row. undefined for root rows
      */
 
+    /**
+     * Takes a TreeSource and adapts it to represent the flat list of expanded nodes. This is a generic implementation
+     * that can work with both asynchronous and synchronous TreeSources. See {@link SyncTreeGridDataSource} for an
+     * implementation that is optimised to work with synchronous TreeSources.
+     * @module AsyncTreeGridDataSource
+     * @param {TreeSource} treesource
+     * @param options
+     * @constructor
+     */
     function AsyncTreeGridDataSource(treesource, options) {
         utils.Evented.apply(this);
 
@@ -33,7 +38,11 @@ define(['../utils'], function (utils) {
 
     }
 
-    AsyncTreeGridDataSource.prototype = {
+    AsyncTreeGridDataSource.prototype =
+        /**
+         * @lends AsyncTreeGridDataSource.prototype
+         */
+        {
         initShadowTree: function () {
             if(!this.treesource.isReady()) {
                 throw new Error("Treesource is not ready yet.");

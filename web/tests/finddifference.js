@@ -1,7 +1,7 @@
 "use strict";
 define(
-    ['QUnit', '../powergrid'],
-    function(QUnit, PowerGrid) {
+    ['QUnit', '../powergrid', '../utils'],
+    function(QUnit, PowerGrid, utils) {
         return function() {
             QUnit.test("Test find difference", function(assert) {
                 function _(i) { return { id: i }; }
@@ -10,13 +10,13 @@ define(
                     var n = new Array(dataset1.length);
                     for(var x=0;x<dataset1.length;x++) n[x] = dataset1[x];
 
-                    var diff = PowerGrid.prototype.diff(dataset1, dataset2);
+                    var diff = utils.diff(dataset1, dataset2);
 
                     diff.forEach(function(c) {
                         if(c.add) {
-                            n.splice.apply(n, [c.add[0], 0].concat(dataset2.slice(c.add[0], c.add[1])));
+                            n.splice.apply(n, [c.add.start, 0].concat(dataset2.slice(c.add.start, c.add.end)));
                         } else if (c.remove) {
-                            n.splice(c.remove[0],c.remove[1]-c.remove[0]);
+                            n.splice(c.remove.start,c.remove.end-c.remove.start);
                         }
                     });
 

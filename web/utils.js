@@ -77,16 +77,44 @@
         }
     }
 
+    /**
+     * Allows event handlers to be registered
+     * @interface EventSource
+     */
+
+    /**
+     * An {@link EventSource} implementation.
+     * @class
+     * @implements {EventSource}
+     */
     function Evented() {
         var handlers = {};
+        /**
+         * Registers an event handler. Use the 'cancel' function in the returned object to remove the event handler.
+         * @function EventSource#on
+         * @param eventName
+         * @param handler
+         * @returns {{cancel: cancel}}
+         */
         this.on = function (eventName, handler) {
+            var self = this;
             if (eventName in handlers) {
                 handlers[eventName] = handlers[eventName].concat(handler);
             } else {
                 handlers[eventName] = [handler];
             }
+            return {
+                cancel: function() {
+                    self.off(eventName, handler);
+                }
+            }
         };
 
+        /**
+         * Fires an event
+         * @function Evented#trigger
+         * @param eventName
+         */
         this.trigger = function (eventName) {
             var self = this, args = Array.apply(null, arguments).slice(1);
             if (eventName in handlers) {
@@ -96,16 +124,49 @@
             }
         };
 
+        /**
+         * Registers a one-time event handler. The handler will only be invoked once, the next time the event is fired.
+         * Use the 'cancel' function in the returned object to remove the event handler.
+         * @function EventSource#one
+         * @param eventName
+         * @param handler
+         * @returns {{cancel: cancel}}
+         */
         this.one = function(eventName, handler) {
+            var self = this;
             var selfDestructingHandler = (function() {
-                var idx = handlers[eventName].indexOf(selfDestructingHandler);
-                if(idx > -1) handlers[eventName].splice(idx, 1);
+                self.off(eventName, selfDestructingHandler);
                 handler.apply(this, arguments);
             });
 
             this.on(eventName, selfDestructingHandler);
+
+            return {
+                cancel: function() {
+                    self.off(eventName, selfDestructingHandler);
+                }
+            }
         };
 
+        /**
+         * Removes an event handler.
+         * @function EventSource#off
+         * @param eventName
+         * @param handler
+         */
+        this.off = function(eventName, handler) {
+            var idx = handlers[eventName].indexOf(handler);
+            if(idx > -1) {
+                handlers[eventName].splice(idx, 1);
+            }
+        };
+
+        /**
+         * Passes events through from another EventSource
+         * @function EventSource#passthroughFrom
+         * @param {EventSource} target - the other EventSource whose events should be passed through
+         * @param {...string} eventNames - the names of the events that should be passed through
+         */
         this.passthroughFrom = function (target) {
             var self = this;
             for (var x = 1; x < arguments.length; x++) {
@@ -149,6 +210,78 @@
         this.cancel = function() {
             cancelled = true;
         };
+    }
+
+    function calculateDifference(a, b) {
+        // Utility function. Generates a list of actions (add, remove) to take to get from list a to list b.
+        // Extremely useful when doing incremental DOM tree updates from one dataset to another.
+
+        function idMap(a) {
+            var m = {};
+            for(var x=0,l=a.length;x<l;x++) m[a[x].id] = a[x];
+            return m;
+        }
+
+        // special cases
+        if(!a.length && !b.length) return [];
+        if(!a.length) return [{add: {start: 0, end: b.length}}];
+        if(!b.length) return [{remove: {start: 0, end: a.length}}];
+
+        var diff = [], lastdiff;
+        var ia = idMap(a);
+        var c = [];
+        // first find rows to remove
+        for(var xa=a.length-1,xb=b.length-1;xa>=0;) {
+            while(xb >= 0 && !ia[b[xb].id]) xb--;
+            if(xb < 0) {
+                diff.push({remove: {start: 0, end: xa+1}});
+                break;
+            } else {
+                var sa = xa;
+                while(xa >=0 && a[xa].id !== b[xb].id) xa--;
+                if(xa >= 0) c.unshift(a[xa]);
+                if(xa !== sa) diff.push({remove: {start: xa+1, end: sa+1}});
+                xa--;xb--;
+            }
+        }
+
+        // find the ones to add now. since these operations will be done
+        // on a subset of a that only contains the items also in b, we
+        // use c as a base.
+        if(c.length == 0) {
+            // apparently there was no overlap between a and b, so all of b can be added
+            diff.push({add: {start: 0, end: b.length}});
+        } else {
+            for(var xc=0, xb=0;xb < b.length && xc < c.length;) {
+                while(xb < b.length && xc < c.length && c[xc].id === b[xb].id) {
+                    xc++; xb++;
+                }
+
+                if(xb >= b.length) break;
+
+                var sb = xb;
+
+                if(xc >= c.length) {
+                    xb = b.length;
+                } else {
+                    while(c[xc].id !== b[xb].id) xb++;
+                }
+                if(sb !== xb) diff.push({add: {start: sb, end: xb}});
+            }
+        }
+        return diff;
+    }
+
+    function incrementalUpdate(dataSource, oldData, newData) {
+        var diff = calculateDifference(oldData, newData);
+        for(var x=0,l=diff.length;x<l;x++) {
+            var d = diff[x];
+            if(d.add) {
+                dataSource.trigger('rowsadded', d.add);
+            } else if(d.remove) {
+                dataSource.trigger('rowsremoved', d.remove);
+            }
+        }
     }
 
     define(['./jquery'], function($) {
@@ -243,7 +376,11 @@
                 } else {
                     return func(input);
                 }
-            }
+            },
+
+            diff: calculateDifference,
+
+            incrementalUpdate: incrementalUpdate
         }
     });
 })(define);

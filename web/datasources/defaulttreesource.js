@@ -4,6 +4,7 @@ define(['../utils'], function(utils) {
      * - each child row has a 'parent' property that references the id of its parent
      * - each row has a 'children' property containing an array of its children
      *
+     * @module DefaultTreeSource
      * @param delegate
      * @constructor
      */

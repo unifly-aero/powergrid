@@ -46,6 +46,16 @@ define(["../jquery", "../utils"], function($, utils) {
             }
         },
 
+        insert: function(index, rows) {
+            this.data.splice.apply(this.data, [index, 0].concat(rows));
+            this.trigger('rowsadded', { start: index, end: index + rows.length });
+        },
+
+        remove: function(start, end) {
+            this.data.splice(start, (end === undefined ? 1 : end - start));
+            this.trigger('rowsremoved', {start: start, end: end});
+        },
+
         getData: function(start, end) {
             this.assertReady();
             if(start === undefined && end === undefined) return this.data;

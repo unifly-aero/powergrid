@@ -219,18 +219,19 @@ define(
                 var arrayDataSource = new ArrayDataSource([]);
                 var filteringDataSource = new FilteringDataSource(arrayDataSource);
 
-                const row1 = {id: 0,name: 'AABB'};
-                const row2 = {id: 1,name: 'BBBB'};
-                const row3 = {id: 3,name: 'AAAA'};
-                const row4 = {id: 4,name: 'BBAA'};
-                const row5 = {id: 5,name: 'BBCC'};
-                const row6 = {id: 6,name: 'CCCC'};
-                const row7 = {id: 7,name: 'DDBB'};
-                const row8 = {id: 8,name: 'DDDD'};
+                var row1 = {id: 0,name: 'AABB'};
+                var row2 = {id: 1,name: 'BBBB'};
+                var row3 = {id: 3,name: 'AAAA'};
+                var row4 = {id: 4,name: 'BBAA'};
+                var row5 = {id: 5,name: 'BBCC'};
+                var row6 = {id: 6,name: 'CCCC'};
+                var row7 = {id: 7,name: 'DDBB'};
+                var row8 = {id: 8,name: 'DDDD'};
 
                 function expectEvent(event, description, after) {
                     return new Promise(function(resolve, reject) {
-                        let timeout = setTimeout(function() {
+                        var timeout = setTimeout(function() {
+                            assert.ok(false, description);
                             reject(description);
                         }, 100);
                         filteringDataSource.one(event, function(event) {
@@ -255,6 +256,7 @@ define(
                         eventSubscriptions = events.map(function(eventName) {
                             return filteringDataSource.on(eventName, function(evt) {
                                 clearTimeout(timeout);
+                                assert.ok(false, description);
                                 reject("Unexpected event " + eventName + " in " + description);
                             });
                         });

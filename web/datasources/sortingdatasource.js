@@ -19,6 +19,14 @@ define(['../utils'], function(utils) {
             self.trigger("datachanged", data);
         });
 
+        delegate.on("rowsadded", function(data) {
+            self.handleDataChanges();
+        });
+
+        delegate.on("rowsremoved", function(data) {
+            self.handleDataChanges();
+        });
+
         if(delegate.isReady()) {
             this.reload();
         }
@@ -36,9 +44,9 @@ define(['../utils'], function(utils) {
         reload: function() {
             this.delegate.assertReady();
             if(this.comparator) {
-                this.view = this.delegate.getData().sort(this.comparator);
+                this.view = this.delegate.getData().concat([]).sort(this.comparator);
             } else {
-                this.view = this.delegate.getData()
+                this.view = this.delegate.getData().concat([]);
             }
         },
 
@@ -79,6 +87,12 @@ define(['../utils'], function(utils) {
             this.comparator = comparator;
             this.reload();
             this.trigger("dataloaded");
+        },
+
+        handleDataChanges: function() {
+            var oldView = this.view;
+            this.reload();
+            utils.incrementalUpdate(this, oldView, this.view);
         }
     };
 

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function(define) {
+    "use strict";
+
+    var animFrameQueue = [], inAnimFrame = false, animFrameRequested = false;
+
+    var pathRegex = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]/g;
+
+    function parsePath(key) {
+        var p = [];
+        if (key.replace) {
+            key.replace(pathRegex, function (a, b) {
+                if (b !== undefined) {
+                    p.push(parseInt(b));
+                } else {
+                    p.push(a);
+                }
+            });
+            return p;
+        }
+
+        return [key];
+    }
+
+    function getValue(object, key) {
+        var o = object;
+        for(var p=parsePath(key),x=0,l=p.length;x&lt;l;x++) {
+            if(o === undefined || o === null) {
+                return o;
+            }
+            o = o[p[x]];
+        }
+        return o;
+    }
+
+    function setValue(object, key, value) {
+        var o = object,
+            p=parsePath(key);
+        for(var x=0,l=p.length-1;x&lt;l;x++) {
+            o = o[p[x]];
+        }
+        o[p[x]] = value;
+    }
+
+    function createElement(tag, attributes, content) {
+        var element = document.createElement(tag);
+        if(typeof attributes == 'string' || Array.isArray(attributes)) {
+            content = attributes;
+            attributes = undefined;
+        }
+        if(attributes) {
+            for (var x in attributes) {
+                if (attributes.hasOwnProperty(x) &amp;&amp; attributes[x] !== false) {
+                    element.setAttribute(x, attributes[x]);
+                }
+            }
+        }
+        if(typeof content == 'string') {
+            element.textContent = content;
+        } else if(Array.isArray(content)) {
+            for(var x=0,l=content.length;x&lt;l;x++) {
+                element.appendChild(content[x]);
+            }
+        }
+        return element;
+    }
+
+    function normalizeOptions(options) {
+        if(Array.isArray(options)) {
+            return options;
+        } else {
+            return Object.keys(options).map(function(key) {
+                return {
+                    value: key,
+                    label: options[key]
+                };
+            });
+        }
+    }
+
+    /**
+     * Allows event handlers to be registered
+     * @interface EventSource
+     */
+
+    /**
+     * An {@link EventSource} implementation.
+     * @class
+     * @implements {EventSource}
+     */
+    function Evented() {
+        var handlers = {};
+        /**
+         * Registers an event handler. Use the 'cancel' function in the returned object to remove the event handler.
+         * @function EventSource#on
+         * @param eventName
+         * @param handler
+         * @returns {{cancel: cancel}}
+         */
+        this.on = function (eventName, handler) {
+            var self = this;
+            if (eventName in handlers) {
+                handlers[eventName] = handlers[eventName].concat(handler);
+            } else {
+                handlers[eventName] = [handler];
+            }
+            return {
+                cancel: function() {
+                    self.off(eventName, handler);
+                }
+            }
+        };
+
+        /**
+         * Fires an event
+         * @function Evented#trigger
+         * @param eventName
+         */
+        this.trigger = function (eventName) {
+            var self = this, args = Array.apply(null, arguments).slice(1);
+            if (eventName in handlers) {
+                handlers[eventName].forEach(function (handler) {
+                    handler.apply(self, args);
+                });
+            }
+        };
+
+        /**
+         * Registers a one-time event handler. The handler will only be invoked once, the next time the event is fired.
+         * Use the 'cancel' function in the returned object to remove the event handler.
+         * @function EventSource#one
+         * @param eventName
+         * @param handler
+         * @returns {{cancel: cancel}}
+         */
+        this.one = function(eventName, handler) {
+            var self = this;
+            var selfDestructingHandler = (function() {
+                self.off(eventName, selfDestructingHandler);
+                handler.apply(this, arguments);
+            });
+
+            this.on(eventName, selfDestructingHandler);
+
+            return {
+                cancel: function() {
+                    self.off(eventName, selfDestructingHandler);
+                }
+            }
+        };
+
+        /**
+         * Removes an event handler.
+         * @function EventSource#off
+         * @param eventName
+         * @param handler
+         */
+        this.off = function(eventName, handler) {
+            var idx = handlers[eventName].indexOf(handler);
+            if(idx > -1) {
+                handlers[eventName].splice(idx, 1);
+            }
+        };
+
+        /**
+         * Passes events through from another EventSource
+         * @function EventSource#passthroughFrom
+         * @param {EventSource} target - the other EventSource whose events should be passed through
+         * @param {...string} eventNames - the names of the events that should be passed through
+         */
+        this.passthroughFrom = function (target) {
+            var self = this;
+            for (var x = 1; x &lt; arguments.length; x++) {
+                (function (eventName) {
+                    target.on(eventName, function () {
+                        self.trigger.apply(self, [eventName].concat(arguments));
+                    });
+                })(arguments[x]);
+            }
+        };
+    }
+
+    function findRanges(indeces) {
+        var ranges = [];
+        indeces.sort(function(a,b) { return a-b; });
+
+        var prevIdx = indeces[0], currentCount=1;
+        for(var x=1; x&lt;indeces.length;x++) {
+            if(indeces[x] == indeces[x - 1] + 1) {
+                currentCount++;
+            } else {
+                ranges.push({start: prevIdx, count: currentCount});
+                prevIdx = indeces[x];
+                currentCount = 1;
+            }
+        }
+
+        ranges.push({start: prevIdx, count: currentCount});
+        return ranges;
+    }
+
+    function SubscriptionQueue() {
+        var cancelled = false;
+
+        this.queue = function(cb) {
+            return function() {
+                if(!cancelled) cb.apply(this, arguments);
+            }
+        };
+
+        this.cancel = function() {
+            cancelled = true;
+        };
+    }
+
+    function calculateDifference(a, b) {
+        // Utility function. Generates a list of actions (add, remove) to take to get from list a to list b.
+        // Extremely useful when doing incremental DOM tree updates from one dataset to another.
+
+        function idMap(a) {
+            var m = {};
+            for(var x=0,l=a.length;x&lt;l;x++) m[a[x].id] = a[x];
+            return m;
+        }
+
+        // special cases
+        if(!a.length &amp;&amp; !b.length) return [];
+        if(!a.length) return [{add: {start: 0, end: b.length}}];
+        if(!b.length) return [{remove: {start: 0, end: a.length}}];
+
+        var diff = [], lastdiff;
+        var ia = idMap(a);
+        var c = [];
+        // first find rows to remove
+        for(var xa=a.length-1,xb=b.length-1;xa>=0;) {
+            while(xb >= 0 &amp;&amp; !ia[b[xb].id]) xb--;
+            if(xb &lt; 0) {
+                diff.push({remove: {start: 0, end: xa+1}});
+                break;
+            } else {
+                var sa = xa;
+                while(xa >=0 &amp;&amp; a[xa].id !== b[xb].id) xa--;
+                if(xa >= 0) c.unshift(a[xa]);
+                if(xa !== sa) diff.push({remove: {start: xa+1, end: sa+1}});
+                xa--;xb--;
+            }
+        }
+
+        // find the ones to add now. since these operations will be done
+        // on a subset of a that only contains the items also in b, we
+        // use c as a base.
+        if(c.length == 0) {
+            // apparently there was no overlap between a and b, so all of b can be added
+            diff.push({add: {start: 0, end: b.length}});
+        } else {
+            for(var xc=0, xb=0;xb &lt; b.length &amp;&amp; xc &lt; c.length;) {
+                while(xb &lt; b.length &amp;&amp; xc &lt; c.length &amp;&amp; c[xc].id === b[xb].id) {
+                    xc++; xb++;
+                }
+
+                if(xb >= b.length) break;
+
+                var sb = xb;
+
+                if(xc >= c.length) {
+                    xb = b.length;
+                } else {
+                    while(c[xc].id !== b[xb].id) xb++;
+                }
+                if(sb !== xb) diff.push({add: {start: sb, end: xb}});
+            }
+        }
+        return diff;
+    }
+
+    function incrementalUpdate(dataSource, oldData, newData) {
+        var diff = calculateDifference(oldData, newData);
+        for(var x=0,l=diff.length;x&lt;l;x++) {
+            var d = diff[x];
+            if(d.add) {
+                dataSource.trigger('rowsadded', d.add);
+            } else if(d.remove) {
+                dataSource.trigger('rowsremoved', d.remove);
+            }
+        }
+    }
+
+    define(['./jquery'], function($) {
+        return {
+            inAnimationFrame: function(f, queue) {
+                if(inAnimFrame &amp;&amp; !queue) {
+                    f();
+                } else {
+                    animFrameQueue.push(f);
+                    if(!animFrameRequested) {
+                        animFrameRequested = true;
+                        requestAnimationFrame(this.handleAnimationFrames.bind(this));
+                    }
+                }
+            },
+
+            handleAnimationFrames: function() {
+                inAnimFrame = true;
+                try {
+                    while(animFrameQueue.length) {
+                        animFrameQueue.pop()();
+                    }
+                } finally {
+                    inAnimFrame = false;
+                    animFrameRequested = false;
+                }
+            },
+
+            handleEventInAnimationFrame: function (event) {
+                var self = this, args = arguments;
+                requestAnimationFrame(function() {
+                    event.data.apply(self, args);;
+                });
+            },
+
+            findInArray: function (array, selector) {
+                for(var x=0,l=array.length;x&lt;l;x++) {
+                    if(selector(array[x], x)) return x;
+                }
+                return -1;
+            },
+
+            elementFromPoint: function(x,y,selector) {
+                var elements = $(selector);
+                for(var i = elements.length - 1; i>=0; i--) {
+                    var e = $(elements.get(i)), o = e.offset();
+                    if(x >= o.left &amp;&amp; y >= o.top &amp;&amp; x &lt; o.left + e.outerWidth() &amp;&amp; y &lt; o.top + e.outerHeight()) {
+                        return e;
+                    }
+                }
+            },
+
+            loggingInterceptor: function(callback) {
+                var args = Array.prototype.slice.apply(arguments, [1]);
+                var r = callback.apply(this, args);
+                console.log(args.map(function(e) { return e }).join(",") + " -> " + r);
+                return r;
+            },
+
+            cancelEvent: function(event) {
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+                event.preventDefault();
+            },
+
+            passthrough: function(target, delegate, functions) {
+                for(var x = 0,l=functions.length;x&lt;l;x++) {
+                    if(typeof delegate[functions[x]] == 'function') {
+                        target[functions[x]] = delegate[functions[x]].bind(delegate);
+                    }
+                }
+            },
+
+            findRanges: findRanges,
+
+            getValue: getValue,
+            setValue: setValue,
+
+            createElement: createElement,
+
+            normalizeOptions: normalizeOptions,
+
+            Evented: Evented,
+
+            SubscriptionQueue: SubscriptionQueue,
+
+            notNull: function(n) { return n != null; },
+
+            map: function(input, func) {
+                if(typeof input.then === 'function') {
+                    return input.then(func);
+                } else {
+                    return func(input);
+                }
+            },
+
+            diff: calculateDifference,
+
+            incrementalUpdate: incrementalUpdate
+        }
+    });
+})(define);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AsyncTreeGridDataSource.html">AsyncTreeGridDataSource</a></li><li><a href="DefaultTreeSource.html">DefaultTreeSource</a></li><li><a href="PowerGrid.html">PowerGrid</a></li><li><a href="SyncTreeGridDataSource.html">SyncTreeGridDataSource</a></li></ul><h3>Events</h3><ul><li><a href="DataSource.html#event:datachanged">datachanged</a></li><li><a href="DataSource.html#event:dataloaded">dataloaded</a></li><li><a href="DataSource.html#event:ready">ready</a></li><li><a href="DataSource.html#event:rowsadded">rowsadded</a></li><li><a href="DataSource.html#event:rowsremoved">rowsremoved</a></li><li><a href="TreeSource.html#event:dataloaded">dataloaded</a></li><li><a href="TreeSource.html#event:ready">ready</a></li></ul><h3>Interfaces</h3><ul><li><a href="DataSource.html">DataSource</a></li><li><a href="EventSource.html">EventSource</a></li><li><a href="TreeSource.html">TreeSource</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 04 2018 10:44:13 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

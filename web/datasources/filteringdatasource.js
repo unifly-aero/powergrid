@@ -96,22 +96,27 @@ define(['../utils'], function (utils) {
         },
 
         updateView: function () {
-            var sourceData = this.delegate.getData(),
-                view = new Array(sourceData.length),
-                indexMap = new Array(sourceData.length),
-                c = 0;
+            var sourceData = this.delegate.getData();
 
-            for (var x = 0, l = sourceData.length; x < l; x++) {
-                var row = sourceData[x];
-                if (this.filter(row)) {
-                    indexMap[c] = x;
-                    view[c++] = row;
+            if(this.filter) {
+                var view = new Array(sourceData.length),
+                    indexMap = new Array(sourceData.length),
+                    c = 0;
+                for (var x = 0, l = sourceData.length; x < l; x++) {
+                    var row = sourceData[x];
+                    if (this.filter(row)) {
+                        indexMap[c] = x;
+                        view[c++] = row;
+                    }
                 }
-            }
 
-            this.view = view;
-            this.indexMap = indexMap;
-            return view;
+                this.view = view.slice(0, c);
+                this.indexMap = indexMap.slice(0, c);
+            } else {
+                this.view = sourceData.concat([]);
+                this.indexMap = null;
+            }
+            return this.view;
         },
 
         applyFilter: function (settings, filter) {
@@ -131,9 +136,9 @@ define(['../utils'], function (utils) {
         },
 
         _handleRowsAdded: function(start, end) {
-            var targetStart = findIndex(this.indexMap, start);
             var newData = this.delegate.getData(start, end);
             if(this.filter) {
+                var targetStart = findIndex(this.indexMap, start);
                 var targetEnd=targetStart;
                 for(var x=0;x<end-start;x++) {
                     if(this.filter(newData[x])) {
@@ -144,23 +149,24 @@ define(['../utils'], function (utils) {
                 incArray(this.indexMap, targetEnd, end - start);
                 this.trigger('rowsadded', {start: targetStart, end: targetEnd});
             } else {
-                this.view.splice.apply(this.view, [targetStart, 0].concat(newData));
-                this.indexMap.splice.apply(this.indexMap, [targetStart, 0].concat(newData.map(function(e,i) {
-                    return i+start;
-                })));
-                incArray(this.indexMap, targetStart + newData.length, end-start);
-                this.trigger('rowsadded', {start: targetStart, end: targetStart + newData.length});
+                this.view.splice.apply(this.view, [start, 0].concat(newData));
+                this.trigger('rowsadded', {start: start, end: end});
             }
         },
 
         _handleRowsRemoved: function(start, end) {
-            var targetStart = findIndex(this.indexMap, start),
-                targetEnd = findIndex(this.indexMap, end);
-            incArray(this.indexMap, targetStart, start - end);
-            if(targetEnd > targetStart) {
-                this.view.splice(targetStart, targetEnd);
-                this.indexMap.splice(targetStart, targetEnd);
-                this.trigger('rowsremoved', {start: targetStart, end: targetEnd});
+            if(this.filter) {
+                var targetStart = findIndex(this.indexMap, start),
+                    targetEnd = findIndex(this.indexMap, end);
+                incArray(this.indexMap, targetStart, start - end);
+                if(targetEnd > targetStart) {
+                    this.view.splice(targetStart, targetEnd-targetStart);
+                    this.indexMap.splice(targetStart, targetEnd-targetStart);
+                    this.trigger('rowsremoved', {start: targetStart, end: targetEnd});
+                }
+            } else {
+                this.view.splice(start, end-start);
+                this.trigger('rowsremoved', {start: start, end: end});
             }
         }
     };

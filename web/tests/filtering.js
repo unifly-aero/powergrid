@@ -282,14 +282,14 @@ define(
                     }, 'No filtering, two rows added, event contents');
 
                     assert.deepEqual(filteringDataSource.getData(), [row1, row2], 'No filtering, two rows added, datasource contents');
-                    assert.deepEqual(filteringDataSource.indexMap, [0,1]);
+                    assert.equal(filteringDataSource.getData().length, 2);
 
                     return expectNoEvent(['rowsadded','datachanged','rowsremoved'], 'Apply filter, no changes expected', function() {
                         filter('BB');
                     });
                 }).then(function () {
                     assert.deepEqual(filteringDataSource.getData(), [row1, row2], 'Filtering, no changes expected');
-                    assert.deepEqual(filteringDataSource.indexMap, [0,1]);
+                    assert.equal(filteringDataSource.getData().length, 2);
 
                     return expectEvent('rowsadded', 'Adding 4 rows, two match filter', function () {
                         arrayDataSource.insert(1, [
@@ -300,14 +300,13 @@ define(
                     assert.deepEqual(event, {start: 1, end: 3}, 'Two new rows in filtered datasource');
                     assert.deepEqual(arrayDataSource.getData(), [row1,row3,row4,row5,row6,row2]);
                     assert.deepEqual(filteringDataSource.getData(), [row1,row4,row5,row2]);
-                    assert.deepEqual(filteringDataSource.indexMap, [0,2,3,5]);
+                    assert.equal(filteringDataSource.getData().length, 4);
                     return expectNoEvent(['rowsadded','rowsremoved'], 'Removing row that wasn\'t in filtered result, expecting no event', function() {
                         arrayDataSource.remove(1, 2);
                     });
                 }).then(function() {
                     assert.deepEqual(arrayDataSource.getData(), [row1, row4, row5, row6, row2]);
                     assert.deepEqual(filteringDataSource.getData(), [row1, row4, row5, row2]);
-                    assert.deepEqual(filteringDataSource.indexMap, [0, 1, 2, 4]);
 
                     return expectEvent('rowsadded', 'Adding two rows of which one is in filtered result, at end of list', function () {
                         arrayDataSource.insert(5, [row7, row8]);
@@ -317,7 +316,7 @@ define(
 
                     assert.deepEqual(arrayDataSource.getData(), [row1, row4, row5, row6, row2, row7, row8]);
                     assert.deepEqual(filteringDataSource.getData(), [row1, row4, row5, row2, row7]);
-                    assert.deepEqual(filteringDataSource.indexMap, [0, 1, 2, 4, 5]);
+                    assert.equal(filteringDataSource.getData().length, 5);
 
                     return expectEvent('rowsremoved','Removing two rows of which one is in filtered result, expecting 1 rowsremoved', function() {
                         arrayDataSource.remove(5, 7);
@@ -326,7 +325,101 @@ define(
                     assert.deepEqual({start: 4, end: 5}, event);
                     assert.deepEqual(arrayDataSource.getData(), [row1, row4, row5, row6, row2]);
                     assert.deepEqual(filteringDataSource.getData(), [row1, row4, row5, row2]);
-                    assert.deepEqual(filteringDataSource.indexMap, [0, 1, 2, 4]);
+                    assert.equal(filteringDataSource.getData().length, 4);
+                });
+            });
+
+            QUnit.test("Test filter changing", function(assert) {
+                var row1 = {id: 0,name: 'AABB'};
+                var row2 = {id: 1,name: 'BBBB'};
+                var row3 = {id: 3,name: 'AAAA'};
+                var row4 = {id: 4,name: 'BBAA'};
+                var row5 = {id: 5,name: 'BBCC'};
+                var row6 = {id: 6,name: 'CCCC'};
+                var row7 = {id: 7,name: 'DDBB'};
+                var row8 = {id: 8,name: 'DDDD'};
+
+                var arrayDataSource = new ArrayDataSource([
+                    row1,
+                    row2,
+                    row3,
+                    row4,
+                    row5,
+                    row6,
+                    row7,
+                    row8
+                ]);
+
+                var filteringDataSource = new FilteringDataSource(arrayDataSource);
+
+                function expectEvents(event, count, description, after) {
+                    return new Promise(function (resolve, reject) {
+                        var events = new Array(count);
+                        var c = 0;
+                        var subsc = filteringDataSource.on(event, function (event) {
+                            events[c++] = event;
+                        });
+                        var timeout = setTimeout(function () {
+                            subsc.cancel();
+                            assert.pushResult({
+                                result: c == count,
+                                actual: c,
+                                expected: count,
+                                message: description
+                            });
+                            resolve(events);
+                        }, 100);
+
+                        after && after();
+                    });
+                }
+
+                assert.deepEqual(filteringDataSource.getData(), [
+                    row1,
+                    row2,
+                    row3,
+                    row4,
+                    row5,
+                    row6,
+                    row7,
+                    row8
+                ]);
+
+                return expectEvents("rowsremoved", 3, "Expecting three rows removed", function() {
+                    filteringDataSource.applyFilter(null, function(x) { return x.name.indexOf('BB') > -1; });
+                }).then(function(events) {
+                    assert.deepEqual(events, [
+                        {start: 7, end: 8},
+                        {start: 5, end: 6},
+                        {start: 2, end: 3}
+                    ]);
+                    assert.deepEqual(filteringDataSource.getData(), [
+                        row1,
+                        row2,
+                        row4,
+                        row5,
+                        row7
+                    ]);
+
+                    return expectEvents("rowsadded", 3, "Expecting three rows added", function() {
+                        filteringDataSource.applyFilter(null, null);
+                    }).then(function(events) {
+                        assert.deepEqual(events, [
+                            {start: 2, end: 3},
+                            {start: 5, end: 6},
+                            {start: 7, end: 8}
+                        ]);
+                        assert.deepEqual(filteringDataSource.getData(), [
+                            row1,
+                            row2,
+                            row3,
+                            row4,
+                            row5,
+                            row6,
+                            row7,
+                            row8
+                        ]);
+                    })
                 });
             });
         };

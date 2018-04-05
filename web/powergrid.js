@@ -865,6 +865,9 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
          * @private
          */
         _removeRows: function(start, end) {
+            if(end > this.recordCount) {
+                throw "Index mismatch";
+            }
             this.recordCount -= end - start;
             this.workingSet.splice(start, end);
 
@@ -998,37 +1001,27 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
          * @private
          */
         _addRows: function(start, end) {
+            if(start > this.recordCount) {
+                throw "Index mismatch";
+            }
             this.recordCount += end - start; // adjust the record count first so viewRange can take the new record count into account
-            var range = this.viewRange(),
-                self = this;
+            var range = this.viewRange();
 
             // insert the appropriate amount of new empty entries in the workingSet
             this.workingSet = this.workingSet.slice(0, start).concat(new Array(end - start)).concat(this.workingSet.slice(start));
 
-            if(end >= this.viewport.begin && start <= this.viewport.end) {
-                // new rows being added to the virtual scrolling container, so that means:
-                // a) insert some rows between two existing rows
-                // b) remove the rows that are no longer in the viewport
-                // Preferably we'd do b first.
+            if(end >= this.viewport.begin && start < this.viewport.end) {
+                // the new rows are within the current viewport, so add the new rows to the grid
+                // excess rows in the viewport will be truncated in updateViewport
 
                 end = Math.min(range.end, end);
                 start = Math.max(range.begin, start);
-                var count = end - start;
-
                 // update the data-row-idx attributes
                 this._incrementRowIndexes(start, end-start);
 
-                // we have to remove (count) entries from the end of the grid
-                var rowsToDelete = Math.min(this.viewport.end - start, count);
-                if(rowsToDelete > 0) {
-                    this.scrollinggroup.all.each(function (i, part) {
-                        self.destroyRows($(part).children('.pg-row:gt(' + (self.viewport.end - rowsToDelete - 1 - self.viewport.begin) + ')'));
-                    });
-                }
+                this.viewport.end += end - start;
 
-                this.viewport.end += count - rowsToDelete;
-
-                this.renderRowGroupContents(start, end, this.scrollinggroup, false, start-this.viewport.begin-1);
+                this.renderRowGroupContents(start, end, this.scrollinggroup, true, start-this.viewport.begin);
             }
         },
 

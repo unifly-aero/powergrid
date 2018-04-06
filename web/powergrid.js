@@ -869,7 +869,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 throw "Index mismatch";
             }
             this.recordCount -= end - start;
-            this.workingSet.splice(start, end);
+            this.workingSet.splice(start, end - start);
 
             var self = this;
             function r(start, end, rowgroup) {

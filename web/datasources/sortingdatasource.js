@@ -44,7 +44,26 @@ define(['../utils'], function(utils) {
         reload: function() {
             this.delegate.assertReady();
             if(this.comparator) {
-                this.view = this.delegate.getData().concat([]).sort(this.comparator);
+                var data = this.delegate.getData();
+                var indexMap = data.map(function(r, i) {
+                    return {
+                        index: i,
+                        record: r
+                    }
+                });
+                var comparator = this.comparator;
+                function compare(a,b) {
+                    var r = comparator(a.record, b.record);
+                    if(r == 0) {
+                        return a.index - b.index;
+                    } else {
+                        return r;
+                    }
+                }
+                indexMap.sort(compare);
+                this.view = indexMap.map(function(i) {
+                    return data[i.index];
+                });
             } else {
                 this.view = this.delegate.getData().concat([]);
             }

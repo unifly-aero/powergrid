@@ -143,6 +143,44 @@ define(
                     });
                 });
             });
+
+            QUnit.test("Test fallback to natural order", function(assert) {
+
+                var r1 = {id: 0, firstname: "John", lastname: "Doe"};
+                var r2 = {id: 4, firstname: "John", lastname: "Williams"};
+                var r3 = {id: 1, firstname: "John", lastname: "Deer"};
+                var r4 = {id: 2, firstname: "John", lastname: "Eboy"};
+                var r5 = {id: 5, firstname: "Johnny", lastname: "Johnson"};
+                var r6 = {id: 3, firstname: "John", lastname: "Lasseter"};
+                var r7 = {id: 5, firstname: "Angus", lastname: "Black"};
+                var arrayDataSource = new ArrayDataSource([
+                    r1,
+                    r2,
+                    r3,
+                    r4,
+                    r5,
+                    r6,
+                    r7
+                ]);
+
+                var sorting = new SortingDataSource(arrayDataSource);
+
+                function byName(a,b) {
+                    if(a.firstname < b.firstname) {
+                        return -1;
+                    } else if(a.firstname > b.firstname) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+
+                sorting.sort(byName);
+
+                assert.deepEqual(sorting.getData(), [
+                    r7, r1, r2, r3, r4, r6, r5
+                ])
+            });
         };
     }
 );

@@ -215,6 +215,7 @@
     function calculateDifference(a, b) {
         // Utility function. Generates a list of actions (add, remove) to take to get from list a to list b.
         // Extremely useful when doing incremental DOM tree updates from one dataset to another.
+        // WARNING: the resulting diff is only optimal in cases where the order of the items was not changed between a and b
 
         function idMap(a) {
             var m = {};
@@ -232,15 +233,26 @@
         var c = [];
         // first find rows to remove
         for(var xa=a.length-1,xb=b.length-1;xa>=0;) {
-            while(xb >= 0 && !ia[b[xb].id]) xb--;
+            // find next item in b that is also in a
+            while(xb >= 0 && !(b[xb].id in ia)) {
+                xb--;
+            }
             if(xb < 0) {
+                // no item in b found that is also in a, so we remove everything from the start to the position of the last common item in both
                 diff.push({remove: {start: 0, end: xa+1}});
                 break;
             } else {
                 var sa = xa;
-                while(xa >=0 && a[xa].id !== b[xb].id) xa--;
-                if(xa >= 0) c.unshift(a[xa]);
-                if(xa !== sa) diff.push({remove: {start: xa+1, end: sa+1}});
+                // find the index of that item in a
+                while(xa >=0 && a[xa].id !== b[xb].id) {
+                    xa--;
+                }
+                if(xa >= 0) {
+                    c.unshift(a[xa]);
+                }
+                if(xa !== sa) {
+                    diff.push({remove: {start: xa+1, end: sa+1}});
+                }
                 xa--;xb--;
             }
         }
@@ -257,16 +269,21 @@
                     xc++; xb++;
                 }
 
-                if(xb >= b.length) break;
+                if(xb >= b.length)
+                    break;
 
                 var sb = xb;
 
                 if(xc >= c.length) {
                     xb = b.length;
                 } else {
-                    while(c[xc].id !== b[xb].id) xb++;
+                    while(c[xc].id !== b[xb].id) {
+                        xb++;
+                    }
                 }
-                if(sb !== xb) diff.push({add: {start: sb, end: xb}});
+                if(sb !== xb) {
+                    diff.push({add: {start: sb, end: xb}});
+                }
             }
         }
         return diff;

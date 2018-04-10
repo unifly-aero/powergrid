@@ -41,6 +41,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         width: 100
     };
 
+    var debug = true;
+
     function determineScrollBarSize() {
         // Creates a dummy div just to measure the scrollbar sizes, then deletes it when it's no longer necessary.
         var dummy = $("<div style='overflow: scroll; width: 100px; height: 100px; visibility: hidden; opacity: 0'></div>");
@@ -339,31 +341,27 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 });
             });
 
-            this.dataSource.on("rowsremoved", function(data) {
-                // utils.inAnimationFrame(function() {
-                    grid._removeRows(data.start, data.end);
+            this.dataSource.on("rowsremoved", function (data) {
+                grid._removeRows(data.start, data.end);
 
-                    grid.queueUpdateViewport();
-                    grid.queueAdjustHeights();
-                    grid.queueAfterRender(function() {
-                        grid.trigger('rowsremoved', data);
-                        grid.trigger('viewchanged');
-                    });
-                // });
+                grid.queueUpdateViewport();
+                grid.queueAdjustHeights();
+                grid.queueAfterRender(function () {
+                    grid.trigger('rowsremoved', data);
+                    grid.trigger('viewchanged');
+                });
             });
 
-            this.dataSource.on("rowsadded", function(data) {
-                // utils.inAnimationFrame(function() {
-                    grid._addRows(data.start, data.end);
+            this.dataSource.on("rowsadded", function (data) {
+                grid._addRows(data.start, data.end);
 
-                    grid.queueUpdateViewport();
-                    grid.queueAdjustHeights();
+                grid.queueUpdateViewport();
+                grid.queueAdjustHeights();
 
-                    grid.queueAfterRender(function() {
-                        grid.trigger('rowsadded', data);
-                        grid.trigger('viewchanged');
-                    });
-                // });
+                grid.queueAfterRender(function () {
+                    grid.trigger('rowsadded', data);
+                    grid.trigger('viewchanged');
+                });
             });
 
             this.dataSource.on("datachanged", function(data) {
@@ -650,19 +648,24 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
          * Calls the dataSource's getData, updates the working set and returns a Promise of the results.
          * @param start
          * @param end
-         * @returns {Promise.<TResult>|*}
+         * @returns {Promise<object[]>|object[]}
          */
         getData: function(start, end) {
             var self = this;
-            return Promise.resolve(this.dataSource.getData(start, end)).then(function(result) {
-                for(var x=0,l=result.length;x<l;x++) {
+            var data = this.dataSource.getData(start, end);
+
+            function processData(result) {
+                for (var x = 0, l = result.length; x < l; x++) {
                     self.workingSet[(start || 0) + x] = result[x];
                 }
                 return result;
-            }).catch(function(error) {
-                console.error(error);
-                throw error;
-            });
+            }
+
+            if (Array.isArray(data)) {
+                return processData(data);
+            } else {
+                return data.then(processData);
+            }
         },
 
         /**
@@ -674,8 +677,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
          */
         getDataSync: function(start, end) {
             var result = this.dataSource.getData(start, end);
-            if(Array.isArray(result)) {
-                for(var x=0,l=result.length;x<l;x++) {
+            if (Array.isArray(result)) {
+                for (var x = 0, l = result.length; x < l; x++) {
                     this.workingSet[(start || 0) + x] = result[x];
                 }
                 return result;
@@ -751,8 +754,6 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
             var method = atIndex === undefined ? (prepend === true ? 'prepend' : 'append') : (prepend === true ? 'before' : 'after');
 
-            var reverse = prepend ^ (atIndex !== undefined);
-
             var targetLeft, targetMiddle, targetRight;
 
             if(atIndex === undefined) {
@@ -794,7 +795,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 if(fragmentRight)  fragmentRight.appendChild(rowFixedPartRight);
             }
 
-            Promise.resolve(dataSubset).then(this.dataSubscriptions.queue(function(dataSubset) {
+            function populateRows(dataSubset) {
                 for(var x = start; x < end; x++) {
                     var record = dataSubset[x-start],
                         row = rows[x],
@@ -811,9 +812,16 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                         e.setAttribute("data-row-id", record.id);
                     });
                 }
-            })).catch(function(error) {
-                console.error(error);
-            });
+            }
+
+            if (Array.isArray(dataSubset)) {
+                populateRows(dataSubset);
+            } else {
+                // assume Promise<object[]>
+                dataSubset.then(this.dataSubscriptions.queue(populateRows)).catch(function (error) {
+                    console.error(error);
+                });
+            }
 
             if(targetLeft) targetLeft[method](fragmentLeft);
             if(targetMiddle) targetMiddle[method](fragmentMiddle);
@@ -865,29 +873,60 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
          * @private
          */
         _removeRows: function(start, end) {
-            if(end > this.recordCount) {
+            if(end > this.recordCount || end < start) {
                 throw "Index mismatch";
             }
             this.recordCount -= end - start;
-            this.workingSet.splice(start, end - start);
+
+            if (this.workingSet) {
+                this.workingSet.splice(start, end - start);
+            }
 
             var self = this;
-            function r(start, end, rowgroup) {
-                var selector = ".pg-row:lt(" + end + ")";
-                if(start > 0) {
-                    selector += ":gt(" + (start-1) + ")";
+
+            if (end <= this.viewport.begin) {
+                // deleted rows come before the viewport, so adjust the viewport indexes and index attributes of rendered rows
+                this.viewport.begin -= end - start;
+                this.viewport.end -= end - start;
+                this._incrementRowIndexes(start, start - end);
+
+                if (debug) this.verify();
+            } else if (end > this.viewport.begin && start < this.viewport.end) {
+                // deleted block has overlap with current viewport, so remove currently rendered rows
+
+                // find pg-row elements to remove. as gt and lt work within the result, first do 'lt' as 'gt' affect indeces
+                // first build a selector
+                var selector = ".pg-row";
+                if (end < this.viewport.end) {
+                    selector += ":lt(" + (end - this.viewport.begin) + ")";
                 }
-                rowgroup.children(".pg-container").each(function(i,part) {
+                if (start > this.viewport.begin) {
+                    selector += ":gt(" + (start - this.viewport.begin - 1) + ")";
+                }
+                // then query all row containers with that selector
+                this.scrollingcontainer.children(".pg-container").each(function (i, part) {
+                    // and destroy the found row elements
                     self.destroyRows($(part).children(selector));
                 });
-                return end-start;
+
+                if(end < this.viewport.end) {
+                    // adjust the index attributes of the remaining rendered rows after the deleted block.
+                    this._incrementRowIndexes(start, start - end);
+                }
+
+                // the effective viewport will have shrunk, so adjust it
+                if(end >= this.viewport.end) {
+                    this.viewport.end = Math.max(start, this.viewport.begin);
+                    if (debug) this.verify();
+                } else {
+                    this.viewport.end -= end-start;
+                    if (debug) this.verify();
+                }
+            } else {
+                if (debug) this.verify();
             }
 
-            if(start < end && start >= this.viewport.begin && start < this.viewport.end) {
-                var count = r(start - this.viewport.begin, Math.min(this.viewport.end, end) - this.viewport.begin, this.scrollingcontainer);
-                this._incrementRowIndexes(start, start - end);
-                this.viewport.end -= count;
-            }
+            this.queueUpdateViewport();
         },
 
         /**
@@ -1004,25 +1043,78 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             if(start > this.recordCount) {
                 throw "Index mismatch";
             }
-            this.recordCount += end - start; // adjust the record count first so viewRange can take the new record count into account
-            var range = this.viewRange();
 
-            // insert the appropriate amount of new empty entries in the workingSet
-            this.workingSet = this.workingSet.slice(0, start).concat(new Array(end - start)).concat(this.workingSet.slice(start));
+            this.recordCount += end - start;
 
-            if(end >= this.viewport.begin && start < this.viewport.end) {
+            if (this.workingSet) {
+                // insert the appropriate amount of new empty entries in the workingSet
+                this.workingSet = this.workingSet.slice(0, start).concat(new Array(end - start)).concat(this.workingSet.slice(start));
+            }
+
+
+            if (end >= this.viewport.begin && start < this.viewport.end) {
                 // the new rows are within the current viewport, so add the new rows to the grid
                 // excess rows in the viewport will be truncated in updateViewport
 
-                end = Math.min(range.end, end);
-                start = Math.max(range.begin, start);
+                // adding rows can have an effect on the viewport, so predict what the new viewport should be like
+                var viewRange = this.viewRange();
+
+                // overlap of the viewport and new datablock. The new viewport (viewRange) after inserting may be
+                // larger than the current viewport, so take the new viewport into account
+                var renderEnd = Math.min(Math.max(viewRange.end, this.viewport.end), end);
+                var renderStart = Math.max(this.viewport.begin, start);
+                var renderCount = renderEnd - renderStart;
+
+                // if we're appending
+                // and the last row that's appended's index + 1 is not equal the adjusted index of the insertion point row
+                // so renderEnd != renderStart + end - start
+                // then it's not contiguous
+                if (renderEnd != renderStart + end - start) {
+                    // we're not rendering the last rows of the new data block, so we have to remove all rows starting from the insertion point
+                    var startIndexForDeletion = renderStart - this.viewport.begin;
+                    var self = this;
+                    var selector = ".pg-row";
+                    if(startIndexForDeletion > 0) {
+                        selector += ":gt(" + (startIndexForDeletion - 1) + ")";
+                    }
+                    this.scrollinggroup.all.each(function (i, part) {
+                        var rows = $(part).children(selector);
+                        if(debug && rows.length != self.viewport.end - renderStart) {
+                            // our selector is returning more rows than we're expecting
+                            debugger;
+                        }
+                        self.destroyRows(rows);
+                    });
+                    // adjust the viewport
+                    this.viewport.end = renderStart;
+                }
+
                 // update the data-row-idx attributes
-                this._incrementRowIndexes(start, end-start);
+                this._incrementRowIndexes(start, end - start);
+                this.viewport.end += renderCount;
 
+                if(renderEnd == this.viewport.end) { // if this block of data comes right at the end of the viewport
+                    // append rows to the end
+                    this.renderRowGroupContents(renderStart, renderEnd, this.scrollinggroup, false);
+                } else {
+                    // otherwise insert them before the correct index
+                    this.renderRowGroupContents(renderStart, renderEnd, this.scrollinggroup, true, renderStart - this.viewport.begin);
+                }
+
+                if (debug) this.verify();
+            } else if (end < this.viewport.begin) {
+                // the new rows are inserted before the current viewport, so shift the indexes of the viewport and rendered rows
                 this.viewport.end += end - start;
+                this.viewport.begin += end - start;
+                this._incrementRowIndexes(start, end - start);
 
-                this.renderRowGroupContents(start, end, this.scrollinggroup, true, start-this.viewport.begin);
+                if (debug) this.verify();
+            } else {
+                if (debug) this.verify();
             }
+
+            // schedule a viewport update
+            this.queueUpdateViewport();
         },
 
         /**
@@ -1071,7 +1163,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
             if(!renderExcess) {
                 (window.clearImmediate) && window.clearImmediate(this._updateViewportImmediate);
-                this._updateViewportImmediate = (window.setImmediate || requestAnimationFrame)(this.updateViewport.bind(this, [true]));
+                this._updateViewportImmediate = (window.setImmediate || requestAnimationFrame)(this.updateViewport.bind(this, true));
             }
         },
 
@@ -1085,7 +1177,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 end = this.getRecordCount() - this.options.frozenRowsBottom,
                 group = this.scrollinggroup,
                 allParts = group.all;
-                
+
             if(!this.viewport || range.begin != this.viewport.begin || range.end != this.viewport.end) {
                 var leadingHeight = this.rowHeight(start, range.begin),
                     trailingHeight = this.rowHeight(range.end, end);
@@ -1126,26 +1218,10 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 allParts.css('padding-top', leadingHeight + 'px');
                 allParts.css('padding-bottom', trailingHeight + 'px');
 
-                if(false) { // change to if(true) if you want to debug virtual scrolling. Disable for performance
-                    // verify
-                    var idxsMatched = {};
-                    $(allParts).children('.pg-row').each(function(i, row) {
-                        var idx = parseInt($(row).attr('data-row-idx'));
-                        idxsMatched[idx] = true;
-                        if(idx < range.begin || idx >= range.end) {
-                            debugger;
-                        }
-                    });
-
-                    for(var x = range.begin; x < range.end ; x++) {
-                        if(!idxsMatched[x]) {
-                            debugger;
-                        }
-                    }
-                }
-
                 this.viewport = range;
             }
+
+            if (debug) this.verify();
         },
 
         _updateStyle: function(temporary, selector, style) {
@@ -1884,6 +1960,41 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
          */
         resize: function() {
             // indicate that the grid container has resized. used in extensions.
+        },
+
+        /**
+         * Checks grid DOM tree against internal data:
+         * - data-row-idx against viewport.begin and viewport.end
+         * - data-row-id against workingSet
+         * - amount of rows against viewport size
+         */
+        verify: function () {
+            var rowGroups = this.scrollinggroup.all;
+            var hasError = false;
+            for (var g = 0; g < rowGroups.length; g++) {
+                var group = rowGroups[g];
+                var rows = group.children;
+                if (rows.length != this.viewport.end - this.viewport.begin) {
+                    debugger;
+                    hasError = true;
+                    console.error("Rowgroup does not contain expected amount of rows", group, this.viewport);
+                } else {
+                    for (var r = 0; r < rows.length; r++) {
+                        var row = rows[r];
+                        var record = this.workingSet[this.viewport.begin + r];
+                        if (parseInt(row.getAttribute("data-row-idx")) != this.viewport.begin + r) {
+                            debugger;
+                            hasError = true;
+                            console.error("Row does not have matching index", row, record, this.viewport, r);
+                        }
+                        if (record !== undefined && row.hasAttribute("data-row-id") && row.getAttribute("data-row-id") != record.id) {
+                            debugger;
+                            hasError = true;
+                            console.error("Row does not have matching identifier", row, record, this.viewport, r);
+                        }
+                    }
+                }
+            }
         }
     };
 

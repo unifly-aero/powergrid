@@ -112,6 +112,7 @@ define(['../override', '../jquery', '../utils', '../datasources/sortingdatasourc
                                     return result;
                                 }
                             }
+                            return 0;
                         },
                         
                         compareValue: function(a,b) {

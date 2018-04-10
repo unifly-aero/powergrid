@@ -891,13 +891,16 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 this._incrementRowIndexes(start, start - end);
 
                 if (debug) this.verify();
-            } else if (start >= this.viewport.begin && start < this.viewport.end) {
-                // deleted block starts within current viewport, so removes currently rendered rows
+            } else if (end > this.viewport.begin && start < this.viewport.end) {
+                // deleted block has overlap with current viewport, so remove currently rendered rows
 
                 // find pg-row elements to remove. as gt and lt work within the result, first do 'lt' as 'gt' affect indeces
                 // first build a selector
-                var selector = ".pg-row:lt(" + (Math.min(this.viewport.end, end) - this.viewport.begin) + ")";
-                if (start - this.viewport.begin > 0) {
+                var selector = ".pg-row";
+                if (end < this.viewport.end) {
+                    selector += ":lt(" + (end - this.viewport.begin) + ")";
+                }
+                if (start > this.viewport.begin) {
                     selector += ":gt(" + (start - this.viewport.begin - 1) + ")";
                 }
                 // then query all row containers with that selector
@@ -906,12 +909,19 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                     self.destroyRows($(part).children(selector));
                 });
 
-                // the effective viewport will have shrunk, so adjust it
-                this.viewport.end -= Math.min(this.viewport.end, end) - start;
-                // adjust the index attributes of the remaining rendered rows after the deleted block.
-                this._incrementRowIndexes(start, start - end);
+                if(end < this.viewport.end) {
+                    // adjust the index attributes of the remaining rendered rows after the deleted block.
+                    this._incrementRowIndexes(start, start - end);
+                }
 
-                if (debug) this.verify();
+                // the effective viewport will have shrunk, so adjust it
+                if(end >= this.viewport.end) {
+                    this.viewport.end = Math.max(start, this.viewport.begin);
+                    if (debug) this.verify();
+                } else {
+                    this.viewport.end -= end-start;
+                    if (debug) this.verify();
+                }
             } else {
                 if (debug) this.verify();
             }

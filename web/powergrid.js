@@ -884,14 +884,14 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
             var self = this;
 
-            if (end < this.viewport.begin) {
+            if (end <= this.viewport.begin) {
                 // deleted rows come before the viewport, so adjust the viewport indexes and index attributes of rendered rows
                 this.viewport.begin -= end - start;
                 this.viewport.end -= end - start;
                 this._incrementRowIndexes(start, start - end);
 
                 if (debug) this.verify();
-            } else if (start < end && start >= this.viewport.begin && start < this.viewport.end) {
+            } else if (start >= this.viewport.begin && start < this.viewport.end) {
                 // deleted block starts within current viewport, so removes currently rendered rows
 
                 // find pg-row elements to remove. as gt and lt work within the result, first do 'lt' as 'gt' affect indeces
@@ -911,6 +911,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 // adjust the index attributes of the remaining rendered rows after the deleted block.
                 this._incrementRowIndexes(start, start - end);
 
+                if (debug) this.verify();
+            } else {
                 if (debug) this.verify();
             }
 
@@ -1049,7 +1051,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
                 // overlap of the viewport and new datablock. The new viewport (viewRange) after inserting may be
                 // larger than the current viewport, so take the new viewport into account
-                var renderEnd = Math.min(viewRange.end, end);
+                var renderEnd = Math.min(Math.max(viewRange.end, this.viewport.end), end);
                 var renderStart = Math.max(this.viewport.begin, start);
                 var renderCount = renderEnd - renderStart;
 
@@ -1096,6 +1098,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 this.viewport.begin += end - start;
                 this._incrementRowIndexes(start, end - start);
 
+                if (debug) this.verify();
+            } else {
                 if (debug) this.verify();
             }
 

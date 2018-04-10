@@ -20,11 +20,15 @@ define(['../utils'], function(utils) {
         });
 
         delegate.on("rowsadded", function(data) {
-            self.handleDataChanges();
+            if(!self.handleDataChanges()) {
+                self.trigger('rowsadded', data);
+            }
         });
 
         delegate.on("rowsremoved", function(data) {
-            self.handleDataChanges();
+            if(!self.handleDataChanges()) {
+                self.trigger('rowsremoved', data);
+            }
         });
 
         if(delegate.isReady()) {
@@ -45,6 +49,7 @@ define(['../utils'], function(utils) {
             this.delegate.assertReady();
             if(this.comparator) {
                 var data = this.delegate.getData();
+                this.prevData = data.concat([]);
                 var indexMap = data.map(function(r, i) {
                     return {
                         index: i,
@@ -109,9 +114,14 @@ define(['../utils'], function(utils) {
         },
 
         handleDataChanges: function() {
-            var oldView = this.view;
-            this.reload();
-            utils.incrementalUpdate(this, oldView, this.view);
+            if(this.comparator) {
+                var oldView = this.view;
+                this.reload();
+                utils.incrementalUpdate(this, oldView, this.view);
+                return true;
+            } else {
+                return false;
+            }
         }
     };
 

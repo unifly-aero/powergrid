@@ -906,12 +906,21 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 // then query all row containers with that selector
                 this.scrollingcontainer.children(".pg-container").each(function (i, part) {
                     // and destroy the found row elements
-                    self.destroyRows($(part).children(selector));
+                    var children = $(part).children(selector)
+                    if(children.length != Math.min(end, self.viewport.end) - Math.max(start, self.viewport.begin)) {
+                        debugger;
+                    }
+                    self.destroyRows(children);
                 });
 
                 if(end < this.viewport.end) {
                     // adjust the index attributes of the remaining rendered rows after the deleted block.
                     this._incrementRowIndexes(start, start - end);
+                }
+
+                if(start < this.viewport.begin) {
+                    // deleted block covers start of viewport
+                    this.viewport.begin = start;
                 }
 
                 // the effective viewport will have shrunk, so adjust it

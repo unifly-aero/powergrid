@@ -29,16 +29,16 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                             csv += header.join(",");
                             csv += "\n";
 
-                            ds.getData().forEach(function (row) {
-                                var values = [];
-                                columnKeys.forEach(function (key) {
-                                    var val = utils.getValue(row, key);
-                                    values.push(((val) ? self.format(val) : ""));
-                                })
-                                csv += values.join(",");
-                                csv += "\n";
-                            });
-
+                            if (ds.getData().forEach === undefined) {
+                                Promise.resolve(ds.getData())
+                                    .forEach(function (row) {
+                                        csv = parseCsvRow(row, columnKeys, csv);
+                                    });
+                            }else {
+                                ds.getData().forEach(function (row) {
+                                    csv = parseCsvRow(row, columnKeys, csv);
+                                });
+                            }
                             resolve(csv);
 
                         });
@@ -62,3 +62,15 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
     };
     
 });
+
+function parseCsvRow(row, columnKeys, csv) {
+    var values = [];
+    columnKeys.forEach(function (key) {
+        var val = utils.getValue(row, key);
+        values.push(((val) ? self.format(val) : ""));
+    });
+    csv += values.join(",");
+    csv += "\n";
+
+    return csv;
+}

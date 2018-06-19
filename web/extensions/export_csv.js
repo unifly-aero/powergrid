@@ -28,19 +28,19 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
 
                             csv += header.join(",");
                             csv += "\n";
-
-                            ds.getData().forEach(function (row) {
-                                var values = [];
-                                columnKeys.forEach(function (key) {
-                                    var val = utils.getValue(row, key);
-                                    values.push(((val) ? self.format(val) : ""));
-                                })
-                                csv += values.join(",");
-                                csv += "\n";
+                            Promise.resolve(ds.getData())
+                                .then(function (rows) {
+                                    rows.forEach(function (row) {
+                                        var values = [];
+                                        columnKeys.forEach(function (key) {
+                                            var val = utils.getValue(row, key);
+                                            values.push(((val) ? self.format(val) : ""));
+                                        });
+                                        csv += values.join(",");
+                                        csv += "\n";
+                                    });
+                                    resolve(csv);
                             });
-
-                            resolve(csv);
-
                         });
                     },
 

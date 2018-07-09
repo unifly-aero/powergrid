@@ -56,9 +56,13 @@ define(['../override', '../jquery', '../utils',
                     },
                     
                     filterHeight: function() {
-                        return Math.max.apply(undefined, this.target.find(".pg-columnheader .pg-filter-box").map(function(i, e) {
+                        var filterHeights = this.target.find(".pg-columnheader .pg-filter-box").map(function(i, e) {
                             return $(e).outerHeight();
-                        }));
+                        });
+                        if(filterHeights.length > 0) {
+                            return Math.max.apply(undefined, filterHeights);
+                        }
+                        return 0;
                     },
                     
                     headerHeight: function() {

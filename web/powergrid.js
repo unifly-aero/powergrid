@@ -809,7 +809,9 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                     self.afterRenderRow(record, x, rowParts);
 
                     rowParts.forEach(function(e) {
-                        e.setAttribute("data-row-id", record.id);
+                        if (record.id) {
+                            e.setAttribute("data-row-id", record.id);
+                        }
                     });
                 }
             }

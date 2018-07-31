@@ -34,7 +34,7 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                                         var values = [];
                                         columnKeys.forEach(function (key) {
                                             var val = utils.getValue(row, key);
-                                            values.push(((val) ? self.format(val) : ""));
+                                            values.push(((val !== null) ? self.format(val) : ""));
                                         });
                                         csv += values.join(",");
                                         csv += "\n";
@@ -45,6 +45,10 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                     },
 
                     format: function (val) {
+                        if (typeof(val) === "boolean"){
+                            return val.toString();
+                        }
+
                         val = val + "";
                         return "\"" + val.replace(/[\"]/g, '\\"').replace(/[\,]/g, '\\,') + "\"";
                     },

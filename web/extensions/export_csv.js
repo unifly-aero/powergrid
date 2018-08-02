@@ -34,7 +34,7 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                                         var values = [];
                                         columnKeys.forEach(function (key) {
                                             var val = utils.getValue(row, key);
-                                            values.push(((val) ? self.format(val) : ""));
+                                            values.push(((val !== null && val !== "undefined") ? self.format(val) : ""));
                                         });
                                         csv += values.join(",");
                                         csv += "\n";

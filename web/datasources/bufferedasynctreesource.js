@@ -70,6 +70,11 @@ define(["../utils"], function(utils) {
             });
         },
 
+        queryForExport: function () {
+          var self = this;
+          return self.delegate.queryForExport();
+        },
+
         hasChildren: function(row) {
             return this.delegate.hasChildren(row);
         },

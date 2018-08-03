@@ -28,7 +28,9 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
 
                             csv += header.join(",");
                             csv += "\n";
-                            Promise.resolve(ds.getData())
+                            Promise.resolve(
+                                typeof ds.getDataForExport === "function" ? ds.getDataForExport() : ds.getData()
+                            )
                                 .then(function (rows) {
                                     rows.forEach(function (row) {
                                         var values = [];

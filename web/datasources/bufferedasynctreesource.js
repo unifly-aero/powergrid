@@ -72,7 +72,11 @@ define(["../utils"], function(utils) {
 
         queryForExport: function () {
           var self = this;
-          return self.delegate.queryForExport();
+          if (typeof self.delegate.queryForExport === "function"){
+            return self.delegate.queryForExport();
+          } else {
+              return Promise.reject("No queryForExport function found")
+          }
         },
 
         hasChildren: function(row) {

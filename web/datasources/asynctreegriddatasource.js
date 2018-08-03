@@ -235,7 +235,11 @@ define(['../utils'], function (utils) {
 
         getDataForExport: function () {
             var self = this;
-            return Promise.resolve(typeof self.treesource.queryForExport() === "function" ? self.treesource.getAllRecords() : self.getData())
+            var data;
+            if (typeof self.treesource.queryForExport === "function"){
+                return self.treesource.queryForExport().catch(error => {console.log(error); return self.getData()});
+            }
+            return self.getData();
         },
             
         recordCount: function () {

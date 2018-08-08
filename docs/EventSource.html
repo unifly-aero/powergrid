@@ -2,22 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Interface: EventSource</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>EventSource - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Interface: EventSource</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AsyncTreeGridDataSource.html">AsyncTreeGridDataSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AsyncTreeGridDataSource.html#getShadowNodeSubTreeSize">getShadowNodeSubTreeSize</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="DefaultTreeSource.html">DefaultTreeSource</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PowerGrid.html">PowerGrid</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#adjustColumnPositions">adjustColumnPositions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#adjustHeights">adjustHeights</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#adjustWidths">adjustWidths</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#afterCellRendered">afterCellRendered</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#afterRenderRow">afterRenderRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#allRowsDisposed">allRowsDisposed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#cellContentDisposed">cellContentDisposed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#columnCount">columnCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#columnWidth">columnWidth</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#destroy">destroy</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#findRow">findRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getCellFor">getCellFor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getCellTextValue">getCellTextValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getColumnForIndex">getColumnForIndex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getColumnForKey">getColumnForKey</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getColumnIndexForKey">getColumnIndexForKey</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getData">getData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getDataSync">getDataSync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getIdsFromRows">getIdsFromRows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRecordById">getRecordById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRecordCount">getRecordCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRow">getRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRowPartsForIndex">getRowPartsForIndex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getScrollAreaSize">getScrollAreaSize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getScrollPosition">getScrollPosition</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getVisibleColumns">getVisibleColumns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#headerContainerHeight">headerContainerHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#headerHeight">headerHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#hideColumns">hideColumns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#indexOfRow">indexOfRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#isColumnHidden">isColumnHidden</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#loadSetting">loadSetting</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#normalizeCssClass">normalizeCssClass</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueAdjustColumnPositions">queueAdjustColumnPositions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueAdjustHeights">queueAdjustHeights</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueAfterRender">queueAfterRender</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueRenderUpdate">queueRenderUpdate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueSyncScroll">queueSyncScroll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueUpdateViewport">queueUpdateViewport</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#ready">ready</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderCell">renderCell</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderCellContent">renderCellContent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderCellValue">renderCellValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderHeaderCell">renderHeaderCell</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderRowToParts">renderRowToParts</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#resetDataSubscriptions">resetDataSubscriptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#resize">resize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#rowHeight">rowHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#rowsInView">rowsInView</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#saveSetting">saveSetting</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#scrollBy">scrollBy</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#scrollTo">scrollTo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#scrollToCell">scrollToCell</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#setColumnWidth">setColumnWidth</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#setViewport">setViewport</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#then">then</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#trigger">trigger</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateCellValue">updateCellValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateCellValues">updateCellValues</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateColumns">updateColumns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateRowHeight">updateRowHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateRows">updateRows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateViewport">updateViewport</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#viewportWidth">viewportWidth</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#viewRange">viewRange</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="SyncTreeGridDataSource.html">SyncTreeGridDataSource</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:datachanged">datachanged</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:dataloaded">dataloaded</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:ready">ready</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:rowsadded">rowsadded</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:rowsremoved">rowsremoved</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="TreeSource.html#event:dataloaded">dataloaded</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="TreeSource.html#event:ready">ready</a></span></li><li class="nav-heading">Interfaces</li><li class="nav-heading"><span class="nav-item-type type-interface">I</span><span class="nav-item-name"><a href="DataSource.html">DataSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#getData">getData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#getData">getData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#getRecordById">getRecordById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#isReady">isReady</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#off">off</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#one">one</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#passthroughFrom">passthroughFrom</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#recordCount">recordCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#setValue">setValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#sort">sort</a></span></li><li class="nav-heading"><span class="nav-item-type type-interface">I</span><span class="nav-item-name"><a href="EventSource.html">EventSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#off">off</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#one">one</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#passthroughFrom">passthroughFrom</a></span></li><li class="nav-heading"><span class="nav-item-type type-interface">I</span><span class="nav-item-name"><a href="TreeSource.html">TreeSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#children">children</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#countChildren">countChildren</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#countRootNodes">countRootNodes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#filter">filter</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#getRecordById">getRecordById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#getRecordCount">getRecordCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#getRootNodes">getRootNodes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#hasChildren">hasChildren</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#isReady">isReady</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#sort">sort</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">EventSource</h1>
+    
 
     
 
@@ -28,7 +41,9 @@
 
 <header>
     
-        <h2>EventSource</h2>
+        <h2>
+        EventSource
+        </h2>
         
     
 </header>
@@ -94,9 +109,7 @@
 
     
 
-    
-
-    
+     
 
     
 
@@ -107,12 +120,11 @@
 
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(eventName, handler)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -121,76 +133,6 @@
 <div class="description">
     Removes an event handler.
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>eventName</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>handler</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -244,40 +186,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(eventName, handler)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Registers an event handler. Use the 'cancel' function in the returned object to remove the event handler.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -314,7 +222,10 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
@@ -332,13 +243,47 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(eventName, handler)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Registers an event handler. Use the 'cancel' function in the returned object to remove the event handler.
+</div>
 
 
 
@@ -392,59 +337,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="one"><span class="type-signature"></span>one<span class="signature">(eventName, handler)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Registers a one-time event handler. The handler will only be invoked once, the next time the event is fired.
-Use the 'cancel' function in the returned object to remove the event handler.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -481,7 +373,10 @@ Use the 'cancel' function in the returned object to remove the event handler.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
@@ -499,13 +394,69 @@ Use the 'cancel' function in the returned object to remove the event handler.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="one"><span class="type-signature"></span>one<span class="signature">(eventName, handler)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Registers a one-time event handler. The handler will only be invoked once, the next time the event is fired.
+Use the 'cancel' function in the returned object to remove the event handler.
+</div>
 
 
 
@@ -559,58 +510,6 @@ Use the 'cancel' function in the returned object to remove the event handler.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="passthroughFrom"><span class="type-signature"></span>passthroughFrom<span class="signature">(target, &hellip;eventNames)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Passes events through from another EventSource
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -624,8 +523,6 @@ Use the 'cancel' function in the returned object to remove the event handler.
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -638,70 +535,100 @@ Use the 'cancel' function in the returned object to remove the event handler.
 
         <tr>
             
-                <td class="name"><code>target</code></td>
+                <td class="name"><code>eventName</code></td>
             
 
             <td class="type">
             
-                
-<span class="param-type"><a href="EventSource.html">EventSource</a></span>
-
-
-            
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">the other EventSource whose events should be passed through</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>eventNames</code></td>
+                <td class="name"><code>handler</code></td>
             
 
             <td class="type">
             
-                
-<span class="param-type">string</span>
-
-
-            
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                    &lt;repeatable><br>
-                
-                </td>
-            
 
             
 
-            <td class="description last">the names of the events that should be passed through</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="passthroughFrom"><span class="type-signature"></span>passthroughFrom<span class="signature">(target, &hellip;eventNames)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Passes events through from another EventSource
+</div>
 
 
 
@@ -755,6 +682,102 @@ Use the 'cancel' function in the returned object to remove the event handler.
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="EventSource.html">EventSource</a></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                the other EventSource whose events should be passed through
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventNames</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                the names of the events that should be passed through
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -764,6 +787,14 @@ Use the 'cancel' function in the returned object to remove the event handler.
 
 
 
+
+
+
+
+
+
+
+</div>
         
     
 
@@ -779,17 +810,13 @@ Use the 'cancel' function in the returned object to remove the event handler.
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AsyncTreeGridDataSource.html">AsyncTreeGridDataSource</a></li><li><a href="DefaultTreeSource.html">DefaultTreeSource</a></li><li><a href="PowerGrid.html">PowerGrid</a></li><li><a href="SyncTreeGridDataSource.html">SyncTreeGridDataSource</a></li></ul><h3>Events</h3><ul><li><a href="DataSource.html#event:datachanged">datachanged</a></li><li><a href="DataSource.html#event:dataloaded">dataloaded</a></li><li><a href="DataSource.html#event:ready">ready</a></li><li><a href="DataSource.html#event:rowsadded">rowsadded</a></li><li><a href="DataSource.html#event:rowsremoved">rowsremoved</a></li><li><a href="TreeSource.html#event:dataloaded">dataloaded</a></li><li><a href="TreeSource.html#event:ready">ready</a></li></ul><h3>Interfaces</h3><ul><li><a href="DataSource.html">DataSource</a></li><li><a href="EventSource.html">EventSource</a></li><li><a href="TreeSource.html">TreeSource</a></li></ul><h3><a href="global.html">Global</a></h3>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 04 2018 10:44:13 GMT+0200 (CEST)
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 04 2018 11:29:09 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

@@ -7,10 +7,11 @@
     "grunt": "^0.4.5",
     "grunt-bower": "^0.14.0",
     "grunt-bower-requirejs": "^1.1.0",
-    "jsdoc": "^3.5.5"
+    "jsdoc": "^3.5.5",
+    "minami": "^1.2.3"
   },
   "scripts": {
-    "generate-docs": "node node_modules/jsdoc/jsdoc.js web/*.js web/extensions/*.js web/datasources/*.js README.md -d 'docs'"
+    "generate-docs": "node node_modules/jsdoc/jsdoc.js web/*.js web/extensions/*.js web/datasources/*.js README.md -d 'docs' -t node_modules/minami"
   },
   "jspm": {
     "directories": {

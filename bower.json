@@ -1,9 +1,9 @@
 {
   "name": "PowerGrid",
   "version": "0.0.1",
-  "homepage": "https://github.com/ccantill/powergrid",
+  "homepage": "https://github.com/unifly-aero/powergrid",
   "authors": [
-    "ccantill <christoph.cantillon@pearlchain.net>"
+    "ccantill <christoph.cantillon@unifly.aero>"
   ],
   "main": "web/index.html",
   "keywords": [

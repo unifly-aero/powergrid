@@ -17,7 +17,9 @@
 
             var columns = [
                 { title: "Operation Name", key: "name", width: 300, subViewToggle: true, flex: 1 },
-                { title: "Status", key: "status", width: 100, flex: 0.5, type: 'option', options: {'planned': 'Planned','cancelled': 'Cancelled','ongoing': 'Ongoing','landed': 'Landed'} },
+                { title: "Status", key: "status", width: 100, type: 'option', options: {'planned': 'Planned','cancelled': 'Cancelled','ongoing': 'Ongoing','landed': 'Landed'} },
+                { title: "Start Time", key: "startTime", width: 100, type: 'datetime'},
+                { title: "Duration", key: "duration", width: 100, type: 'duration'}
             ];
 
             var data = [{
@@ -26,7 +28,9 @@
                     model: "Trimble",
                     serial: "PH123456789"
                 }],
-                status: 'planned'
+                status: 'planned',
+                startTime: new Date(2018, 4, 1, 11, 0, 0),
+                duration: 600
             }, {
                 name: "Test Flight",
                 uas: [{
@@ -39,7 +43,9 @@
                     model: "Sensefly",
                     serial: "SF111"
                 }],
-                status: 'cancelled'
+                status: 'cancelled',
+                startTime: new Date(2018, 5, 2, 9, 0, 0),
+                duration: 700
             }];
             var content = "";
 
@@ -80,7 +86,29 @@
                         }
                     },
                     'flexcolumns': true,
-                    'filtering_option': true
+                    'filtering_option': true,
+                    'filtering_date': true,
+                    'filtering_scalar': {
+                        types: {
+                            duration: {
+                                fieldType: 'number'
+                            }
+                        }
+                    },
+                    'formatting': {
+                        'datetime': function(v) {
+                            return v.toUTCString()
+                        },
+                        'duration': function(r) {
+                            if(r > 3600) {
+                                return (r/3600).toFixed(1) + " hours";
+                            } else if(r> 60) {
+                                return (r/60).toFixed(0) + " minutes";
+                            } else {
+                                return r + " seconds";
+                            }
+                        }
+                    }
                 }
             });
 

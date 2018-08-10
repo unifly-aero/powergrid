@@ -301,6 +301,22 @@
         }
     }
 
+    function addSingleUseEventListener(eventTarget, type, handler) {
+        function f() {
+            eventTarget.removeEventListener(type, f);
+            handler.apply(this, arguments);
+        }
+        eventTarget.addEventListener(type, f);
+    }
+
+    function offset(target) {
+        var rect = target.getBoundingClientRect();
+        return {
+            top: rect.top + document.body.scrollTop,
+            left: rect.left + document.body.scrollLeft
+        }
+    }
+
     define(['./jquery'], function($) {
         return {
             inAnimationFrame: function(f, queue) {
@@ -327,13 +343,6 @@
                 }
             },
 
-            handleEventInAnimationFrame: function (event) {
-                var self = this, args = arguments;
-                requestAnimationFrame(function() {
-                    event.data.apply(self, args);;
-                });
-            },
-
             findInArray: function (array, selector) {
                 for(var x=0,l=array.length;x<l;x++) {
                     if(selector(array[x], x)) return x;
@@ -349,13 +358,6 @@
                         return e;
                     }
                 }
-            },
-
-            loggingInterceptor: function(callback) {
-                var args = Array.prototype.slice.apply(arguments, [1]);
-                var r = callback.apply(this, args);
-                console.log(args.map(function(e) { return e }).join(",") + " -> " + r);
-                return r;
             },
 
             cancelEvent: function(event) {
@@ -397,7 +399,11 @@
 
             diff: calculateDifference,
 
-            incrementalUpdate: incrementalUpdate
+            incrementalUpdate: incrementalUpdate,
+
+            addSingleUseEventListener: addSingleUseEventListener,
+
+            offset: offset
         }
     });
 })(define);

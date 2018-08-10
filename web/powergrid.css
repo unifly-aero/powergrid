@@ -132,6 +132,7 @@
     background: white;
     font-size: 13px;
     border: none;
+    padding-top: 4px;
 }
 
 .pg-filter-box.pg-filter-options > .span:empty {
@@ -147,7 +148,6 @@
     display: inline-block;
     padding-left: 0;
     margin: 0;
-    padding-top: 4px;
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -164,7 +164,6 @@
 .pg-filter-dropdown {
     position: absolute;
     z-index: 1000;
-
     border: 1px solid black;
     background: white;
     padding: 5px;
@@ -172,7 +171,7 @@
     font-size: 80%;
     top: 100%;
     left: 0;
-    margin-top: 22px;
+    /* margin-top: 22px; */
 }
 
 .pg-filter-dropdown-open {

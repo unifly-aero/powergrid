@@ -8,8 +8,12 @@
 
     <link href="../powergrid.css" rel="stylesheet"/>
     <script>
-        require(['jquery', 'powergrid', 'datasources/csvdatasource'], function ($, powergrid, CSVDataSource) {
-            var datasource = new CSVDataSource({url: 'airports-extended.dat'});
+        require(['jquery', 'powergrid', 'datasources/arraydatasource'], function ($, powergrid, ArrayDataSource) {
+            var datasource = new ArrayDataSource([
+                {id: "a", name: "BEL4532"},
+                {id: "b", name: "EZY3345"},
+                {id: "c", name: "RY331"}
+            ]);
 
             function formatDegrees(deg, record, column) {
                 var whole = Math.floor(Math.abs(deg));
@@ -22,51 +26,8 @@
             $("#test").PowerGrid({
                 columns: [
                     {
-                        title: "Airport ID",
-                        align: "right"
-                    },
-                    {
-                        title: "Name"
-                    },
-                    {
-                        title: "City"
-                    },
-                    {
-                        title: "Country"
-                    },
-                    {
-                        title: "IATA"
-                    },
-                    {
-                        title: "ICAO"
-                    },
-                    {
-                        title: "Latitude",
-                        type: "degrees",
-                        degreeSuffixes: ['N', 'S']
-                    },
-                    {
-                        title: "Longitude",
-                        type: "degrees",
-                        degreeSuffixes: ['E', 'W']
-                    },
-                    {
-                        title: "Altitude"
-                    },
-                    {
-                        title: "Timezone"
-                    },
-                    {
-                        title: "DST"
-                    },
-                    {
-                        title: "TZ"
-                    },
-                    {
-                        title: "Type"
-                    },
-                    {
-                        title: "Source"
+                        title: "Callsign",
+                        key: "name"
                     }
                 ],
 
@@ -75,8 +36,6 @@
                 extensions: {
                     'columnsizing': {},
                     'columnmoving': {},
-                    'editing': true,
-                    // 'grouping': true,
                     'filtering': true,
                     'sorting': true,
                     'formatting': {

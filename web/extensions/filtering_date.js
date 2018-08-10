@@ -21,130 +21,22 @@
  *  - value: initial value for the field
  *  - type: 'date' or 'datetime' depending on the column type
  *  - callback: callback to invoke when the value of the field changes
- *  - fieldName: 'before' or 'after'
+ *  - fieldName: 'minimum' or 'maximum'
  */
 
-var sequence=1;
-
-function nextId() {
-    return "filter-option-" + (sequence++);
-}
-
-var defaults = {
-    filterBoxClass: "pg-filter-box",
-    filterClass: "pg-filter",
-    filterInputClass: "pg-filter-input",
-    filterOptionsClass: "pg-filter-optionpane",
-    filterDropDownClass: "pg-filter-dropdown",
-    filterOpenDropDownClass: "pg-filter-dropdown-open",
-    filterFormClass: "pg-filter-form"
-};
-
-define(['../override', '../jquery', '../utils'], function(override, $, utils) {
+define([], function() {
 
     "use strict";
-
-    function createEditor(type) {
-        return function(column, grid) {
-            var
-                pluginOptions = $.extend({}, defaults, grid.options.extensions.filtering_date),
-                filterBox = utils.createElement("div", {"class": pluginOptions.filterBoxClass}),
-                filter = utils.createElement("div", {"class": pluginOptions.filterClass}),
-                select = utils.createElement("div", {"class": pluginOptions.filterInputClass}),
-                listener = new utils.Evented(),
-                filterSettings = {
-                    before: null,
-                    after: null,
-                    method: 'date'
-                },
-                filterObj = {
-                    filterBox: filterBox,
-                    on: listener.on,
-                    trigger : listener.trigger,
-                    valueMatches: function(value, columnSettings) {
-                        return value && (!columnSettings.after || value >= columnSettings.after) && (!columnSettings.before || columnSettings.before > value);
-                    }
-                };
-
-            function format(value) {
-                return grid.getCellTextValue(value, null, column);
-            }
-
-            function updateFilter() {
-                if(filterSettings.before && filterSettings.after) {
-                    select.textContent = format(filterSettings.before) + " - " + format(filterSettings.after);
-                } else if(filterSettings.before) {
-                    select.textContent = "< " + format(filterSettings.before);
-                } else if(filterSettings.after) {
-                    select.textContent = "> " + format(filterSettings.after);
-                } else {
-                    select.textContent = "";
-                }
-                filterObj.trigger("change", (filterSettings.before || filterSettings.after) ? filterSettings : null);
-            }
-
-            function createField(value, callback, fieldName) {
-                if(pluginOptions.createField) {
-                    return pluginOptions.createField(value, type, callback, fieldName);
-                } else {
-                    var dateField = utils.createElement("input", {type: 'date'});
-                    dateField.valueAsDate = value;
-                    dateField.addEventListener("change", function(event) {
-                        callback(dateField.valueAsDate);
-                    });
-                    return dateField;
-                }
-            }
-
-            function createOptionPane() {
-                var beforeDatePicker = createField(filterSettings.before, function(value) {
-                        filterSettings.before = value;
-                        updateFilter();
-                    }, 'before'),
-                    afterDatePicker = createField(filterSettings.after, function(value) {
-                        filterSettings.after = value;
-                        updateFilter();
-                    }, 'after'),
-                    form = utils.createElement("form", {"class": pluginOptions.filterFormClass},
-                        [ afterDatePicker, beforeDatePicker ]),
-                    pane = utils.createElement("div", {"class": pluginOptions.filterOptionsClass},
-                        [ form ]
-                    ),
-                    optionsDropDown = utils.createElement("div", {"class": pluginOptions.filterDropDownClass}, [pane]);
-                return optionsDropDown;
-            }
-
-            filterBox.addEventListener('click', function() {
-                var optionDropDown = createOptionPane();
-                optionDropDown.classList.add(pluginOptions.filterOpenDropDownClass);
-                $("body").append(optionDropDown);
-                var offset = $(this).offset();
-                $(optionDropDown).css({
-                    left: offset.left,
-                    position: 'absolute',
-                    top: offset.top + $(this).height()
-                });
-                $(optionDropDown).on("mousedown", function(event) {
-                    event.stopPropagation();
-                });
-                $("body").one("mousedown", function() {
-                    optionDropDown.remove();
-                });
-            });
-
-            filterBox.appendChild(filter);
-            filterBox.appendChild(select);
-
-            return filterObj;
-        }
-    }
-
     return {
+        init: function(grid, pluginOptions) {
+            grid.options.extensions.filtering_scalar.types.datetime.createField = pluginOptions.createField;
+            grid.options.extensions.filtering_scalar.types.date.createField = pluginOptions.createField;
+        },
         requires: {
-            filtering: {
-                filterFactories: {
-                    datetime: createEditor('datetime'),
-                    date: createEditor('date')
+            filtering_scalar: {
+                types: {
+                    datetime: {fieldAttribute: 'valueAsDate', fieldType: 'date', minimumLabel: "After", maximumLabel: "Before"},
+                    date: {fieldAttribute: 'valueAsDate', fieldType: 'date', minimumLabel: "After", maximumLabel: "Before"}
                 }
             }
         }

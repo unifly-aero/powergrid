@@ -4,25 +4,25 @@
  * Generates a simple html select / option list
  */
 
-var sequence=1;
-
-function nextId() {
-    return "filter-option-" + (sequence++);
-}
-
-var defaults = {
-    filterBoxClass: "pg-filter-box pg-filter-options",
-    filterClass: "pg-filter",
-    filterInputClass: "pg-filter-input",
-    currentFilterClass: "pg-filter-current-options",
-    filterListClass: "pg-filter-dropdown-menu",
-    filterDropDownClass: "pg-filter-dropdown",
-    filterOpenDropDownClass: "pg-filter-dropdown-open"
-};
-
 define(['../override', '../jquery', '../utils'], function(override, $, utils) {
 
     "use strict";
+
+    var sequence=1;
+
+    function nextId() {
+        return "filter-option-" + (sequence++);
+    }
+
+    var defaults = {
+        filterBoxClass: "pg-filter-box pg-filter-options",
+        filterClass: "pg-filter",
+        filterInputClass: "pg-filter-input",
+        currentFilterClass: "pg-filter-current-options",
+        filterListClass: "pg-filter-dropdown-menu",
+        filterDropDownClass: "pg-filter-dropdown",
+        filterOpenDropDownClass: "pg-filter-dropdown-open"
+    };
 
     return {
         requires: {
@@ -30,7 +30,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                 filterFactories: {
                     option: function(column, grid) {
                         var
-                            pluginOptions = $.extend({}, defaults, grid.options.extensions.filtering_option),
+                            pluginOptions = Object.assign({}, defaults, grid.options.extensions.filtering_option),
                             filterBox = utils.createElement("div", {"class": pluginOptions.filterBoxClass}),
                             filter = utils.createElement("div", {"class": pluginOptions.filterClass}),
                             select = utils.createElement("div", {"class": pluginOptions.filterInputClass}),

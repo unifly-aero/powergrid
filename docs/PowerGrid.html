@@ -2,22 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: PowerGrid</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PowerGrid - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Class: PowerGrid</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="AsyncTreeGridDataSource.html">AsyncTreeGridDataSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="AsyncTreeGridDataSource.html#getShadowNodeSubTreeSize">getShadowNodeSubTreeSize</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="DefaultTreeSource.html">DefaultTreeSource</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="PowerGrid.html">PowerGrid</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#adjustColumnPositions">adjustColumnPositions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#adjustHeights">adjustHeights</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#adjustWidths">adjustWidths</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#afterCellRendered">afterCellRendered</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#afterRenderRow">afterRenderRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#allRowsDisposed">allRowsDisposed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#cellContentDisposed">cellContentDisposed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#columnCount">columnCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#columnWidth">columnWidth</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#destroy">destroy</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#findRow">findRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getCellFor">getCellFor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getCellTextValue">getCellTextValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getColumnForIndex">getColumnForIndex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getColumnForKey">getColumnForKey</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getColumnIndexForKey">getColumnIndexForKey</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getData">getData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getDataSync">getDataSync</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getIdsFromRows">getIdsFromRows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRecordById">getRecordById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRecordCount">getRecordCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRow">getRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getRowPartsForIndex">getRowPartsForIndex</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getScrollAreaSize">getScrollAreaSize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getScrollPosition">getScrollPosition</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#getVisibleColumns">getVisibleColumns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#headerContainerHeight">headerContainerHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#headerHeight">headerHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#hideColumns">hideColumns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#indexOfRow">indexOfRow</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#isColumnHidden">isColumnHidden</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#loadSetting">loadSetting</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#normalizeCssClass">normalizeCssClass</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueAdjustColumnPositions">queueAdjustColumnPositions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueAdjustHeights">queueAdjustHeights</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueAfterRender">queueAfterRender</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueRenderUpdate">queueRenderUpdate</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueSyncScroll">queueSyncScroll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#queueUpdateViewport">queueUpdateViewport</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#ready">ready</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderCell">renderCell</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderCellContent">renderCellContent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderCellValue">renderCellValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderHeaderCell">renderHeaderCell</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#renderRowToParts">renderRowToParts</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#resetDataSubscriptions">resetDataSubscriptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#resize">resize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#rowHeight">rowHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#rowsInView">rowsInView</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#saveSetting">saveSetting</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#scrollBy">scrollBy</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#scrollTo">scrollTo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#scrollToCell">scrollToCell</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#setColumnWidth">setColumnWidth</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#setViewport">setViewport</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#then">then</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#trigger">trigger</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateCellValue">updateCellValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateCellValues">updateCellValues</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateColumns">updateColumns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateRowHeight">updateRowHeight</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateRows">updateRows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#updateViewport">updateViewport</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#viewportWidth">viewportWidth</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="PowerGrid.html#viewRange">viewRange</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="SyncTreeGridDataSource.html">SyncTreeGridDataSource</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:datachanged">datachanged</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:dataloaded">dataloaded</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:ready">ready</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:rowsadded">rowsadded</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="DataSource.html#event:rowsremoved">rowsremoved</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="TreeSource.html#event:dataloaded">dataloaded</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="TreeSource.html#event:ready">ready</a></span></li><li class="nav-heading">Interfaces</li><li class="nav-heading"><span class="nav-item-type type-interface">I</span><span class="nav-item-name"><a href="DataSource.html">DataSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#getData">getData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#getData">getData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#getRecordById">getRecordById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#isReady">isReady</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#off">off</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#one">one</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#passthroughFrom">passthroughFrom</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#recordCount">recordCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#setValue">setValue</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="DataSource.html#sort">sort</a></span></li><li class="nav-heading"><span class="nav-item-type type-interface">I</span><span class="nav-item-name"><a href="EventSource.html">EventSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#off">off</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#one">one</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EventSource.html#passthroughFrom">passthroughFrom</a></span></li><li class="nav-heading"><span class="nav-item-type type-interface">I</span><span class="nav-item-name"><a href="TreeSource.html">TreeSource</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#children">children</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#countChildren">countChildren</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#countRootNodes">countRootNodes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#filter">filter</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#getRecordById">getRecordById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#getRecordCount">getRecordCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#getRootNodes">getRootNodes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#hasChildren">hasChildren</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#isReady">isReady</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="TreeSource.html#sort">sort</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">PowerGrid</h1>
+    
 
     
 
@@ -28,7 +41,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>PowerGrid<span class="signature">(target, options)</span><span class="type-signature"></span></h2>
+        <h2>
+        PowerGrid
+        </h2>
         
     
 </header>
@@ -37,12 +52,11 @@
     <div class="container-overview">
     
         
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="PowerGrid"><span class="type-signature"></span>new PowerGrid<span class="signature">(target, options)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -51,86 +65,6 @@
 <div class="description">
     Creates a new PowerGrid.
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the DOM element that should contain the new grid</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#PowerGridOptions">PowerGridOptions</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the options to use in the grid</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -184,60 +118,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="adjustColumnPositions"><span class="type-signature"></span>adjustColumnPositions<span class="signature">(temporary)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Adjust the grid when the column order has changed.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -263,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>temporary</code></td>
+                <td class="name"><code>target</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type"><code>HTMLElement</code></span>
 
 
             
@@ -279,13 +159,91 @@
 
             
 
-            <td class="description last">pass true for performance when a series of changes are expected, but always finalize by passing false.</td>
+            <td class="description last">
+                the DOM element that should contain the new grid
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="global.html#PowerGridOptions">PowerGridOptions</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                the options to use in the grid
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="adjustColumnPositions"><span class="type-signature"></span>adjustColumnPositions<span class="signature">(temporary)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Adjust the grid when the column order has changed.
+</div>
 
 
 
@@ -339,45 +297,105 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>temporary</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>boolean</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                pass true for performance when a series of changes are expected, but always finalize by passing false.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    the positions of each column in pixels within their parts.
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type"><code>Array.&lt;number></code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    the positions of each column in pixels within their parts.
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="adjustHeights"><span class="type-signature"></span>adjustHeights<span class="signature">()</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -386,14 +404,6 @@
 <div class="description">
     Adjusts the heights of onscreen parts. Invoked during init, or when changing row heights and such.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -456,14 +466,19 @@
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="adjustWidths"><span class="type-signature"></span>adjustWidths<span class="signature">(temporary)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -472,63 +487,6 @@
 <div class="description">
     Update column widths.
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>temporary</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">pass true for performance when a series of changes are expected, but always finalize by passing false.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -582,40 +540,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="afterCellRendered"><span class="type-signature"></span>afterCellRendered<span class="signature">(record, column, cell)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Invoked after a cell is rendered
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -641,13 +565,13 @@
 
         <tr>
             
-                <td class="name"><code>record</code></td>
+                <td class="name"><code>temporary</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><code>boolean</code></span>
 
 
             
@@ -657,59 +581,47 @@
 
             
 
-            <td class="description last">Record for which the cell was rendered</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>column</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
+                pass true for performance when a series of changes are expected, but always finalize by passing false.
                 
-<span class="param-type">object</span>
-
-
-            
             </td>
-
-            
-
-            
-
-            <td class="description last">Column for which the cell was rendered</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cell</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Node</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The rendered cell</td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="afterCellRendered"><span class="type-signature"></span>afterCellRendered<span class="signature">(record, column, cell)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Invoked after a cell is rendered
+</div>
 
 
 
@@ -763,40 +675,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="afterRenderRow"><span class="type-signature"></span>afterRenderRow<span class="signature">(record, rowIndex, rowParts)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Invoked after a row is rendered to its parts.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -828,7 +706,7 @@
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><code>object</code></span>
 
 
             
@@ -838,20 +716,23 @@
 
             
 
-            <td class="description last">The record that was rendered</td>
+            <td class="description last">
+                Record for which the cell was rendered
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>rowIndex</code></td>
+                <td class="name"><code>column</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>object</code></span>
 
 
             
@@ -861,20 +742,23 @@
 
             
 
-            <td class="description last">The index of the row</td>
+            <td class="description last">
+                Column for which the cell was rendered
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>rowParts</code></td>
+                <td class="name"><code>cell</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;HTMLElement></span>
+<span class="param-type"><code>Node</code></span>
 
 
             
@@ -884,13 +768,47 @@
 
             
 
-            <td class="description last">array containing the row parts (left, middle, right)</td>
+            <td class="description last">
+                The rendered cell
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="afterRenderRow"><span class="type-signature"></span>afterRenderRow<span class="signature">(record, rowIndex, rowParts)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Invoked after a row is rendered to its parts.
+</div>
 
 
 
@@ -944,23 +862,132 @@
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
             
 
-    
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The record that was rendered
+                
+            </td>
+        </tr>
 
     
-    <h4 class="name" id="allRowsDisposed"><span class="type-signature"></span>allRowsDisposed<span class="signature">()</span><span class="type-signature"></span></h4>
+
+        <tr>
+            
+                <td class="name"><code>rowIndex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The index of the row
+                
+            </td>
+        </tr>
+
     
+
+        <tr>
+            
+                <td class="name"><code>rowParts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Array.&lt;HTMLElement></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                array containing the row parts (left, middle, right)
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="allRowsDisposed"><span class="type-signature"></span>allRowsDisposed<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -969,14 +996,6 @@
 <div class="description">
     Invoked when the grids contents is removed from the DOM
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -1039,14 +1058,19 @@
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="cellContentDisposed"><span class="type-signature"></span>cellContentDisposed<span class="signature">(record, column)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -1055,86 +1079,6 @@
 <div class="description">
     Invoked when a cell's content is removed from the DOM
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>record</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>column</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -1188,23 +1132,106 @@
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
             
 
-    
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
 
     
-    <h4 class="name" id="columnCount"><span class="type-signature"></span>columnCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+        <tr>
+            
+                <td class="name"><code>column</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
     
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="columnCount"><span class="type-signature"></span>columnCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
 
     
 
@@ -1213,14 +1240,6 @@
 <div class="description">
     Returns the number of columns
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -1278,37 +1297,45 @@
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="columnWidth"><span class="type-signature"></span>columnWidth<span class="signature">(start, end, transform)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
 
     
 
@@ -1317,115 +1344,6 @@
 <div class="description">
     Calculates the total width of the given range of columns, or a single column
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>start</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Index of the first column</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>end</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Index of the last column + 1, or undefined if only a single column should be measured</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>transform</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">A transformation that should be applied to each column's width before adding it</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -1479,45 +1397,163 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Index of the first column
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Index of the last column + 1, or undefined if only a single column should be measured
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transform</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                A transformation that should be applied to each column's width before adding it
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    The total column width in pixels
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    The total column width in pixels
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="destroy"><span class="type-signature"></span>destroy<span class="signature">()</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -1526,14 +1562,6 @@
 <div class="description">
     Remove the grid from the DOM and clean up.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -1596,14 +1624,19 @@
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="findRow"><span class="type-signature"></span>findRow<span class="signature">(rowId)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
-    
 
     
 
@@ -1612,63 +1645,6 @@
 <div class="description">
     Finds the row element for the given row id
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>rowId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -1722,58 +1698,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">jQuery</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getCellFor"><span class="type-signature"></span>getCellFor<span class="signature">(rowId, key)</span><span class="type-signature"> &rarr; {Node}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get the DOM node for the given cell
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -1805,7 +1729,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -1815,36 +1739,68 @@
 
             
 
-            <td class="description last">Row id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
                 
-<span class="param-type">string</span>
-
-
-            
+                
             </td>
-
-            
-
-            
-
-            <td class="description last">Column key</td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>jQuery</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getCellFor"><span class="type-signature"></span>getCellFor<span class="signature">(rowId, key)</span><span class="type-signature"> &rarr; {Node}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Get the DOM node for the given cell
+</div>
 
 
 
@@ -1898,58 +1854,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Node</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getCellTextValue"><span class="type-signature"></span>getCellTextValue<span class="signature">(value, record, column)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns a text representation of the given value for the given record and column.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -1975,13 +1879,13 @@
 
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>rowId</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -1991,20 +1895,23 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                Row id
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>record</code></td>
+                <td class="name"><code>key</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -2014,36 +1921,68 @@
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>column</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
+                Column key
                 
-<span class="param-type">object</span>
-
-
-            
             </td>
-
-            
-
-            
-
-            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Node</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getCellTextValue"><span class="type-signature"></span>getCellTextValue<span class="signature">(value, record, column)</span><span class="type-signature"> &rarr; {*}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a text representation of the given value for the given record and column.
+</div>
 
 
 
@@ -2097,58 +2036,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getColumnForIndex"><span class="type-signature"></span>getColumnForIndex<span class="signature">(index)</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns the column at the given index
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2174,13 +2061,13 @@
 
         <tr>
             
-                <td class="name"><code>index</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>*</code></span>
 
 
             
@@ -2190,13 +2077,120 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>column</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>*</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getColumnForIndex"><span class="type-signature"></span>getColumnForIndex<span class="signature">(index)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the column at the given index
+</div>
 
 
 
@@ -2250,58 +2244,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getColumnForKey"><span class="type-signature"></span>getColumnForKey<span class="signature">(key)</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns the column object for the given column key
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2327,13 +2269,13 @@
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>index</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -2343,13 +2285,68 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>object</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getColumnForKey"><span class="type-signature"></span>getColumnForKey<span class="signature">(key)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the column object for the given column key
+</div>
 
 
 
@@ -2403,58 +2400,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getColumnIndexForKey"><span class="type-signature"></span>getColumnIndexForKey<span class="signature">(key)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns the index for the column with the given key
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2486,7 +2431,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -2496,13 +2441,68 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>object</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getColumnIndexForKey"><span class="type-signature"></span>getColumnIndexForKey<span class="signature">(key)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the index for the column with the given key
+</div>
 
 
 
@@ -2556,58 +2556,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getData"><span class="type-signature"></span>getData<span class="signature">(start, end)</span><span class="type-signature"> &rarr; {Promise.&lt;TResult>|*}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Calls the dataSource's getData, updates the working set and returns a Promise of the results.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2633,10 +2581,15 @@
 
         <tr>
             
-                <td class="name"><code>start</code></td>
+                <td class="name"><code>key</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
             
             </td>
 
@@ -2644,31 +2597,68 @@
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>end</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
+                
+                
             </td>
-
-            
-
-            
-
-            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getData"><span class="type-signature"></span>getData<span class="signature">(start, end)</span><span class="type-signature"> &rarr; {Promise.&lt;TResult>|*}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Calls the dataSource's getData, updates the working set and returns a Promise of the results.
+</div>
 
 
 
@@ -2722,63 +2712,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;TResult></span>
-|
-
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getDataSync"><span class="type-signature"></span>getDataSync<span class="signature">(start, end)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Calls the dataSource's getData, updates the working set and immediately returns the records. This
-only works if the dataSource is synchronous (i.e. getData returns an array, not a Promise), and throws
-an exception otherwise.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2815,7 +2748,10 @@ an exception otherwise.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
@@ -2833,13 +2769,73 @@ an exception otherwise.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;TResult></code></span>
+|
+
+<span class="param-type"><code>*</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getDataSync"><span class="type-signature"></span>getDataSync<span class="signature">(start, end)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Calls the dataSource's getData, updates the working set and immediately returns the records. This
+only works if the dataSource is synchronous (i.e. getData returns an array, not a Promise), and throws
+an exception otherwise.
+</div>
 
 
 
@@ -2893,40 +2889,6 @@ an exception otherwise.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getIdsFromRows"><span class="type-signature"></span>getIdsFromRows<span class="signature">(rows)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Extract the row id's from the given row DOM nodes
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2952,15 +2914,10 @@ an exception otherwise.
 
         <tr>
             
-                <td class="name"><code>rows</code></td>
+                <td class="name"><code>start</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">Array.&lt;Node></span>
-
-
             
             </td>
 
@@ -2968,13 +2925,68 @@ an exception otherwise.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getIdsFromRows"><span class="type-signature"></span>getIdsFromRows<span class="signature">(rows)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Extract the row id's from the given row DOM nodes
+</div>
 
 
 
@@ -3028,40 +3040,6 @@ an exception otherwise.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getRecordById"><span class="type-signature"></span>getRecordById<span class="signature">(rowId)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Shorthand for dataSource#getRecordById(rowId)
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -3087,10 +3065,15 @@ an exception otherwise.
 
         <tr>
             
-                <td class="name"><code>rowId</code></td>
+                <td class="name"><code>rows</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>Array.&lt;Node></code></span>
+
+
             
             </td>
 
@@ -3098,13 +3081,47 @@ an exception otherwise.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getRecordById"><span class="type-signature"></span>getRecordById<span class="signature">(rowId)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Shorthand for dataSource#getRecordById(rowId)
+</div>
 
 
 
@@ -3158,23 +3175,75 @@ an exception otherwise.
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rowId</code></td>
             
 
-    
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
 
     
-    <h4 class="name" id="getRecordCount"><span class="type-signature"></span>getRecordCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
     
+
+    <h4 class="name" id="getRecordCount"><span class="type-signature"></span>getRecordCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
 
     
 
@@ -3183,14 +3252,6 @@ an exception otherwise.
 <div class="description">
     Returns the current number of records known to be in the datasource, or throws an Exception if the amount isn't known.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -3248,37 +3309,45 @@ an exception otherwise.
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="getRow"><span class="type-signature"></span>getRow<span class="signature">(index)</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
 
     
 
@@ -3287,63 +3356,6 @@ an exception otherwise.
 <div class="description">
     Returns a row by index from the working set, or undefined if the row wasn't loaded yet.
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>index</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -3397,58 +3409,6 @@ an exception otherwise.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getRowPartsForIndex"><span class="type-signature"></span>getRowPartsForIndex<span class="signature">(rowIndex)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns all the parts for the given row index
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -3474,10 +3434,15 @@ an exception otherwise.
 
         <tr>
             
-                <td class="name"><code>rowIndex</code></td>
+                <td class="name"><code>index</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
             
             </td>
 
@@ -3485,13 +3450,68 @@ an exception otherwise.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>object</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getRowPartsForIndex"><span class="type-signature"></span>getRowPartsForIndex<span class="signature">(rowIndex)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns all the parts for the given row index
+</div>
 
 
 
@@ -3545,23 +3565,75 @@ an exception otherwise.
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rowIndex</code></td>
             
 
-    
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
 
     
-    <h4 class="name" id="getScrollAreaSize"><span class="type-signature"></span>getScrollAreaSize<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
     
+
+    <h4 class="name" id="getScrollAreaSize"><span class="type-signature"></span>getScrollAreaSize<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
@@ -3570,14 +3642,6 @@ an exception otherwise.
 <div class="description">
     Get the size of the
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -3635,37 +3699,45 @@ an exception otherwise.
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="getScrollPosition"><span class="type-signature"></span>getScrollPosition<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
 
     
 
@@ -3674,14 +3746,6 @@ an exception otherwise.
 <div class="description">
     Get the current scroll position
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -3739,47 +3803,47 @@ an exception otherwise.
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="getVisibleColumns"><span class="type-signature"></span>getVisibleColumns<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;object>}</span></h4>
-    
 
     
-
-
-
-
-
-
-
-
 
 
 
@@ -3839,41 +3903,49 @@ an exception otherwise.
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    - List of visible columns
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;object></span>
+<span class="param-type"><code>Array.&lt;object></code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    - List of visible columns
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="headerContainerHeight"><span class="type-signature"></span>headerContainerHeight<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
 
     
 
@@ -3883,14 +3955,6 @@ an exception otherwise.
     Returns the height of the header container. In a default implementation, this is the same as <a href="PowerGrid.html#headerHeight">PowerGrid#headerHeight</a>.
 Extensions can however add other elements to the header container, and override this method.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -3948,41 +4012,49 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    The height in pixels
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    The height in pixels
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="headerHeight"><span class="type-signature"></span>headerHeight<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
 
     
 
@@ -3991,14 +4063,6 @@ Extensions can however add other elements to the header container, and override 
 <div class="description">
     Returns the height of the header contents
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -4056,41 +4120,49 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    The height in pixels.
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    The height in pixels.
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="hideColumns"><span class="type-signature"></span>hideColumns<span class="signature">(keys)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -4099,63 +4171,6 @@ Extensions can however add other elements to the header container, and override 
 <div class="description">
     Hide the given columns
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>keys</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">array of column keys to hide</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -4209,40 +4224,6 @@ Extensions can however add other elements to the header container, and override 
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="indexOfRow"><span class="type-signature"></span>indexOfRow<span class="signature">(row)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns the index of the given row. Only works if it's in the working set (i.e. the row has been loaded in the grid).
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -4268,13 +4249,13 @@ Extensions can however add other elements to the header container, and override 
 
         <tr>
             
-                <td class="name"><code>row</code></td>
+                <td class="name"><code>keys</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><code>Array.&lt;string></code></span>
 
 
             
@@ -4284,13 +4265,47 @@ Extensions can however add other elements to the header container, and override 
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                array of column keys to hide
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="indexOfRow"><span class="type-signature"></span>indexOfRow<span class="signature">(row)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the index of the given row. Only works if it's in the working set (i.e. the row has been loaded in the grid).
+</div>
 
 
 
@@ -4344,58 +4359,6 @@ Extensions can however add other elements to the header container, and override 
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="isColumnHidden"><span class="type-signature"></span>isColumnHidden<span class="signature">(column)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Check if the given column is hidden
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -4421,13 +4384,13 @@ Extensions can however add other elements to the header container, and override 
 
         <tr>
             
-                <td class="name"><code>column</code></td>
+                <td class="name"><code>row</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><code>object</code></span>
 
 
             
@@ -4437,13 +4400,68 @@ Extensions can however add other elements to the header container, and override 
 
             
 
-            <td class="description last">Column object</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="isColumnHidden"><span class="type-signature"></span>isColumnHidden<span class="signature">(column)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Check if the given column is hidden
+</div>
 
 
 
@@ -4497,58 +4515,6 @@ Extensions can however add other elements to the header container, and override 
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="loadSetting"><span class="type-signature"></span>loadSetting<span class="signature">(id)</span><span class="type-signature"> &rarr; {any}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Loads a setting for this grid
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -4574,13 +4540,13 @@ Extensions can however add other elements to the header container, and override 
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>column</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><code>object</code></span>
 
 
             
@@ -4590,13 +4556,68 @@ Extensions can however add other elements to the header container, and override 
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                Column object
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="loadSetting"><span class="type-signature"></span>loadSetting<span class="signature">(id)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Loads a setting for this grid
+</div>
 
 
 
@@ -4650,58 +4671,6 @@ Extensions can however add other elements to the header container, and override 
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">any</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="normalizeCssClass"><span class="type-signature"></span>normalizeCssClass<span class="signature">(c)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns the CSS class that is used to represent the given identifier (used to transform column keys etc).
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -4727,10 +4696,15 @@ Extensions can however add other elements to the header container, and override 
 
         <tr>
             
-                <td class="name"><code>c</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
             
             </td>
 
@@ -4738,13 +4712,68 @@ Extensions can however add other elements to the header container, and override 
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>any</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="normalizeCssClass"><span class="type-signature"></span>normalizeCssClass<span class="signature">(c)</span><span class="type-signature"> &rarr; {*}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the CSS class that is used to represent the given identifier (used to transform column keys etc).
+</div>
 
 
 
@@ -4798,58 +4827,6 @@ Extensions can however add other elements to the header container, and override 
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(eventName, handler)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Register a event handler
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -4875,7 +4852,7 @@ Extensions can however add other elements to the header container, and override 
 
         <tr>
             
-                <td class="name"><code>eventName</code></td>
+                <td class="name"><code>c</code></td>
             
 
             <td class="type">
@@ -4886,31 +4863,68 @@ Extensions can however add other elements to the header container, and override 
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>handler</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
+                
+                
             </td>
-
-            
-
-            
-
-            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>*</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(eventName, handler)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Register a event handler
+</div>
 
 
 
@@ -4964,58 +4978,6 @@ Extensions can however add other elements to the header container, and override 
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">jQuery</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="queueAdjustColumnPositions"><span class="type-signature"></span>queueAdjustColumnPositions<span class="signature">(temporary)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Queue an adjustment of column positions.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -5041,7 +5003,7 @@ Extensions can however add other elements to the header container, and override 
 
         <tr>
             
-                <td class="name"><code>temporary</code></td>
+                <td class="name"><code>eventName</code></td>
             
 
             <td class="type">
@@ -5052,13 +5014,89 @@ Extensions can however add other elements to the header container, and override 
 
             
 
-            <td class="description last">see <a href="PowerGrid.html#adjustColumnPositions">PowerGrid#adjustColumnPositions</a></td>
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>jQuery</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="queueAdjustColumnPositions"><span class="type-signature"></span>queueAdjustColumnPositions<span class="signature">(temporary)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Queue an adjustment of column positions.
+</div>
 
 
 
@@ -5112,23 +5150,75 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>temporary</code></td>
             
 
-    
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                see <a href="PowerGrid.html#adjustColumnPositions">PowerGrid#adjustColumnPositions</a>
+                
+            </td>
+        </tr>
 
     
-    <h4 class="name" id="queueAdjustHeights"><span class="type-signature"></span>queueAdjustHeights<span class="signature">()</span><span class="type-signature"></span></h4>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
     
+
+    <h4 class="name" id="queueAdjustHeights"><span class="type-signature"></span>queueAdjustHeights<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -5137,14 +5227,6 @@ Extensions can however add other elements to the header container, and override 
 <div class="description">
     Queue a height adjustment
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -5207,14 +5289,19 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="queueAfterRender"><span class="type-signature"></span>queueAfterRender<span class="signature">(f)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -5223,58 +5310,6 @@ Extensions can however add other elements to the header container, and override 
 <div class="description">
     Invoke the given callback after the next render queue is finished
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>f</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -5328,23 +5363,75 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>f</code></td>
             
 
-    
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
 
     
-    <h4 class="name" id="queueRenderUpdate"><span class="type-signature"></span>queueRenderUpdate<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
     
+
+    <h4 class="name" id="queueRenderUpdate"><span class="type-signature"></span>queueRenderUpdate<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
 
     
 
@@ -5353,14 +5440,6 @@ Extensions can however add other elements to the header container, and override 
 <div class="description">
     Queues a render update and returns an object on which render queue flags can be set.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -5418,37 +5497,45 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type"><code>object</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="queueSyncScroll"><span class="type-signature"></span>queueSyncScroll<span class="signature">()</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -5457,14 +5544,6 @@ Extensions can however add other elements to the header container, and override 
 <div class="description">
     Queue a sync scroll
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -5527,14 +5606,19 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="queueUpdateViewport"><span class="type-signature"></span>queueUpdateViewport<span class="signature">()</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -5543,14 +5627,6 @@ Extensions can however add other elements to the header container, and override 
 <div class="description">
     Queue a viewport adjustment
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -5613,14 +5689,19 @@ Extensions can however add other elements to the header container, and override 
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="ready"><span class="type-signature"></span>ready<span class="signature">(callback)</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -5630,63 +5711,6 @@ Extensions can however add other elements to the header container, and override 
     Invokes the given callback immediately if the grid is ready, or queues the callback to be invoked
 as soon as the grid is ready.
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The callback to invoke.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -5742,40 +5766,6 @@ as soon as the grid is ready.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="renderCell"><span class="type-signature"></span>renderCell<span class="signature">(record, column, rowIdx, columnIdx)</span><span class="type-signature"> &rarr; {Node}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Renders the cell for a given record and column
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -5801,10 +5791,15 @@ as soon as the grid is ready.
 
         <tr>
             
-                <td class="name"><code>record</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
             
             </td>
 
@@ -5812,67 +5807,47 @@ as soon as the grid is ready.
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>column</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
+                The callback to invoke.
+                
             </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rowIdx</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>columnIdx</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="renderCell"><span class="type-signature"></span>renderCell<span class="signature">(record, column, rowIdx, columnIdx)</span><span class="type-signature"> &rarr; {Node}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Renders the cell for a given record and column
+</div>
 
 
 
@@ -5926,58 +5901,6 @@ as soon as the grid is ready.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Node</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="renderCellContent"><span class="type-signature"></span>renderCellContent<span class="signature">(record, column)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Renders the contents for the cell of a given record and column
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -6014,7 +5937,10 @@ as soon as the grid is ready.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
@@ -6032,13 +5958,110 @@ as soon as the grid is ready.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rowIdx</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>columnIdx</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Node</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="renderCellContent"><span class="type-signature"></span>renderCellContent<span class="signature">(record, column)</span><span class="type-signature"> &rarr; {*}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Renders the contents for the cell of a given record and column
+</div>
 
 
 
@@ -6092,58 +6115,6 @@ as soon as the grid is ready.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="renderCellValue"><span class="type-signature"></span>renderCellValue<span class="signature">(record, column, value)</span><span class="type-signature"> &rarr; {Node}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Render the cell content for the given record, column and value
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -6174,18 +6145,16 @@ as soon as the grid is ready.
 
             <td class="type">
             
-                
-<span class="param-type">object</span>
-
-
-            
             </td>
 
             
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
@@ -6197,47 +6166,74 @@ as soon as the grid is ready.
 
             <td class="type">
             
-                
-<span class="param-type">object</span>
-
-
-            
             </td>
 
             
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
                 
-<span class="param-type">*</span>
-
-
-            
+                
             </td>
-
-            
-
-            
-
-            <td class="description last">The value to render.</td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>*</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="renderCellValue"><span class="type-signature"></span>renderCellValue<span class="signature">(record, column, value)</span><span class="type-signature"> &rarr; {Node}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Render the cell content for the given record, column and value
+</div>
 
 
 
@@ -6291,58 +6287,6 @@ as soon as the grid is ready.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Node</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="renderHeaderCell"><span class="type-signature"></span>renderHeaderCell<span class="signature">(column, columnIdx)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Generates the cell for a given column
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -6368,10 +6312,15 @@ as soon as the grid is ready.
 
         <tr>
             
-                <td class="name"><code>column</code></td>
+                <td class="name"><code>record</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
             
             </td>
 
@@ -6379,17 +6328,25 @@ as soon as the grid is ready.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>columnIdx</code></td>
+                <td class="name"><code>column</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
             
             </td>
 
@@ -6397,13 +6354,94 @@ as soon as the grid is ready.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>*</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The value to render.
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Node</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="renderHeaderCell"><span class="type-signature"></span>renderHeaderCell<span class="signature">(column, columnIdx)</span><span class="type-signature"> &rarr; {jQuery}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Generates the cell for a given column
+</div>
 
 
 
@@ -6457,59 +6495,6 @@ as soon as the grid is ready.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">jQuery</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="renderRowToParts"><span class="type-signature"></span>renderRowToParts<span class="signature">(record, rowIdx, rowFixedPartLeft, rowScrollingPart, rowFixedPartRight)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Do not invoke directly. Renders the cells for the given record to the rows parts; each row
-can have three parts: the left fixed part, a middle scrolling part and a right fixed part.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -6535,15 +6520,10 @@ can have three parts: the left fixed part, a middle scrolling part and a right f
 
         <tr>
             
-                <td class="name"><code>record</code></td>
+                <td class="name"><code>column</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
             
             </td>
 
@@ -6551,22 +6531,20 @@ can have three parts: the left fixed part, a middle scrolling part and a right f
 
             
 
-            <td class="description last">The record to render</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>rowIdx</code></td>
+                <td class="name"><code>columnIdx</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
             
             </td>
 
@@ -6574,82 +6552,69 @@ can have three parts: the left fixed part, a middle scrolling part and a right f
 
             
 
-            <td class="description last">The index of the row</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rowFixedPartLeft</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
                 
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rowScrollingPart</code></td>
-            
-
-            <td class="type">
-            
                 
-<span class="param-type">HTMLElement</span>
-
-
-            
             </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rowFixedPartRight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>jQuery</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="renderRowToParts"><span class="type-signature"></span>renderRowToParts<span class="signature">(record, rowIdx, rowFixedPartLeft, rowScrollingPart, rowFixedPartRight)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Do not invoke directly. Renders the cells for the given record to the rows parts; each row
+can have three parts: the left fixed part, a middle scrolling part and a right fixed part.
+</div>
 
 
 
@@ -6703,23 +6668,184 @@ can have three parts: the left fixed part, a middle scrolling part and a right f
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>record</code></td>
             
 
-    
+            <td class="type">
+            
+                
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The record to render
+                
+            </td>
+        </tr>
 
     
-    <h4 class="name" id="resetDataSubscriptions"><span class="type-signature"></span>resetDataSubscriptions<span class="signature">()</span><span class="type-signature"></span></h4>
+
+        <tr>
+            
+                <td class="name"><code>rowIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The index of the row
+                
+            </td>
+        </tr>
+
     
+
+        <tr>
+            
+                <td class="name"><code>rowFixedPartLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>HTMLElement</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rowScrollingPart</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>HTMLElement</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rowFixedPartRight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>HTMLElement</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="resetDataSubscriptions"><span class="type-signature"></span>resetDataSubscriptions<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -6730,14 +6856,6 @@ can have three parts: the left fixed part, a middle scrolling part and a right f
 invalidates all ongoing data requests so no stale data is handled by methods that have been properly queued
 in the dataSubscriptions SubscriptionQueue.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -6800,14 +6918,19 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="resize"><span class="type-signature"></span>resize<span class="signature">()</span><span class="type-signature"></span></h4>
-    
 
     
 
@@ -6816,14 +6939,6 @@ in the dataSubscriptions SubscriptionQueue.
 <div class="description">
     Invoked when the grid container has resized.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -6886,14 +7001,19 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
+
+
+
+
+
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="rowHeight"><span class="type-signature"></span>rowHeight<span class="signature">(start, end)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
 
     
 
@@ -6902,86 +7022,6 @@ in the dataSubscriptions SubscriptionQueue.
 <div class="description">
     Calculates the total height of the given range of rows, or of a single row.
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>start</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">index of the first row to calculate the height for</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>end</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">index of the last row to calculate the height for + 1, or undefined if only a single row should be measure</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -7035,62 +7075,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The total row height in pixels
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="rowsInView"><span class="type-signature"></span>rowsInView<span class="signature">(top, bottom, start, end)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Finds rows within the viewport defined by both coordinates in pixels
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -7116,62 +7100,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>top</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Viewport top coordinate in pixels</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>bottom</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Viewport bottom coordinates in pixels</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>start</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7181,7 +7116,10 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">If defined, returned row positions are relative to this</td>
+            <td class="description last">
+                index of the first row to calculate the height for
+                
+            </td>
         </tr>
 
     
@@ -7194,10 +7132,7 @@ in the dataSubscriptions SubscriptionQueue.
             <td class="type">
             
                 
-<span class="param-type">number</span>
-|
-
-<span class="param-type">undefined</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7207,13 +7142,72 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">If defined, stop counting at this index</td>
+            <td class="description last">
+                index of the last row to calculate the height for + 1, or undefined if only a single row should be measure
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    The total row height in pixels
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="rowsInView"><span class="type-signature"></span>rowsInView<span class="signature">(top, bottom, start, end)</span><span class="type-signature"> &rarr; {*}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Finds rows within the viewport defined by both coordinates in pixels
+</div>
 
 
 
@@ -7267,58 +7261,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="saveSetting"><span class="type-signature"></span>saveSetting<span class="signature">(id, value)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Stores a setting for this grid
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -7344,13 +7286,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>top</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7360,20 +7302,23 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                Viewport top coordinate in pixels
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>bottom</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7383,13 +7328,126 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                Viewport bottom coordinates in pixels
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                If defined, returned row positions are relative to this
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                If defined, stop counting at this index
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>*</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="saveSetting"><span class="type-signature"></span>saveSetting<span class="signature">(id, value)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Stores a setting for this grid
+</div>
 
 
 
@@ -7443,40 +7501,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="scrollBy"><span class="type-signature"></span>scrollBy<span class="signature">(dX, dY)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Scroll by a specific offset
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -7502,13 +7526,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>dX</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -7518,20 +7542,23 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">number of pixels the grid contents should shift left</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>dY</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>*</code></span>
 
 
             
@@ -7541,13 +7568,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">number of pixels the grid contents should shift up</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="scrollBy"><span class="type-signature"></span>scrollBy<span class="signature">(dX, dY)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Scroll by a specific offset
+</div>
 
 
 
@@ -7601,62 +7662,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    false if there was no change
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="scrollTo"><span class="type-signature"></span>scrollTo<span class="signature">(x, y)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Scroll to a specific location
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -7682,13 +7687,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>x</code></td>
+                <td class="name"><code>dX</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7698,20 +7703,23 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                number of pixels the grid contents should shift left
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>y</code></td>
+                <td class="name"><code>dY</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7721,13 +7729,72 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                number of pixels the grid contents should shift up
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    false if there was no change
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="scrollTo"><span class="type-signature"></span>scrollTo<span class="signature">(x, y)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Scroll to a specific location
+</div>
 
 
 
@@ -7781,40 +7848,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="scrollToCell"><span class="type-signature"></span>scrollToCell<span class="signature">(rowIdx)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Scroll the grid to the given row index
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -7840,13 +7873,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>rowIdx</code></td>
+                <td class="name"><code>x</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7856,13 +7889,73 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="scrollToCell"><span class="type-signature"></span>scrollToCell<span class="signature">(rowIdx)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Scroll the grid to the given row index
+</div>
 
 
 
@@ -7916,40 +8009,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="setColumnWidth"><span class="type-signature"></span>setColumnWidth<span class="signature">(column, width, temporary)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Changes the given columns width
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -7975,13 +8034,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>column</code></td>
+                <td class="name"><code>rowIdx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -7991,59 +8050,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">The column whose width needs to be changed</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>width</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
                 
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The width of the column in pixels</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>temporary</code></td>
-            
-
-            <td class="type">
-            
                 
-<span class="param-type">boolean</span>
-
-
-            
             </td>
-
-            
-
-            
-
-            <td class="description last">True for performance, false if the changes need to persist. Use 'true' when changing multiple columns or rapidly changing widths.</td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="setColumnWidth"><span class="type-signature"></span>setColumnWidth<span class="signature">(column, width, temporary)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Changes the given columns width
+</div>
 
 
 
@@ -8097,40 +8144,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="setViewport"><span class="type-signature"></span>setViewport<span class="signature">(range)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Invoked when the viewport needs to change (e.g. when scrolling)
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -8156,13 +8169,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>range</code></td>
+                <td class="name"><code>column</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Range">Range</a></span>
+<span class="param-type"><code>object</code></span>
 
 
             
@@ -8172,13 +8185,99 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                The column whose width needs to be changed
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The width of the column in pixels
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>temporary</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>boolean</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                True for performance, false if the changes need to persist. Use 'true' when changing multiple columns or rapidly changing widths.
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="setViewport"><span class="type-signature"></span>setViewport<span class="signature">(range)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Invoked when the viewport needs to change (e.g. when scrolling)
+</div>
 
 
 
@@ -8232,40 +8331,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="then"><span class="type-signature"></span>then<span class="signature">(callback)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Queues the callback to invoke when the grid is ready
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -8291,13 +8356,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>range</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><code><a href="global.html#Range">Range</a></code></span>
 
 
             
@@ -8307,13 +8372,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">the callback to invoke when the grid is ready</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="then"><span class="type-signature"></span>then<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Queues the callback to invoke when the grid is ready
+</div>
 
 
 
@@ -8367,40 +8466,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="trigger"><span class="type-signature"></span>trigger<span class="signature">(eventName, data)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Trigger a jQuery event on the grid and its container element
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -8426,10 +8491,15 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>eventName</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
             
             </td>
 
@@ -8437,31 +8507,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
+                the callback to invoke when the grid is ready
+                
             </td>
-
-            
-
-            
-
-            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="trigger"><span class="type-signature"></span>trigger<span class="signature">(eventName, data)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Trigger a jQuery event on the grid and its container element
+</div>
 
 
 
@@ -8515,40 +8601,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateCellValue"><span class="type-signature"></span>updateCellValue<span class="signature">(rowId, key)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Update the given cell
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -8574,15 +8626,10 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>rowId</code></td>
+                <td class="name"><code>eventName</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
             
             </td>
 
@@ -8590,22 +8637,20 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">id of the row to update</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
             
             </td>
 
@@ -8613,13 +8658,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">key of the column to update</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="updateCellValue"><span class="type-signature"></span>updateCellValue<span class="signature">(rowId, key)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Update the given cell
+</div>
 
 
 
@@ -8673,40 +8752,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateCellValues"><span class="type-signature"></span>updateCellValues<span class="signature">(list)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Updates the cell values
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -8732,13 +8777,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>list</code></td>
+                <td class="name"><code>rowId</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="global.html#CellByRowIdAndColumnKey">CellByRowIdAndColumnKey</a>></span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -8748,13 +8793,73 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">List of row ids and column keys that should be updated</td>
+            <td class="description last">
+                id of the row to update
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                key of the column to update
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="updateCellValues"><span class="type-signature"></span>updateCellValues<span class="signature">(list)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Updates the cell values
+</div>
 
 
 
@@ -8808,40 +8913,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateColumns"><span class="type-signature"></span>updateColumns<span class="signature">(renderData)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Update the column headers and widths, and optionally data
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -8867,13 +8938,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>renderData</code></td>
+                <td class="name"><code>list</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type"><code>Array.&lt;<a href="global.html#CellByRowIdAndColumnKey">CellByRowIdAndColumnKey</a>></code></span>
 
 
             
@@ -8883,13 +8954,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">true if the data should be rendered as well.</td>
+            <td class="description last">
+                List of row ids and column keys that should be updated
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="updateColumns"><span class="type-signature"></span>updateColumns<span class="signature">(renderData)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Update the column headers and widths, and optionally data
+</div>
 
 
 
@@ -8943,40 +9048,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateRowHeight"><span class="type-signature"></span>updateRowHeight<span class="signature">(rowIndex)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Updates a single row's height
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -9002,13 +9073,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>rowIndex</code></td>
+                <td class="name"><code>renderData</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>boolean</code></span>
 
 
             
@@ -9018,13 +9089,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                true if the data should be rendered as well.
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="updateRowHeight"><span class="type-signature"></span>updateRowHeight<span class="signature">(rowIndex)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Updates a single row's height
+</div>
 
 
 
@@ -9078,40 +9183,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateRows"><span class="type-signature"></span>updateRows<span class="signature">(list)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Update the given rows completely
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -9137,13 +9208,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>list</code></td>
+                <td class="name"><code>rowIndex</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;object></span>
+<span class="param-type"><code>number</code></span>
 
 
             
@@ -9153,13 +9224,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">List of records to update</td>
+            <td class="description last">
+                
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="updateRows"><span class="type-signature"></span>updateRows<span class="signature">(list)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Update the given rows completely
+</div>
 
 
 
@@ -9213,40 +9318,6 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateViewport"><span class="type-signature"></span>updateViewport<span class="signature">(renderExcess)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Invoked when the viewport has changed.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -9272,13 +9343,13 @@ in the dataSubscriptions SubscriptionQueue.
 
         <tr>
             
-                <td class="name"><code>renderExcess</code></td>
+                <td class="name"><code>list</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type"><code>Array.&lt;object></code></span>
 
 
             
@@ -9288,13 +9359,47 @@ in the dataSubscriptions SubscriptionQueue.
 
             
 
-            <td class="description last">if true, immediately render excess rows. If false, this is scheduled for a later time.</td>
+            <td class="description last">
+                List of records to update
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="updateViewport"><span class="type-signature"></span>updateViewport<span class="signature">(renderExcess)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Invoked when the viewport has changed.
+</div>
 
 
 
@@ -9348,33 +9453,82 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>renderExcess</code></td>
             
 
-    
+            <td class="type">
+            
+                
+<span class="param-type"><code>boolean</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                if true, immediately render excess rows. If false, this is scheduled for a later time.
+                
+            </td>
+        </tr>
 
     
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
     <h4 class="name" id="viewportWidth"><span class="type-signature"></span>viewportWidth<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
 
     
-
-
-
-
-
-
-
-
 
 
 
@@ -9434,41 +9588,49 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    the viewports width in pixels
-</div>
 
-
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    the viewports width in pixels
+</div>
+
     
+</div>
 
 
 
-
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    
     <h4 class="name" id="viewRange"><span class="type-signature"></span>viewRange<span class="signature">()</span><span class="type-signature"> &rarr; {*|Object}</span></h4>
-    
 
     
 
@@ -9477,14 +9639,6 @@ in the dataSubscriptions SubscriptionQueue.
 <div class="description">
     The current range of rows that should be rendered.
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -9542,32 +9696,41 @@ in the dataSubscriptions SubscriptionQueue.
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
-<dl>
+<dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">*</span>
+<span class="param-type"><code>*</code></span>
 |
 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
 
-
-
+</div>
         
     
 
@@ -9583,17 +9746,13 @@ in the dataSubscriptions SubscriptionQueue.
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AsyncTreeGridDataSource.html">AsyncTreeGridDataSource</a></li><li><a href="DefaultTreeSource.html">DefaultTreeSource</a></li><li><a href="PowerGrid.html">PowerGrid</a></li><li><a href="SyncTreeGridDataSource.html">SyncTreeGridDataSource</a></li></ul><h3>Events</h3><ul><li><a href="DataSource.html#event:datachanged">datachanged</a></li><li><a href="DataSource.html#event:dataloaded">dataloaded</a></li><li><a href="DataSource.html#event:ready">ready</a></li><li><a href="DataSource.html#event:rowsadded">rowsadded</a></li><li><a href="DataSource.html#event:rowsremoved">rowsremoved</a></li><li><a href="TreeSource.html#event:dataloaded">dataloaded</a></li><li><a href="TreeSource.html#event:ready">ready</a></li></ul><h3>Interfaces</h3><ul><li><a href="DataSource.html">DataSource</a></li><li><a href="EventSource.html">EventSource</a></li><li><a href="TreeSource.html">TreeSource</a></li></ul><h3><a href="global.html">Global</a></h3>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 04 2018 10:44:13 GMT+0200 (CEST)
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 04 2018 11:29:09 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

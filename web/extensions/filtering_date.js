@@ -28,7 +28,7 @@ define([], function() {
 
     "use strict";
     return {
-        init(grid, pluginOptions) {
+        init: function(grid, pluginOptions) {
             grid.options.extensions.filtering_scalar.types.datetime.createField = pluginOptions.createField;
             grid.options.extensions.filtering_scalar.types.date.createField = pluginOptions.createField;
         },

@@ -21,6 +21,15 @@
         return [key];
     }
 
+    function parseObject(o, key) {
+        var object = o;
+        if (o instanceof Array) object = o[0];
+        switch (key) {
+            case 'userRoles': return object === undefined ? 'NO' : object.name.toUpperCase().includes('ADMIN') ? 'YES' : 'NO';
+            default: return JSON.stringify(o);
+        }
+    }
+
     function getValue(object, key) {
         var o = object;
         for(var p=parsePath(key),x=0,l=p.length;x<l;x++) {
@@ -28,6 +37,9 @@
                 return o;
             }
             o = o[p[x]];
+        }
+        if (o instanceof Object) {
+            return parseObject(o, key);
         }
         return o;
     }

@@ -233,6 +233,15 @@ define(['../utils'], function (utils) {
             });
         },
 
+        getDataForExport: function () {
+            var self = this;
+            var data;
+            if (typeof self.treesource.queryForExport === "function"){
+                return self.treesource.queryForExport().catch(error => {console.log(error); return self.getData()});
+            }
+            return self.getData();
+        },
+            
         recordCount: function () {
             this.assertReady();
             return this.getView().then(function(view) { return view.length; });

@@ -56,6 +56,9 @@ define(["../jquery", "../utils"], function($, utils) {
                                 idx = end + 1;
                             }
                         }
+                        if(!('id' in record)) {
+                            record['id'] = lineIdx;
+                        }
                         return record;
                     });
                     self.trigger("dataloaded");

@@ -18,7 +18,7 @@ define(["../utils"], function(utils) {
             self.trigger('dataloaded');
         });
 
-        utils.passthrough(this, delegate, ['hasSubView', 'getSummaryRow']);
+        utils.passthrough(this, delegate, ['hasSubView', 'getSummaryRow', 'queryForExport']);
     }
 
     BufferedAsyncTreeSource.prototype = {

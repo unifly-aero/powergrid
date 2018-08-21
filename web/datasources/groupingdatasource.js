@@ -3,10 +3,12 @@
  */
 
 define(['../utils'], function (utils) {
-    function GroupingDataSource(delegate) {
+    function GroupingDataSource(delegate, options) {
         utils.Evented.apply(this);
 
         this.delegate = delegate;
+        this.options = options;
+
         for (var x in this.delegate) {
             if (!this[x] && (typeof this.delegate[x] === "function")) {
                 this[x] = this.delegate[x].bind(this.delegate);
@@ -217,6 +219,10 @@ define(['../utils'], function (utils) {
             }
         },
 
+        /**
+         * Invoked after a group is created, for optional postprocessing in a subclass.
+         * @param group the group that was created
+         */
         processGroup: function(group) {
 
         },
@@ -227,6 +233,25 @@ define(['../utils'], function (utils) {
             } else if(typeof this.delegate.hasSubView === 'function') {
                 return this.delegate.hasSubView(record);
             }
+        },
+
+        /**
+         * Returns the whole data set, ordered and filtered, but without regard for grouping.
+         * @returns {*}
+         */
+        queryForExport: function() {
+            var data = this.delegate.getData();
+            if(this.filterPredicate) {
+                data = data.filter(this.filterPredicate);
+            } else {
+                data = ([]).concat(data);
+            }
+
+            if(this.sortComparator) {
+                data.sort(this.sortComparator);
+            }
+
+            return data;
         }
     };
 

@@ -28,13 +28,15 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
 
                             csv += header.join(",");
                             csv += "\n";
-                            Promise.resolve(ds.getData())
+                            Promise.resolve(
+                                typeof ds.queryForExport === "function" ? ds.queryForExport() : ds.getData()
+                            )
                                 .then(function (rows) {
                                     rows.forEach(function (row) {
                                         var values = [];
                                         columnKeys.forEach(function (key) {
                                             var val = utils.getValue(row, key);
-                                            values.push(((val !== null && val !== "undefined") ? self.format(val) : ""));
+                                            values.push(((val !== undefined && val !== null) ? self.format(val) : ""));
                                         });
                                         csv += values.join(",");
                                         csv += "\n";

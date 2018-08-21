@@ -92,3 +92,10 @@
  * @function TreeSource#getRecordById
  * @param {string|number} id
  */
+
+/**
+ * Optional. If implemented, should return the contents of the whole datasource in a flat table structure (i.e. without
+ * regards for grouping etc...)
+ * @function TreeSource#queryForExport
+ * @returns {Promise<object[]>|object[]}
+ */

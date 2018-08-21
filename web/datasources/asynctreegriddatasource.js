@@ -34,7 +34,7 @@ define(['../utils'], function (utils) {
 
         this.passthroughFrom(this.treesource, "datachanged", "editabilitychanged", "validationresultchanged");
 
-        utils.passthrough(this, treesource, ['hasSubView', 'getSummaryRow']);
+        utils.passthrough(this, treesource, ['hasSubView', 'getSummaryRow', 'queryForExport']);
 
     }
 

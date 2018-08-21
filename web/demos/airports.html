@@ -76,7 +76,7 @@
                     'columnsizing': {},
                     'columnmoving': {},
                     'editing': true,
-                    // 'grouping': true,
+                    'grouping': true,
                     'filtering': true,
                     'sorting': true,
                     'formatting': {
@@ -87,6 +87,9 @@
                         applyClasses: function(record, column, callback) {
                             if(record[column.key] == '\\N') callback('novalue');
                         }
+                    },
+                    'export_csv': {
+                        autodownload: true
                     }
                 }
             });

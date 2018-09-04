@@ -75,6 +75,10 @@ define(['../override', '../utils'], function(override, utils) {
                 } else {
                     select.textContent = "";
                 }
+
+                filterSettings.maximum = format(filterSettings.maximum);
+                filterSettings.minimum = format(filterSettings.minimum);
+
                 filterObj.trigger("change", (filterSettings.minimum !== null || filterSettings.maximum !== null) ? filterSettings : null);
             }
 

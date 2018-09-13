@@ -42,7 +42,19 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                                 on: listener.on,
                                 trigger : listener.trigger,
                                 valueMatches: function(value, columnSettings) {
-                                    return columnSettings.selectedOptions.length == 0 || columnSettings.selectedOptions.indexOf(value) >= 0;
+                                    if(columnSettings.selectedOptions.length == 0) {
+                                        return true;
+                                    }
+                                    if(Array.isArray(value)) {
+                                        for(var x=0,l=value.length;x<l;x++) {
+                                            if(columnSettings.selectedOptions.indexOf(value[x]) >= 0) {
+                                                return true;
+                                            }
+                                        }
+                                        return false;
+                                    } else {
+                                        return columnSettings.selectedOptions.indexOf(value) >= 0;
+                                    }
                                 }
                             },
                             checkboxes,

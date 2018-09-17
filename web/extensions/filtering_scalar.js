@@ -50,7 +50,8 @@ define(['../override', '../utils'], function(override, utils) {
                 filterSettings = {
                     minimum: null,
                     maximum: null,
-                    method: 'scalar'
+                    method: 'scalar',
+                    dataType: column.type
                 },
                 filterObj = {
                     filterBox: filterBox,

@@ -84,14 +84,6 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
         return e !== false;
     }
 
-    function overlap(a,b) {
-        if(!a || !b) return false;
-        if(a.begin <= b.begin && a.end >= b.begin) return true;
-        if(a.begin <= b.end && a.end >= b.end) return true;
-        if(a.begin >= b.begin && a.end <= b.end) return true;
-        if(a.begin <= b.begin && a.end >= b.end) return true;
-    }
-
     /**
      * Creates a new PowerGrid.
      * @module PowerGrid
@@ -582,11 +574,12 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
          */
         renderData: function() {
             var self = this;
-            this.headergroup && this.headergroup.all.empty();
-            this.footergroup && this.footergroup.all.empty();
-            this.scrollinggroup.all.empty();
 
             var recordCount = Promise.resolve(this.dataSource.recordCount()).then(this.dataSubscriptions.queue(function(recordCount) {
+                self.headergroup && self.headergroup.all.empty();
+                self.footergroup && self.footergroup.all.empty();
+                // this.scrollinggroup.all.empty();
+
                 self.recordCount = recordCount;
 
                 /**
@@ -608,7 +601,6 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
 
                 self.queueUpdateViewport();
                 self.queueAdjustHeights();
-                //this.queueSyncScroll();
                 self.queueAfterRender(function() {
                     self.trigger("datarendered");
                 });
@@ -1150,7 +1142,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             // that he's not going to see anyway.
             if(!renderExcess) {
                 // First pass, render as little as possible.
-                if(overlap(this.viewport, rowsInViewWithExcess)) {
+                if(utils.overlap(this.viewport, rowsInViewWithExcess)) {
                     // the target viewport is adjacent to the current one, so we'll take the union of the current
                     // viewport with what is going to be visible to the user. That means no rows are being removed
                     // from the DOM just yet, only rows are being added (either rows that are going to be visible,
@@ -1191,7 +1183,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                 var leadingHeight = this.rowHeight(start, range.begin),
                     trailingHeight = this.rowHeight(range.end, end);
 
-                if(overlap(range, this.viewport)) {
+                if(utils.overlap(range, this.viewport)) {
                     if(range.begin < this.viewport.begin) {
                         // have to add rows to beginning
                         this.renderRowGroupContents(Math.max(start, range.begin), Math.min(range.end, this.viewport.begin), this.scrollinggroup, true);

@@ -66,6 +66,42 @@ define(
                 assert.deepEqual(utils.findRanges([0,1,2,3,5,6,8,12]), [{start: 0, count: 4}, {start: 5, count: 2}, {start: 8, count: 1}, {start: 12, count: 1}], "find ranges");
                 assert.deepEqual(utils.findRanges([3,1,8,2,6,0,12,5]), [{start: 0, count: 4}, {start: 5, count: 2}, {start: 8, count: 1}, {start: 12, count: 1}], "find ranges unsorted");
             });
+
+            QUnit.test("overlap", function(assert) {
+                function testOverlap(a,b) {
+                    assert.ok(utils.overlap(a,b));
+                    assert.ok(utils.overlap(b,a));
+                }
+                function testNoOverlap(a,b) {
+                    assert.notOk(utils.overlap(a,b));
+                    assert.notOk(utils.overlap(b,a));
+                }
+                testNoOverlap({begin: 0, end: 0}, {begin: 6, end: 8});
+                testNoOverlap({begin: 0, end: 4}, {begin: 6, end: 8});
+                testNoOverlap({begin: 2, end: 4}, {begin: 6, end: 8});
+                testNoOverlap({begin: 2, end: 6}, {begin: 6, end: 8});
+
+                testOverlap({begin: 2, end: 7}, {begin: 6, end: 8});
+                testOverlap({begin: 2, end: 8}, {begin: 6, end: 8});
+                testOverlap({begin: 2, end: 9}, {begin: 6, end: 8});
+
+                testNoOverlap({begin: 6, end: 6}, {begin: 6, end: 8});
+
+                testOverlap({begin: 6, end: 7}, {begin: 6, end: 8});
+                testOverlap({begin: 6, end: 8}, {begin: 6, end: 8});
+                testOverlap({begin: 6, end: 9}, {begin: 6, end: 8});
+
+                testNoOverlap({begin: 7, end: 7}, {begin: 6, end: 8});
+
+                testOverlap({begin: 7, end: 8}, {begin: 6, end: 8});
+                testOverlap({begin: 7, end: 9}, {begin: 6, end: 8});
+
+                testNoOverlap({begin: 8, end: 8}, {begin: 6, end: 8});
+                testNoOverlap({begin: 8, end: 9}, {begin: 6, end: 8});
+
+                testNoOverlap({begin: 9, end: 9}, {begin: 6, end: 8});
+                testNoOverlap({begin: 9, end: 10}, {begin: 6, end: 8});
+            });
         };
     }
 );

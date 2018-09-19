@@ -317,6 +317,14 @@
         }
     }
 
+    function overlap(a,b) {
+        if(!a || !b) return false;
+        if(a.begin == a.end || b.begin == b.end) return false; // one of the ranges is empty so can't overlap with anything
+        if(a.end <= b.begin) return false;
+        if(a.begin >= b.end) return false;
+        return true;
+    }
+
     define(['./jquery'], function($) {
         return {
             inAnimationFrame: function(f, queue) {
@@ -403,7 +411,9 @@
 
             addSingleUseEventListener: addSingleUseEventListener,
 
-            offset: offset
+            offset: offset,
+
+            overlap: overlap
         }
     });
 })(define);

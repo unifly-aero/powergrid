@@ -578,7 +578,6 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
             var recordCount = Promise.resolve(this.dataSource.recordCount()).then(this.dataSubscriptions.queue(function(recordCount) {
                 self.headergroup && self.headergroup.all.empty();
                 self.footergroup && self.footergroup.all.empty();
-                // this.scrollinggroup.all.empty();
 
                 self.recordCount = recordCount;
 

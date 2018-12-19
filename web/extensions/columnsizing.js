@@ -26,7 +26,7 @@ define(['../override', '../utils', '../jquery'], function(override, utils, $) {
                         }
 
                         $super.init();
-                        var header, key, idx, col, oX, w, offset, resizing=0;
+                        var header, key, idx, col, oX, w, offset, resizing=0, minSize = pluginOptions.minSize || 20;
 
                         function startResize(event) {
                             if($(this).parents('.powergrid')[0] !== grid.container[0]) return;
@@ -58,9 +58,9 @@ define(['../override', '../utils', '../jquery'], function(override, utils, $) {
                         function doResize(event) {
                             var width;
                             if(resizing == 1) {
-                                width = Math.max(0, event.pageX - oX + w);
+                                width = Math.max(minSize, event.pageX - oX + w);
                             } else if(resizing == -1) {
-                                width = Math.max(0, oX - event.pageX + w);
+                                width = Math.max(minSize, oX - event.pageX + w);
                             } else {
                                 return;
                             }

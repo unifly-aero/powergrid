@@ -48,7 +48,7 @@ define(['../utils'], function (utils) {
                         return [s];
                     }
                 } else if((start === undefined && end === undefined) || (end !== undefined && end > rc)) {
-                    var r = self.delegate.getData(start, end), s = this.getSummaryRow();
+                    var r = self.delegate.getData(start, end), s = self.getSummaryRow();
                     if(typeof r.then === 'function' || typeof s.then === 'function') {
                         return Promise.all([r,s]).then(function(r) {
                             return r[0].concat([r[1]]);

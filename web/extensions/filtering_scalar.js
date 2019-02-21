@@ -100,13 +100,13 @@ define(['../override', '../utils'], function(override, utils) {
                 var maximumField = createField(filterSettings.maximum, function(value) {
                         filterSettings.maximum = value;
                         updateFilter();
-                    }, 'maximum'),
+                    }, grid.translate('filtering.max')),
                     minimumField = createField(filterSettings.minimum, function(value) {
                         filterSettings.minimum = value;
                         updateFilter();
-                    }, 'minimum'),
-                    minimumLabel = utils.createElement("label", [utils.createElement("span", options.minimumLabel || "Minimum"), minimumField]),
-                    maximumLabel = utils.createElement("label", [utils.createElement("span", options.maximumLabel || "Maximum"), maximumField]),
+                    }, grid.translate('filtering.min')),
+                    minimumLabel = utils.createElement("label", [utils.createElement("span", grid.translate('filtering.min')), minimumField]),
+                    maximumLabel = utils.createElement("label", [utils.createElement("span", grid.translate('filtering.max')), maximumField]),
                     form = utils.createElement("form", {"class": pluginOptions.filterFormClass},
                         [ minimumLabel, maximumLabel ]),
                     pane = utils.createElement("div", {"class": pluginOptions.filterOptionsClass},

@@ -12,7 +12,9 @@ define([], function () {
                 "filtering": {
                     "select_all": "SELECT ALL",
                     "min": "MINIMUM",
-                    "max": "MAXIMUM"
+                    "max": "MAXIMUM",
+                    "after": "After",
+                    "before": "Before"
                 }
             },
             "ja": {
@@ -27,7 +29,9 @@ define([], function () {
                 "filtering": {
                     "select_all": "すべて選択",
                     "min": "最小運航時間",
-                    "max": "最大運航時間"
+                    "max": "最大運航時間",
+                    "after": "後に",
+                    "before": "前"
                 }
             }
         };

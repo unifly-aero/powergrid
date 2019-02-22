@@ -1,4 +1,4 @@
-define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein, utils, Promise, require) {
+define(['./jquery', 'vein', './utils', './promise', 'require', './translations'], function($, vein, utils, Promise, require, translations) {
     "use strict";
 
     /**
@@ -1995,6 +1995,17 @@ define(['./jquery', 'vein', './utils', './promise', 'require'], function($, vein
                     }
                 }
             }
+        },
+        translate: function(key) {
+            let langCode = this.options.languageCode;
+            if (translations[langCode] === undefined) {
+                langCode = 'en';
+            }
+
+            var translation = key.split('.').reduce(function(m, key) {
+                return m[key];
+            }, translations[langCode]);
+            return translation;
         }
     };
 

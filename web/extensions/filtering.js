@@ -143,7 +143,7 @@ define(['../override', '../jquery', '../utils',
 
                                 currentFilterPane = $("<div class='pg-filter-pane'>");
 
-                                currentFilterPane.html(filterPane);
+                                currentFilterPane.html(filterPane(grid.translate.bind(grid)));
                                 currentFilterPane.on("click", "[data-filter-method],[data-filter-type]", function(event) {
                                     filterValue.method = $(this).attr("data-filter-method");
                                     filterValue.type = $(this).attr("data-filter-type");

@@ -84,7 +84,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                             var allOptionsCheckbox, allOptions = utils.createElement("li", {'class': 'pg-filter-all-options'}, [
                                 utils.createElement("a", [
                                     allOptionsCheckbox = utils.createElement("input", {type: 'checkbox'}),
-                                    utils.createElement("label", "Select All")
+                                    utils.createElement("label", grid.translate('filtering.select_all'))
                                 ])
                             ]);
 

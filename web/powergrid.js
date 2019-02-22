@@ -1997,7 +1997,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             }
         },
         translate: function(key) {
-            let langCode = this.options.languageCode;
+            var langCode = this.options.languageCode;
             if (translations[langCode] === undefined) {
                 langCode = 'en';
             }

@@ -19,11 +19,12 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                         return new Promise(function (resolve) {
 
                             var ds = grid.dataSource;
-                            var header = [], columnKeys = [], csv = "";
+                            var header = [], csv = "";
 
-                            grid.options.columns.forEach(function (col) {
+                            var columns = grid.options.columns;
+
+                            columns.forEach(function (col) {
                                 header.push(self.format(col.title));
-                                columnKeys.push(col.key);
                             });
 
                             csv += header.join(",");
@@ -34,8 +35,8 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                                 .then(function (rows) {
                                     rows.forEach(function (row) {
                                         var values = [];
-                                        columnKeys.forEach(function (key) {
-                                            var val = utils.getValue(row, key);
+                                        columns.forEach(function (col) {
+                                            var val = grid.getCellTextValue(utils.getValue(row, col.key), row, col);
                                             values.push(((val !== undefined && val !== null) ? self.format(val) : ""));
                                         });
                                         csv += values.join(",");

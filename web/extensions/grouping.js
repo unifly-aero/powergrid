@@ -65,8 +65,9 @@ define(['../override', '../utils', '../jquery', 'jsrender', '../extensions/treeg
                             
                             treeds.toggle(groupId);
                         });
-                        
-                        var grouper = $(grouperTemplate);
+
+                        var grouper = $(grouperTemplate(grid.translate.bind(grid)));
+
                         this.columnheadercontainer.addClass("pg-grouping-enabled").prepend(grouper);
                         
                         if(this.grouping.groups) {

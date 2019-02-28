@@ -1,6 +1,7 @@
 define([], function () {
         return {
             "en": {
+                "grouping_pane": "Drag columns here to group.",
                 "filter_pane": {
                     "contains": "Contains",
                     "begins": "Begins with",
@@ -18,6 +19,7 @@ define([], function () {
                 }
             },
             "ja": {
+                "grouping_pane": "ここにカラムをドラッグするとグループ化できます。",
                 "filter_pane": {
                     "contains": "該当文字を含む",
                     "begins": "該当文字で始まる",

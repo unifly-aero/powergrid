@@ -192,7 +192,7 @@ define(['../override', '../utils', '../jquery', 'jsrender', '../extensions/treeg
 
                         renderGroupRow: function(column, record) {
                             // <span class="pg-grouping-grouptoggle pg-tree-level-{{:_groupLevel}}" data-id="{{:id}}"></span>
-                            return $(groupRowTemplate.render(record, { column: record._groupColumn }));
+                            return $(groupRowTemplate.render(record, { column: record._groupColumn, value: grid.getCellTextValue(record.description, null, record._groupColumn) }));
                         },
 
                         groupColumns: function() {

@@ -24,7 +24,9 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                             var columns = grid.options.columns;
 
                             columns.forEach(function (col) {
-                                header.push(self.format(col.title));
+                                if (col.exportable !== false){
+                                    header.push(self.format(col.title));
+                                }
                             });
 
                             csv += header.join(",");
@@ -35,7 +37,8 @@ define(['../jquery','../override', '../utils', '../promise'], function($, overri
                                 .then(function (rows) {
                                     rows.forEach(function (row) {
                                         var values = [];
-                                        columns.forEach(function (col) {
+                                        columns.filter(col => col.exportable !== false)
+                                            .forEach(function (col) {
                                             var val = grid.getCellTextValue(utils.getValue(row, col.key), row, col);
                                             values.push(((val !== undefined && val !== null) ? self.format(val) : ""));
                                         });

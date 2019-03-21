@@ -1716,6 +1716,15 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
         },
 
         /**
+         * Shorthand for dataSource#hasRecordById(rowId)
+         * @param rowId
+         * @returns {boolean}
+         */
+        hasRecordById: function(rowId) {
+            return this.dataSource.hasRecordById(rowId);
+        },
+
+        /**
          * Shorthand for dataSource#getRecordById(rowId)
          * @param rowId
          */

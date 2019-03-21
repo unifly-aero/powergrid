@@ -422,6 +422,10 @@ define(['../utils'], function (utils) {
             }
         },
 
+        hasRecordById: function(id) {
+            return id in this.recordByIdMap;
+        },
+
         getRecordById: function(id) {
             if(!(id in this.recordByIdMap)) {
                 throw new Error("Record with id " + id + " not yet loaded or does not exist. This is likely a bug or incorrect usage.");

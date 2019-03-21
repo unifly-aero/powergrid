@@ -174,7 +174,7 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                             var baseHeight = $super.rowHeight(start, end);
 
                             for(var id in subviewsExpanded) {
-                                if(subviewsExpanded[id]) {
+                                if(subviewsExpanded[id] && grid.hasRecordById(id)) {
                                     var record = grid.getRecordById(id);
                                     var idx = grid.indexOfRow(record);
                                     if(idx >= start && idx < end) {

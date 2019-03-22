@@ -7,6 +7,12 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
             override(grid, function($super) {
                 var subViewHeights = [];
                 var subviewsExpanded = {};
+
+                grid.dataSource.on("dataloaded", function () {
+                    subviewsExpanded = {};
+                    subViewHeights = [];
+                });
+
                 return {
                     init: function() {
                         $super.init();

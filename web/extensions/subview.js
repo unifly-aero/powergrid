@@ -54,6 +54,8 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                             rowParts.each(function (i, part) {
                                 part.style.height = grid.rowHeight(rowIdx) + "px";
                             });
+
+                            grid.queueAdjustHeights();
                         },
 
                         collapseView: function(record, rowIdx) {
@@ -71,6 +73,8 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                             rowParts.each(function (i, part) {
                                 part.style.height = grid.rowHeight(rowIdx) + "px";
                             });
+
+                            grid.queueAdjustHeights();
                         },
 
                         hasSubView: function(record) {
@@ -100,7 +104,7 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                                 rowParts.forEach(function(part) {
                                     part.style.height = grid.rowHeight(rowIdx) + "px";
                                 });
-                                grid.adjustHeights();
+                                grid.queueAdjustHeights();
                             });
                         }
 
@@ -130,17 +134,19 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                                 subview = [rowParts[0].querySelector(".pg-subview")];
                             }
 
-                            if (subviewsExpanded[record.id] && !target.is(".pg-row-subview-rendered")) {
-                                var promise = pluginOptions.renderSubView(grid, record, subview[0]);
-                                if (promise.then) {
-                                    promise.then(finish);
-                                } else {
-                                    finish();
-                                }
-                            }
-
-                            if(subviewsExpanded[record.id] == true) {
+                            if (subviewsExpanded[record.id]) {
                                 target.addClass('pg-subview-expanded');
+
+                                if (!target.is(".pg-row-subview-rendered")) {
+                                    var promise = pluginOptions.renderSubView(grid, record, subview[0]);
+                                    if (promise.then) {
+                                        promise.then(finish);
+                                    } else {
+                                        finish();
+                                    }
+                                } else {
+                                    grid.queueAdjustHeights();
+                                }
                             }
                         }
 

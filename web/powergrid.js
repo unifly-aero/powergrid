@@ -1845,6 +1845,16 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
         },
 
         /**
+         * Register a one-time event handler
+         * @param eventName
+         * @param handler
+         * @returns {jQuery}
+         */
+        one: function(eventName, handler) {
+            return $(this).one(eventName, handler);
+        },
+
+        /**
          * Returns the row group for the given index
          * @private
          * @param rowIndex

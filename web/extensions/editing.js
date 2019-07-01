@@ -176,6 +176,12 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
 
                     startEdit: function(target, key, record, rowIdx) {
+                        if(arguments.length == 2) {
+                            key = arguments[0];
+                            record = arguments[1];
+                            target = grid.getCellFor(record.id, key);
+                            rowIdx = grid.indexOfRow(record);
+                        }
                         var rowId = record.id;
                         var column = grid.getColumnForKey(key);
                         var oldValue = utils.getValue(record, key);

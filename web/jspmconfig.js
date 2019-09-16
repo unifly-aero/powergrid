@@ -18,7 +18,7 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.20",
     "core-js": "npm:core-js@1.1.3",
     "es6-promise": "github:components/es6-promise@3.0.2",
-    "jquery": "github:components/jquery@2.1.4",
+    "jquery": "npm:jquery@3.4.1",
     "jsrender": "github:BorisMoore/jsrender@1.0.0-rc.68",
     "systemjs/plugin-text": "github:systemjs/plugin-text@0.0.2",
     "vein": "github:israelidanny/veinjs@master",

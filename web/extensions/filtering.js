@@ -50,6 +50,11 @@ define(['../override', '../jquery', '../utils',
                                     grid.filtering.filter(columnSettings);
                                 }, 1000);
                             });
+                            if (column.selectedOptions.length > 0) {
+                                var filterSettings = {};
+                                filterSettings[column.key] = {selectedOptions: column.selectedOptions};
+                                grid.filtering.filter(filterSettings);
+                            }
                         }
 
                         return header;

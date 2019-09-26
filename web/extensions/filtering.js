@@ -25,7 +25,13 @@ define(['../override', '../jquery', '../utils',
                             event.stopPropagation();
                         });
 
-                        grid.dataSource.applyFilter(columnSettings);
+                        if (grid.dataSource.isReady()) {
+                            grid.dataSource.applyFilter(columnSettings);
+                        } else {
+                            grid.dataSource.one('dataloaded', function() {
+                                grid.dataSource.applyFilter(columnSettings);
+                            });
+                        }
                     },
                     
                     destroy: function() {

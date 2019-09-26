@@ -28,14 +28,14 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
         requires: {
             filtering: {
                 filterFactories: {
-                    option: function(column, grid) {
+                    option: function(column, grid, defaultOptions) {
                         var
                             pluginOptions = Object.assign({}, defaults, grid.options.extensions.filtering_option),
                             filterBox = utils.createElement("div", {"class": pluginOptions.filterBoxClass}),
                             filter = utils.createElement("div", {"class": pluginOptions.filterClass}),
                             select = utils.createElement("div", {"class": pluginOptions.filterInputClass}),
                             currentFilterIndicator = utils.createElement("ul", {"class": pluginOptions.currentFilterClass}),
-                            selectedOptions = [],
+                            selectedOptions = defaultOptions?defaultOptions.selectedOptions:[],
                             listener = new utils.Evented(),
                             filterObj = {
                                 filterBox: filterBox,
@@ -170,7 +170,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         filterBox.appendChild(filter);
                         filterBox.appendChild(select);
                         select.appendChild(currentFilterIndicator);
-
+                        updateFilter();
                         return filterObj;
                     }
                 }

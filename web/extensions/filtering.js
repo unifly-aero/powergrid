@@ -7,7 +7,7 @@ define(['../override', '../jquery', '../utils',
     return {
         init: function(grid, pluginOptions) {
             return override(grid, function($super) {
-                var columnSettings = {};
+                var columnSettings = pluginOptions.defaultFilterSettings || {};
                 
                 var currentFilterPane;
 
@@ -24,6 +24,8 @@ define(['../override', '../jquery', '../utils',
                         this.container.on("click mousedown", ".pg-filter-box", function(event) {
                             event.stopPropagation();
                         });
+
+                        grid.dataSource.applyFilter(columnSettings);
                     },
                     
                     destroy: function() {
@@ -50,11 +52,6 @@ define(['../override', '../jquery', '../utils',
                                     grid.filtering.filter(columnSettings);
                                 }, 1000);
                             });
-                            if (column.selectedOptions.length > 0) {
-                                var filterSettings = {};
-                                filterSettings[column.key] = {selectedOptions: column.selectedOptions};
-                                grid.filtering.filter(filterSettings);
-                            }
                         }
 
                         return header;
@@ -89,7 +86,7 @@ define(['../override', '../jquery', '../utils',
 
                         createFilter: function(column) {
                             if(column.type && pluginOptions.filterFactories && column.type in pluginOptions.filterFactories) {
-                                return pluginOptions.filterFactories[column.type](column, grid);
+                                return pluginOptions.filterFactories[column.type](column, grid, columnSettings[column.key]);
                             } else {
                                 return this.createDefaultFilter(column);
                             }

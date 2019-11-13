@@ -18,6 +18,24 @@ define([], function () {
                     "before": "Before"
                 }
             },
+            "de": {
+                "grouping_pane": "Spaltenüberschriften zum Gruppieren hierher ziehen.",
+                "filter_pane": {
+                    "contains": "Enthält",
+                    "begins": "Beginnt mit",
+                    "ends": "Endet mit",
+                    "not_contains": "Enthält nicht",
+                    "not_begins": "Beginnt nicht mit",
+                    "not_ends": "Endet nicht mit"
+                },
+                "filtering": {
+                    "select_all": "Alles auswählen",
+                    "min": "MINIMUM",
+                    "max": "MAXIMUM",
+                    "after": "Nach",
+                    "before": "Vor"
+                }
+            },
             "ja": {
                 "grouping_pane": "ここにカラムをドラッグするとグループ化できます。",
                 "filter_pane": {

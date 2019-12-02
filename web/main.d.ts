@@ -21,6 +21,7 @@ export interface PowerGridOptions {
     extensions: object; // Object listing which extensions to load and their options
     settingsId?: string;
     autoResize?: boolean;
+    languageCode?: string;
 }
 
 export class PowerGrid extends Evented {

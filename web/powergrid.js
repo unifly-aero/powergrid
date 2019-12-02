@@ -41,6 +41,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
         width: 100
     };
 
+    var sequence = 0;
+
     var debug = true;
 
     function determineScrollBarSize() {
@@ -248,14 +250,22 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             $(this.target).addClass('pg-loading');
         },
 
+        elementId: function () {
+            var id = this.target.attr('id');
+            if(!id) {
+                id = "powergrid-"+ (sequence++);
+                this.target.attr('id', id);
+            }
+            return id;
+        },
+
         /**
          * Initializes the grid elements and event listeners
          * @private
          */
         init: function init() {
             var grid = this;
-            var baseSelector = this.baseSelector = "#" + this.target.attr('id'),
-
+            var baseSelector = this.baseSelector = "#" + this.elementId(),
                 container = this.container = $("<div class='powergrid'>"),
                 columnheadercontainer = this.columnheadercontainer = $("<div class='pg-columnheaders'>"),
                 headercontainer = this.headercontainer = this.options.frozenRowsTop && $("<div class='pg-rowgroup pg-header'>") || undefined,

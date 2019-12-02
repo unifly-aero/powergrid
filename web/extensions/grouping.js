@@ -66,9 +66,7 @@ define(['../override', '../utils', '../jquery', 'jsrender', '../extensions/treeg
                             treeds.toggle(groupId);
                         });
 
-                        var grouper = $(grouperTemplate(grid.translate.bind(grid)));
-
-                        this.columnheadercontainer.addClass("pg-grouping-enabled").prepend(grouper);
+                        var grouper = this.grouping.initGrouperElement();
                         
                         if(this.grouping.groups) {
                             if(pluginOptions.indicatorForFixedGroups !== false) {
@@ -127,6 +125,15 @@ define(['../override', '../utils', '../jquery', 'jsrender', '../extensions/treeg
                     grouping: {
                         groups: [],
                         fixedGroups: [],
+
+                        initGrouperElement: function() {
+                            if(pluginOptions.grouper) {
+                                return $(pluginOptions.grouper);
+                            }
+                            var grouper = $(grouperTemplate(grid.translate.bind(grid)));
+                            grid.columnheadercontainer.addClass("pg-grouping-enabled").prepend(grouper);
+                            return grouper;
+                        },
                         
                         initReordering: function(grouper) {
                             new DragNDrop(grouper, ".pg-group-indicator.pg-draggable", ".pg-group-indicator.pg-draggable");

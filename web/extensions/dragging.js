@@ -38,6 +38,8 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
 
                                 $(header).addClass("pg-dragging");
 
+                                grid.trigger('columndragstart', {column: col});
+
                                 event.stopPropagation();
                             }
                         }
@@ -138,6 +140,7 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
                                 
                                 event.preventDefault();
                                 event.stopImmediatePropagation();
+                                grid.trigger('columndragend', {column: col});
                             }
                             
                             // clean up

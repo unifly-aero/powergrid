@@ -1,14 +1,14 @@
-export class Evented {
+export interface Evented {
     trigger(event: string, ...args: any): void;
     on(event: string, callback: (event: string, ...args: any) => void);
 }
 
-export interface PowerGridColumnDefinition {
+export interface PowerGridColumnDefinition<V> {
     [key: string]: any;
 }
 
 export interface PowerGridOptions {
-    columns: PowerGridColumnDefinition[];
+    columns: PowerGridColumnDefinition<any>[];
     dataSource?: DataSource<any>;
     treeSource?: TreeSource<any>;
     virtualScrollingExcess?: number; // The number of extra rows to render on each side (top/bottom) of the viewport. A higher value results in less flickering during scrolling, but also higher memory usage and longer rendering times.
@@ -24,7 +24,7 @@ export interface PowerGridOptions {
     languageCode?: string;
 }
 
-export class PowerGrid extends Evented {
+export class PowerGrid implements Evented {
     constructor(target: any, options: PowerGridOptions);
     then(callback: () => void): Promise<void>;
     destroy(): void;
@@ -34,6 +34,21 @@ export class PowerGrid extends Evented {
     getRecordCount(): number;
     getData(start?: number, end?: number): Promise<object[]>|object[];
     getDataSync(start?: number, end?: number): object[];
+    trigger(event: string, ...args: any): void;
+    on(event: string, callback: (event: string, ...args: any) => void);
+    hideColumns(keys: string[]);
+    updateCellValue(rowId: any, key: string);
+    options: Readonly<PowerGridOptions>;
+
+    filtering?: {
+        filter(settings: object)
+    };
+    grouping?: {
+        readonly groups: PowerGridColumnDefinition<any>[]
+    };
+    export?: {
+        csv(filename: string): Promise<{stringValue: string, filename: string}>;
+    }
 }
 
 export interface DataSource<T> {
@@ -75,4 +90,10 @@ export class AsyncTreeGridDataSource<T> implements DataSource<T | GroupRow> {
 
 export class BufferedAsyncTreeSource<T> implements DataSource<T | GroupRow> {
     constructor(treeSource: TreeSource<T>)
+}
+
+export interface Filter<V> extends Evented {
+    filterBox?: DocumentFragment // the fragment containing the UI elements for the filter
+    value: V // the value to filter on
+    valueMatches: (value: V, columnSettings: any, column: PowerGridColumnDefinition<V>) => boolean // predicate for client-side filtering
 }

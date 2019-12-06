@@ -12,6 +12,7 @@ define(['./powergrid', './datasources/arraydatasource', './datasources/jsondatas
             FilteringDataSource: FilteringDataSource,
             AsyncTreeGridDataSource: AsyncTreeGridDataSource,
             BufferedAsyncTreeSource: BufferedAsyncTreeSource,
-            Evented: utils.Evented
+            Evented: utils.Evented,
+            PowerGridUtilities: utils
         };
     });

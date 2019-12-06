@@ -38,6 +38,8 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
 
                                 $(header).addClass("pg-dragging");
 
+                                grid.trigger('columngrabstart', {column: col});
+
                                 event.stopPropagation();
                             }
                         }
@@ -64,6 +66,7 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
                                     cells.addClass("pg-columndragging");
                                     $(header).addClass("pg-columndragging");
                                     dragstarted = true;
+                                    grid.trigger('columndragstart', {column: col});
                                 } else {
                                     return;
                                 }
@@ -138,7 +141,9 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
                                 
                                 event.preventDefault();
                                 event.stopImmediatePropagation();
+                                grid.trigger('columndragend', {column: col});
                             }
+                            grid.trigger('columngrabend', {column: col});
                             
                             // clean up
                             cells = null;

@@ -8,10 +8,7 @@ define(['../override', '../jquery', '../utils',
         init: function(grid, pluginOptions) {
             return override(grid, function($super) {
                 var columnSettings = pluginOptions.defaultFilterSettings || {};
-                
-                var currentFilterPane;
-
-                var filters = {};
+                var filters = pluginOptions.filters || {};
                 
                 return {
                     init: function() {
@@ -41,7 +38,7 @@ define(['../override', '../jquery', '../utils',
                     renderHeaderCell: function(column, columnIdx) {
                         var header = $super.renderHeaderCell(column, columnIdx);
                         
-                        if(column.filterable === undefined || column.filterable) {
+                        if(pluginOptions.renderFilters !== false && (column.filterable === undefined || column.filterable)) {
                             header.addClass("pg-filterable");
                             var filter = this.filtering.getFilter(column);
                             var timer;
@@ -78,15 +75,20 @@ define(['../override', '../jquery', '../utils',
                     },
                     
                     filtering: {
-                        getFilter: function(column) {
-                            if(column.key === undefined) {
-                                column = grid.getColumnForKey(column);
+                        getFilter: function(arg) {
+                            var column, key;
+                            if(arg.key === undefined) {
+                                key = arg;
+                                column = grid.getColumnForKey(key);
+                            } else {
+                                key = arg.key;
+                                column = arg;
                             }
 
-                            if(column.key in filters) {
-                                return filters[column.key];
+                            if(key in filters) {
+                                return filters[key];
                             } else {
-                                return filters[column.key] = this.createFilter(column);
+                                return filters[key] = this.createFilter(column);
                             }
                         },
 
@@ -112,16 +114,16 @@ define(['../override', '../jquery', '../utils',
                                     on: listener.on,
                                     trigger: listener.trigger,
                                     value: filterValue,
-                                    valueMatches: function(value, columnSettings) {
+                                    valueMatches: function(value, columnSettings, column) {
                                         var hasValue = value !== undefined && value !== null && value !== "";
                                         switch(columnSettings.method) {
                                             case "contains":
                                                 return (!columnSettings.value || hasValue && (value.toLocaleUpperCase()).indexOf(columnSettings.value.toLocaleUpperCase()) > -1);
                                             case "beginsWith":
-                                                return (!columnSettings.value || hasValue && value.length >= columnSettings.value.length && value.substring(0, columnSettings.value.length).toLocaleUpperCase() == columnSettings.value.toLocaleUpperCase());
+                                                return (!columnSettings.value || hasValue && value.length >= columnSettings.value.length && value.substring(0, columnSettings.value.length).toLocaleUpperCase() === columnSettings.value.toLocaleUpperCase());
                                             case "endsWith":
-                                                return (!columnSettings.value || hasValue && value.length >= columnSettings.value.length && value.substring(value.length - columnSettings.value.length).toLocaleUpperCase() == columnSettings.value.toLocaleUpperCase());
-                                            default: throw "Unsupported filter operator " + columnSettings.type;
+                                                return (!columnSettings.value || hasValue && value.length >= columnSettings.value.length && value.substring(value.length - columnSettings.value.length).toLocaleUpperCase() === columnSettings.value.toLocaleUpperCase());
+                                            default: throw "Unsupported filter method " + columnSettings.method;
                                         }
                                     }
                                 },
@@ -141,9 +143,7 @@ define(['../override', '../jquery', '../utils',
                             }
 
                             filterElement.addEventListener("click", function(event) {
-                                var $this = $(this),
-                                    key = $this.parents('.pg-columnheader').attr('data-column-key'),
-                                    column = grid.getColumnForKey(key);
+                                var $this = $(this);
 
                                 if(currentFilterPane) {
                                     return;
@@ -173,8 +173,7 @@ define(['../override', '../jquery', '../utils',
                             });
 
                             filterInputElement.addEventListener("keyup", function(event) {
-                                var value = this.value;
-                                filterValue.value = value;
+                                filterValue.value = this.value;
                                 updateFilter();
                             });
 
@@ -182,18 +181,22 @@ define(['../override', '../jquery', '../utils',
                         },
                         
                         filter: function(settings) {
+                            columnSettings = settings;
                             grid.dataSource.applyFilter(settings, settings && this.rowMatches.bind(this, settings));
+                            grid.trigger('filterchange', { settings: settings});
                         },
                         
                         rowMatches: function(settings, row) {
                             for(var x in settings) {
-                                if(!this.getFilter(x).valueMatches(utils.getValue(row, x), settings[x])) {
-                                    if(settings[x].type == 'inclusive' || settings[x].type === undefined) {
-                                        return 0;
-                                    }
-                                } else {
-                                    if(settings[x].type == 'exclusive') {
-                                        return -1;
+                                if(settings.hasOwnProperty(x)) {
+                                    if (!this.getFilter(x).valueMatches(utils.getValue(row, x), settings[x], row)) {
+                                        if (settings[x].type === 'inclusive' || settings[x].type === undefined) {
+                                            return 0;
+                                        }
+                                    } else {
+                                        if (settings[x].type === 'exclusive') {
+                                            return -1;
+                                        }
                                     }
                                 }
                             }

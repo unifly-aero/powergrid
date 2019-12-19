@@ -63,7 +63,12 @@ export class PowerGrid extends Evented<{
     rowsremoved: [{start: number, end: number}],
     rowsadded: [{start: number, end: number}],
     viewchanged: [],
-    scroll: []
+    scroll: [],
+    startrowedit: [string|number],
+    endrowedit: [string|number],
+    columngrabstart: [{column: PowerGridColumnDefinition<any>}],
+    columngrabend: [{column: PowerGridColumnDefinition<any>}],
+    groupingchanged: [string[]]
 }> {
     constructor(target: any, options: PowerGridOptions);
     then(callback: () => void): Promise<void>;

@@ -56,8 +56,7 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
                                     offsetX: offsetX,
                                     offsetY: offsetY
                                 });
-                                grid.trigger(dragevent);
-                                
+
                                 if(event.isDefaultPrevented()) {
                                     return;
                                 }
@@ -66,7 +65,7 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
                                     cells.addClass("pg-columndragging");
                                     $(header).addClass("pg-columndragging");
                                     dragstarted = true;
-                                    grid.trigger('columndragstart', {column: col});
+                                    grid.trigger(dragevent);
                                 } else {
                                     return;
                                 }

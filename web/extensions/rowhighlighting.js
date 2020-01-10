@@ -1,7 +1,7 @@
 define(['../override', '../jquery',], function(override, $) {
     "use strict";
 
-    return function(grid, pluginOptions) {
+    return function(grid) {
         override(grid, function($super) {
             return {
 

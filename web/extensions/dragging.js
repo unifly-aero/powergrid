@@ -16,7 +16,7 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
                             header = this;
                             key = $(header).attr("data-column-key");
                             if(!key) return;
-                            idx = utils.findInArray(grid.options.columns, function(col) { return col.key == key; });
+                            idx = utils.findInArray(grid.options.columns, function(col) { return col.key === key; });
                             col = grid.options.columns[idx];
                             
                             var positions = grid.adjustColumnPositions();

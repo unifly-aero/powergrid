@@ -6,7 +6,7 @@ define(['../jquery','../override', '../utils'], function($, override, utils) {
     
     return {
         loadFirst: ['editing'],
-        init: function(grid, pluginOptions) {
+        init: function(grid) {
             override(grid, function($super) {
                 if(grid.editing) {
                     override(grid.editing, function($superEditing) {

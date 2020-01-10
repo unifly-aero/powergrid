@@ -1,11 +1,6 @@
 define(['../override', 'vein', '../utils'], function(override, vein, utils) {
     "use strict";
     
-    function updateStyle(selector, style) {
-        $(selector).css(style);
-        //vein.inject(selector, style);
-    }
-
     function storeColumnOrder(grid) {
         var result = {};
         grid.options.columns.map(function(current, index) {return result[current.key] = index});
@@ -27,7 +22,7 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
             dragging: {}
         },
 
-        init: function (grid, pluginOptions) {
+        init: function (grid) {
             override(grid, function ($super) {
                 return {
                     init: function () {

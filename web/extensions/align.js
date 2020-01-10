@@ -6,7 +6,7 @@
 define(['../override', '../jquery', '../utils'], function(override, $) {
     "use strict";
 
-    return function(grid, pluginOptions) {
+    return function(grid) {
         override(grid, function($super) {
             return {
                 renderCell: function renderCell(record, column, rowIdx, columnIdx) {

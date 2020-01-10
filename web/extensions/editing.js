@@ -60,7 +60,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         });
                     }
 
-                    if(pluginOptions.mode == 'row') {
+                    if(pluginOptions.mode === 'row') {
                         this.container.on("click", "[pg-role]", function(event) {
                             var target = $(event.target);
                             if(!target.is("[pg-role]")) {
@@ -176,7 +176,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                     },
 
                     startEdit: function(target, key, record, rowIdx) {
-                        if(arguments.length == 2) {
+                        if(arguments.length === 2) {
                             key = arguments[0];
                             record = arguments[1];
                             target = grid.getCellFor(record.id, key);
@@ -282,7 +282,7 @@ define(['../override', '../jquery', '../utils'], function(override, $, utils) {
                         $(target).removeClass('pg-editing');
 
                         editedCellMapByRowId[rowId] = editedCellMapByRowIdx[rowIdx] = editedCellMapByRowIdx[rowIdx].filter(function(k) { return k !== column.key });
-                        if(editedCellMapByRowIdx[rowIdx].length == 0) {
+                        if(editedCellMapByRowIdx[rowIdx].length === 0) {
                             delete editedCellMapByRowIdx[rowIdx];
                             delete editedCellMapByRowId[rowId]
                         }

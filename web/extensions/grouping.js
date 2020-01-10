@@ -31,7 +31,7 @@ define(['../override', '../utils', '../jquery', 'jsrender', '../extensions/treeg
                     init: function() {
                         var groupKeys = grid.loadSetting("grouping"),
                             groupSettings;
-                        if ((!groupKeys || groupKeys.length == 0) && pluginOptions.defaultGroupedColumns) {
+                        if ((!groupKeys || groupKeys.length === 0) && pluginOptions.defaultGroupedColumns) {
                             groupKeys = pluginOptions.defaultGroupedColumns;
                         }
 

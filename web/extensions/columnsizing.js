@@ -57,9 +57,9 @@ define(['../override', '../utils', '../jquery'], function(override, utils, $) {
 
                         function doResize(event) {
                             var width;
-                            if(resizing == 1) {
+                            if(resizing === 1) {
                                 width = Math.max(minSize, event.pageX - oX + w);
-                            } else if(resizing == -1) {
+                            } else if(resizing === -1) {
                                 width = Math.max(minSize, oX - event.pageX + w);
                             } else {
                                 return;

@@ -3,7 +3,7 @@ define(['../override', '../utils', '../jquery'],
     "use strict";
     
     return {
-        init: function(grid, pluginOptions) {
+        init: function(grid) {
             
             function autosize(col, shrink) {
                 var cells = grid.target.find(".pg-cell[data-column-key='" + col.key + "']");

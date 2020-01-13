@@ -9,14 +9,111 @@ export interface RecordType {
 
 export type IdOf<T extends RecordType> = T["id"];
 
+export interface PowerGridCellEditor {
+    editor: HTMLElement,
+    value(): any,
+    on(eventName: string, handler: (eventName, data) => void);
+}
+
+export interface PowerGridExtensionOptions<T extends RecordType> {
+    align?: boolean,
+    autosizecolumn?: boolean,
+    backdrop?: boolean,
+    columnmoving?: boolean,
+    columnsizing?: boolean | {
+        minSize?: number
+    },
+    directinput?: boolean,
+    dragging?: boolean | {
+        allowDragOutsideOfViewPort?: boolean
+    },
+    dummy?: (override, $super) => any,
+    editing?: boolean | {
+        mode?: 'cell'|'row',
+        editOnClick?: boolean,
+        commitOnBlur?: boolean,
+        abortOnBlur?: boolean,
+        additionalRowHeight?: number,
+        liveUpdate?: boolean,
+        defaultEditor(record: T, column: PowerGridColumnDefinition<any>, value: any): PowerGridCellEditor,
+        isEditable?(record: T, column: PowerGridColumnDefinition<any>): boolean,
+        editors?: {
+            [columnType: string]: PowerGridCellEditor
+        }
+    },
+    editing_currency?: boolean,
+    editing_date?: boolean,
+    editing_number_int?: boolean,
+    editing_option?: boolean,
+    export_csv?: boolean | {
+        autodownload?: boolean
+    },
+    filtering?: boolean | {
+        defaultFilterSettings?: FilterSettings<T>,
+        filters?: {[K in keyof T]: Filter<T[K]>}
+    },
+    filtering_option?: boolean,
+    filtering_date?: boolean,
+    filtering_scalar?: boolean,
+    flexcolumns?: boolean,
+    formatting?: boolean | {[k: string]: (value: any, record?: T, column?: PowerGridColumnDefinition<T>) => string},
+    grouping?: {
+        defaultGroupedColumns?: (keyof T)[],
+        fixedGroupedColumns?: (keyof T)[],
+        indicatorForFixedGroups?: boolean,
+        grouper?: HTMLElement,
+        hideGroupedColumns?: boolean,
+        renderGroupRow?(column: PowerGridColumnDefinition<any>, record: T): Element | DocumentFragment
+    },
+    rowhighlighting?: boolean,
+    selection?: boolean | {
+        onrowselected?(id: IdOf<T>);
+    },
+    sorting?: boolean | {
+        defaultSortedColumns?: Sorting<T>[]
+    },
+    statistics?: boolean | {
+        template: string
+    },
+    styling?: {
+        applyClasses(record: T, column: PowerGridColumnDefinition<any>, callback: (string)=>void)
+    },
+    subcells?: {
+        cellpadding: number,
+        cellheight: number
+    },
+    subgrids?: {
+        hasSubGrid(grid: PowerGrid<T>, record: T): boolean,
+        subGridSettings(record: T): Promise<PowerGridOptions<any>>,
+        subgrid(id): PowerGrid<any>
+    },
+    subview?: {
+        hasSubView?():boolean,
+        prerender?: boolean,
+        renderSubView(grid: PowerGrid<T>, record: T, target: HTMLElement): Promise<void>
+    },
+    summarize?: {
+        summaryFactory(): RecordType
+    },
+    templating?: boolean,
+    treegrid?: boolean | {
+        autoTreeDataSource?: boolean,
+        initialTreeDepth?: number
+    },
+    validation?: boolean,
+    variablerowheight?: {
+        variableRowHeight(row: T): number;
+    }
+}
+
 export interface PowerGridColumnDefinition<V> {
     [key: string]: any;
 }
 
-export interface PowerGridOptions {
-    columns: PowerGridColumnDefinition<any>[];
-    dataSource?: DataSource<any>;
-    treeSource?: TreeSource<any>;
+export interface PowerGridOptions<T extends RecordType> {
+    columns: PowerGridColumnDefinition<T>[];
+    dataSource?: DataSource<T>;
+    treeSource?: TreeSource<T>;
     virtualScrollingExcess?: number; // The number of extra rows to render on each side (top/bottom) of the viewport. A higher value results in less flickering during scrolling, but also higher memory usage and longer rendering times.
     frozenRowsTop?: number; // Number of rows at the top of the grid that should not scroll (i.e. header)
     frozenRowsBottom?: number; // Number of rows at the bottom of the grid that should not scroll (i.e. footer)
@@ -24,7 +121,7 @@ export interface PowerGridOptions {
     frozenColumnsRight?: number; // Number of columns on the right side of the grid that should not scroll
     fullWidth?: boolean; // If true, the last column will stretch to fill the remaining space
     rowHeight?: number; // Default height of each row in pixels. Can be overridden in extensions on a per row basis.
-    extensions: object; // Object listing which extensions to load and their options
+    extensions: PowerGridExtensionOptions<T>; // Object listing which extensions to load and their options
     settingsId?: string;
     autoResize?: boolean;
     languageCode?: string;
@@ -54,8 +151,8 @@ export type FilterSettings<T> = {[key in keyof(T)]?: FilterSetting};
 
 export type Comparator<T> = (a: T, b: T) => number;
 
-export class PowerGrid extends Evented<{
-    inited: [PowerGrid],
+export class PowerGrid<T extends RecordType> extends Evented<{
+    inited: [PowerGrid<T>],
     change: [],
     dataloaded: [object[]],
     datachanged: [{values?: {id: any, key: string}[]}|{rows?: {id: any}[]}],
@@ -68,9 +165,10 @@ export class PowerGrid extends Evented<{
     endrowedit: [string|number],
     columngrabstart: [{column: PowerGridColumnDefinition<any>}],
     columngrabend: [{column: PowerGridColumnDefinition<any>}],
-    groupingchanged: [string[]]
+    groupingchanged: [string[]],
+    filterchange: [{settings: FilterSettings<T>}]
 }> {
-    constructor(target: any, options: PowerGridOptions);
+    constructor(target: any, options: PowerGridOptions<T>);
     then(callback: () => void): Promise<void>;
     destroy(): void;
     resetDataSubscriptions(): void;
@@ -82,7 +180,7 @@ export class PowerGrid extends Evented<{
     trigger(event: string, ...args: any): void;
     hideColumns(keys: string[]);
     updateCellValue(rowId: any, key: string);
-    options: Readonly<PowerGridOptions>;
+    options: Readonly<PowerGridOptions<T>>;
 
     filtering?: {
         filter(settings: {[key: string]: FilterSetting})
@@ -268,4 +366,9 @@ export interface Filter<V> extends Evented<any> {
     filterBox?: DocumentFragment // the fragment containing the UI elements for the filter
     value: V // the value to filter on
     valueMatches: (value: V, columnSettings: any, column: PowerGridColumnDefinition<V>) => boolean // predicate for client-side filtering
+}
+
+export interface Sorting<T> {
+    direction: 'descending'|'ascending',
+    key: keyof T
 }

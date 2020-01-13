@@ -15,11 +15,11 @@ define(['override', 'jquery', 'utils', 'w2ui'], function(override, $) {
             editing: true
         },
 
-        init: function (grid, pluginOptions) {
+        init: function (grid) {
             override(grid.editing, function ($super) {
                 return {
                     createEditor: function(record, column, value) {
-                        if(column.type=='date') {
+                        if(column.type==='date') {
                             var committed = false;
                             var input = $("<input>").datepicker({
                                 dateFormat: column.format,

@@ -53,7 +53,8 @@ define(
                             key: key,
                             type: 'text'
                         };
-                    }
+                    },
+                    trigger: function() {}
                 };
 
                 filtering.init(mockgrid, {});
@@ -150,7 +151,8 @@ define(
                             key: key,
                             type: 'text'
                         };
-                    }
+                    },
+                    trigger: function() {}
                 };
 
                 filtering.init(mockgrid, {});

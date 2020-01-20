@@ -102,6 +102,31 @@ define(
                 testNoOverlap({begin: 9, end: 9}, {begin: 6, end: 8});
                 testNoOverlap({begin: 9, end: 10}, {begin: 6, end: 8});
             });
+
+            QUnit.test("debounce", function(assert) {
+                var cntr = 0;
+                var arg = -1;
+                var done = assert.async();
+                var dbc = utils.debounce(function(ar) {
+                    arg = ar;
+                    cntr++;
+                }, 100);
+                setTimeout(function() { dbc(0); }, 10);
+                setTimeout(function() { assert.ok(cntr === 0); assert.equal(arg, -1); }, 11);
+                setTimeout(function() { dbc(1); }, 20);
+                setTimeout(function() { assert.ok(cntr === 0); assert.equal(arg, -1);}, 21);
+                setTimeout(function() { dbc(2); }, 30);
+                setTimeout(function() { assert.ok(cntr === 0); assert.equal(arg, -1);}, 31);
+                setTimeout(function() { dbc(3); }, 40);
+                setTimeout(function() { assert.ok(cntr === 0); assert.equal(arg, -1);}, 41);
+                setTimeout(function() { dbc(4); }, 110);
+                setTimeout(function() { assert.ok(cntr === 1); assert.equal(arg, 4);}, 220);
+                setTimeout(function() { dbc(5); }, 230);
+                setTimeout(function() { assert.ok(cntr === 1); assert.equal(arg, 4);}, 220);
+                setTimeout(function() { dbc(6); }, 240);
+                setTimeout(function() { assert.ok(cntr === 1); assert.equal(arg, 4);}, 220);
+                setTimeout(function() { assert.ok(cntr === 2); assert.equal(arg, 6); done(); }, 350);
+            });
         };
     }
 );

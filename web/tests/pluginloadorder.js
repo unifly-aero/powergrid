@@ -1,6 +1,6 @@
 "use strict";
 define(
-    ['QUnit', 'powergrid', '../extensions/dragging', '../extensions/columnmoving', '../extensions/columnsizing', '../extensions/sorting'],
+    ['QUnit', '../powergrid', '../extensions/dragging', '../extensions/columnmoving', '../extensions/columnsizing', '../extensions/sorting'],
     function(QUnit, PowerGrid, dragging, columnmoving, columnsizing, sorting) {
         return function() {
             QUnit.asyncTest("Plugin load order", function(assert) {

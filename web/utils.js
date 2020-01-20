@@ -413,7 +413,22 @@
 
             offset: offset,
 
-            overlap: overlap
+            overlap: overlap,
+
+            debounce: function(func, period) {
+                var timer;
+
+                return function() {
+                    var args = arguments;
+                    var self = this;
+                    if(timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(function() {
+                        func.apply(self, args);
+                    }, period);
+                }
+            }
         }
     });
 })(define);

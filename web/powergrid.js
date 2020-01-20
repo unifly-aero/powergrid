@@ -1131,9 +1131,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * Invoked when the viewport has changed.
          * @param {boolean} renderExcess - if true, immediately render excess rows. If false, this is scheduled for a later time.
          */
-        updateViewport: function(renderExcess) {
-            var self = this,
-                start = this.options.frozenRowsTop,
+        updateViewportImmediate: function(renderExcess) {
+            var start = this.options.frozenRowsTop,
                 end = this.getRecordCount() - this.options.frozenRowsBottom,
                 sPos = this.getScrollPosition(),
                 sArea = this.getScrollAreaSize(),
@@ -1173,9 +1172,13 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
             if(!renderExcess) {
                 (window.clearImmediate) && window.clearImmediate(this._updateViewportImmediate);
-                this._updateViewportImmediate = (window.setImmediate || requestAnimationFrame)(this.updateViewport.bind(this, true));
+                this._updateViewportImmediate = (window.setImmediate || requestAnimationFrame)(this.updateViewportImmediate.bind(this, true));
             }
         },
+
+        updateViewport: utils.debounce(function() {
+            requestAnimationFrame(this.updateViewportImmediate.bind(this));
+        }, 100),
 
         /**
          * Invoked when the viewport needs to change (e.g. when scrolling)
@@ -1616,13 +1619,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * @private
          */
         afterscroll: function() {
-            var self = this;
-            if(!this.updateViewportTimer) {
-                this.updateViewportTimer = setTimeout(function() {
-                    utils.inAnimationFrame(self.updateViewport.bind(self));
-                    self.updateViewportTimer = null;
-                }, 100);
-            }
+            this.updateViewport();
             $(this).trigger('scroll');
         },
 

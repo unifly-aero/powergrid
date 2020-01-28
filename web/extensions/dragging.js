@@ -17,7 +17,11 @@ define(['../override', 'vein', '../utils', '../jquery'], function(override, vein
                             key = $(header).attr("data-column-key");
                             if(!key) return;
                             idx = utils.findInArray(grid.options.columns, function(col) { return col.key === key; });
-                            col = grid.options.columns[idx];
+                            col = grid.getColumnForIndex(idx);
+
+                            if(col.draggable === false) {
+                                return;
+                            }
                             
                             var positions = grid.adjustColumnPositions();
                             startX = positions[idx];

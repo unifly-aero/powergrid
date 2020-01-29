@@ -151,6 +151,11 @@ export type FilterSettings<T> = {[key in keyof(T)]?: FilterSetting};
 
 export type Comparator<T> = (a: T, b: T) => number;
 
+export type CellByRowIdAndColumnKey<T extends RecordType> = {
+    row: IdOf<T>;
+    column: keyof T;
+}
+
 export class PowerGrid<T extends RecordType> extends Evented<{
     inited: [PowerGrid<T>],
     change: [],
@@ -178,8 +183,25 @@ export class PowerGrid<T extends RecordType> extends Evented<{
     getData(start?: number, end?: number): Promise<object[]>|object[];
     getDataSync(start?: number, end?: number): object[];
     trigger(event: string, ...args: any): void;
-    hideColumns(keys: string[]);
-    updateCellValue(rowId: any, key: string);
+    hideColumns(keys: string[]): void;
+    updateCellValue(rowId: any, key: string): void;
+    updateCellValues(cells: CellByRowIdAndColumnKey<T>[]): void;
+    updateRows(records: T[]): void;
+    afterCellRendered(record: T, column: PowerGridColumnDefinition<keyof T>, cell: Node): void;
+    getRecordById(id: IdOf<T>): T;
+    findRow(id: IdOf<T>): JQuery;
+    renderCellValue<K extends keyof T>(record: T, column: PowerGridColumnDefinition<K>, value: T[K]): Node;
+    getCellTextValue(value: any, record: T, column: PowerGridColumnDefinition<keyof T>): string;
+    getVisibleColumns(): PowerGridColumnDefinition<keyof T>[];
+    setColumnVisibility(key: keyof T, visibility: boolean): void;
+    getColumnForKey<K extends keyof T>(k: K): PowerGridColumnDefinition<T[K]>;
+    getColumnForIndex(idx: number): PowerGridColumnDefinition<keyof T>;
+    columnCount(): number;
+    getColumnIndexForKey(key: keyof T): number;
+    getCellFor(rowId: IdOf<T>, key: keyof T): Node;
+    saveSetting(id: string, value: any);
+    loadSetting(id: string): any;
+
     options: Readonly<PowerGridOptions<T>>;
 
     filtering?: {

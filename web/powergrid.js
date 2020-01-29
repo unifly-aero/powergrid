@@ -285,7 +285,9 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             }
 
             var hiddenColumns = this.loadSetting("hidden");
-            this._hideColumns(hiddenColumns);
+            if(hiddenColumns) {
+                this._hideColumns(hiddenColumns);
+            }
 
             this.fixedLeft = this.fixedRight = this.middleScrollers = $();
 
@@ -1009,6 +1011,24 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
         },
 
         /**
+         * Set the specific columns visibility
+         * @param key
+         * @param visibility
+         */
+        setColumnVisibility: function(key, visibility) {
+            var column = this.getColumnForKey(key);
+            column.hidden = !visibility;
+            var keys = this.options.columns.filter(
+                function(column) {
+                    return column.hidden;
+                }).map(function(column) {
+                    return column.key;
+                });
+            this.saveSetting("hidden", keys);
+            this.updateColumns();
+        },
+
+        /**
          * Check if the given column is hidden
          * @param {object} column - Column object
          * @returns {boolean}
@@ -1018,14 +1038,9 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
         },
 
         _hideColumns: function(keys) {
-            if (keys) {
-                this.options.columns.forEach(function (column) {
-                    var hide = keys.find(function (key) {
-                        return key === column.key;
-                    });
-                    column.hidden = (hide) ? true : false;
-                });
-            }
+            this.options.columns.forEach(function (column) {
+                column.hidden = keys.indexOf(column.key) > -1;
+            });
         },
 
         /**
@@ -1472,7 +1487,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             function columnWidth(x) {
                 var col = self.options.columns[x];
                 return self.isColumnHidden(col) ? 0 : (transform ? transform(col, col.width) : col.width);
-            };
+            }
 
             // Calculate the width of a single column, or of a range of columns
             if(end == undefined) {
@@ -1879,6 +1894,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
         /**
          * Returns all the parts for the given row index
+         * @private
          * @param rowIndex
          */
         getRowPartsForIndex: function(rowIndex) {
@@ -1910,6 +1926,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * Returns the CSS class that is used to represent the given identifier (used to transform column keys etc).
          * @param c
          * @returns {*}
+         * @private
          */
         normalizeCssClass: function(c) {
             if (c.replace) {
@@ -1948,6 +1965,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
         /**
          * Extract the row id's from the given row DOM nodes
+         * @private
          * @param {Node[]} rows
          */
         getIdsFromRows: function(rows) {
@@ -1958,6 +1976,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
         /**
          * Updates a single row's height
+         * @private
          * @param {number} rowIndex
          */
         updateRowHeight: function(rowIndex) {

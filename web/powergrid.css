@@ -436,7 +436,6 @@
 .powergrid > .pg-scrolling {
     position: absolute;
     overflow: hidden;
-    z-index: 1;
     border-top: 1px solid rgba(0, 0, 0, 0.27);
     background: white;
 }
@@ -452,13 +451,8 @@
     background: white;
 }
 
-.powergrid > .pg-header {
-    z-index: 2;
-}
-
 .powergrid > .pg-footer {
     border-top: 2px solid rgba(0, 0, 0, 0.27);
-    z-index: 2;
 }
 
 .powergrid > div > .pg-container.pg-fixed {
@@ -735,25 +729,8 @@ ul.pg-menu > li:hover {
     width: 100% !important; /* ensures subviews get full width. */
 }
 
-.pg-container.pg-left .pg-row:not(.pg-row-has-subview),
-.pg-container.pg-left .pg-inner-row,
-.pg-container.pg-left .pg-columnheader,
-.pg-container.pg-left .pg-subview {
-    z-index: 2;
-}
-
-.pg-container.pg-scrolling .pg-row:not(.pg-row-has-subview),
-.pg-container.pg-scrolling .pg-inner-row,
-.pg-container.pg-scrolling .pg-columnheader,
-.pg-container.pg-scrolling .pg-subview   {
-    z-index: 1;
-}
-
-.pg-container.pg-right .pg-row:not(.pg-row-has-subview),
-.pg-container.pg-right .pg-inner-row,
-.pg-container.pg-right .pg-columnheader,
-.pg-container.pg-right .pg-subview   {
-    z-index: 2;
+.pg-container {
+    pointer-events: none;
 }
 
 .pg-container.pg-left .pg-row.pg-editing {

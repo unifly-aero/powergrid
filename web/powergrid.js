@@ -298,7 +298,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
             this.renderColumnHeaderContents(this.columnheadergroup);
 
-            container.append(columnheadercontainer).append(headercontainer).append(scrollingcontainer).append(footercontainer).append(scroller.append(scrollFiller));
+            container.append(scroller.append(scrollFiller)).append(scrollingcontainer).append(columnheadercontainer).append(headercontainer).append(footercontainer);
 
             this.queueAdjustColumnPositions();
 
@@ -533,10 +533,9 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * Creates a row group in the given container. There are three row groups in the grid: top, scrolling (center), and bottom.
          * @private
          * @param container
-         * @param adddummies
          * @returns {{left: boolean|*|jQuery|HTMLElement, scrolling: *|jQuery|HTMLElement, right: boolean|*|jQuery|HTMLElement, all: *|jQuery|HTMLElement}}
          */
-        createRowGroup: function createRowGroup(container, adddummies) {
+        createRowGroup: function createRowGroup(container) {
             var fixedPartLeft = this.options.frozenColumnsLeft > 0 && $("<div class='pg-container pg-fixed pg-left'>");
             var fixedPartRight = this.options.frozenColumnsRight > 0 && $("<div class='pg-container pg-fixed pg-right'>");
             var scrollingPart = $("<div class='pg-container pg-scrolling'>");
@@ -545,20 +544,12 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             this.fixedRight = this.fixedRight.add(fixedPartRight);
             this.middleScrollers = this.middleScrollers.add(scrollingPart);
 
-            var self = this;
-
-            if(adddummies) {
-                fixedPartLeft.add(scrollingPart).add(fixedPartRight).each(function(i, part) {
-                    $(part).append("<div class='.pg-dummyLead'>").append("<div class='.pg-dummyTail'>");
-                });
-            }
-
-            container.append(fixedPartLeft).append(scrollingPart).append(fixedPartRight);
-
             var all = $();
             if(fixedPartLeft) all = all.add(fixedPartLeft);
             if(scrollingPart) all = all.add(scrollingPart);
             if(fixedPartRight) all = all.add(fixedPartRight);
+
+            container.append(scrollingPart).append(fixedPartLeft).append(fixedPartRight);
 
             return {
                 left: fixedPartLeft,

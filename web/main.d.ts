@@ -103,6 +103,11 @@ export interface PowerGridExtensionOptions<T extends RecordType> {
     validation?: boolean,
     variablerowheight?: {
         variableRowHeight(row: T): number;
+    },
+    eventhandlers: {
+        row?: {
+            click?(rowId: IdOf<T>): boolean | undefined;
+        }
     }
 }
 

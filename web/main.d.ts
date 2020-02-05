@@ -213,7 +213,8 @@ export class PowerGrid<T extends RecordType> extends Evented<{
         filter(settings: {[key: string]: FilterSetting})
     };
     grouping?: {
-        readonly groups: PowerGridColumnDefinition<any>[]
+        readonly groups: PowerGridColumnDefinition<any>[],
+        isGroupRow(row: T | GroupRow): boolean
     };
     export?: {
         csv(filename: string): Promise<{stringValue: string, filename: string}>;

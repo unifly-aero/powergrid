@@ -729,9 +729,18 @@ ul.pg-menu > li:hover {
     width: 100% !important; /* ensures subviews get full width. */
 }
 
+/** In case of a grid with left frozen columns, the container for those columns takes the full width of the grid
+ * overlapping the scrolling and right parts, so as to be able to fit subviews. The following ensures that that
+ * part of the container doesn't block mouse clicks to the underlying elements. Clicks are enabled again in the actual
+ * row part of the container.
+ */
 .pg-container {
     pointer-events: none;
 }
+.pg-cell, .pg-columnheader, .pg-grouping-grouprow {
+    pointer-events: all;
+}
+
 
 .pg-container.pg-left .pg-row.pg-editing {
     z-index: 4;
@@ -761,15 +770,4 @@ ul.pg-menu > li:hover {
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
     cursor: grabbing;
-}
-
-/**
- * Make rows transparent for pointer events. This fixes issues where pg-rows from the fixed left column overlap cells from the scrolling part and intercept click events.
- */
-.pg-row:not(.pg-grouping-grouprow) {
-    pointer-events: none;
-}
-
-.pg-cell, .pg-columnheader {
-    pointer-events: all;
 }

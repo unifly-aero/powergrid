@@ -17,7 +17,7 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                     init: function() {
                         $super.init();
 
-                        this.container.on("click", ".pg-subview-toggle", function(event) {
+                        this.container.on("click", ".pg-columnsubviewtoggle", function(event) {
                             var row = $(this).parents(".pg-row").first(),
                                 rowId = row.attr("data-row-id"),
                                 rowIdx = parseInt(row.attr("data-row-idx"));

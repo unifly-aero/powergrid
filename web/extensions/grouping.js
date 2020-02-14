@@ -100,7 +100,7 @@ define(['../override', '../utils', '../jquery', 'jsrender', '../extensions/treeg
                     },
                     
                     headerContainerHeight: function() {
-                        return $super.headerContainerHeight() + this.target.find(".pg-grouper").outerHeight();
+                        return $super.headerContainerHeight() + (this.target.find(".pg-grouper").outerHeight() || 0);
                     },
                     
                     renderRowToParts: function(record, rowIdx, rowFixedPartLeft, rowScrollingPart, rowFixedPartRight) {

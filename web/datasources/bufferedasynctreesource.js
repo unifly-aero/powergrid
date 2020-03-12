@@ -120,7 +120,7 @@ define(["../utils"], function(utils) {
 
             // trim already fetched or being fetched rows from window
             while(cache[fetchStart] !== undefined) fetchStart++;
-            while(cache[fetchEnd] !== undefined) fetchEnd--;
+            while(cache[fetchEnd-1] !== undefined && fetchEnd > fetchStart) fetchEnd--;
 
             // query resulting window and add to cache
             if(fetchEnd > fetchStart) {

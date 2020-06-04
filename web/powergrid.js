@@ -584,6 +584,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
                 self.recordCount = recordCount;
 
+                self.resetDataSubscriptions(); // cancel any requests that still assume the old recordCount
+
                 /**
                  * The working set contains all rows that are currently in the grid (though not necessarily in view) and have
                  * been loaded through 'getData'. If the dataset changes, this needs to be kept up to date and the indexes in

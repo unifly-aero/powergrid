@@ -203,13 +203,25 @@
 
         this.queue = function(cb) {
             return function() {
-                if(!cancelled) cb.apply(this, arguments);
+                if(!cancelled) {
+                    cb.apply(this, arguments);
+                }
             }
         };
 
         this.cancel = function() {
             cancelled = true;
         };
+
+        this.isCancelled = function() {
+            return cancelled;
+        }
+
+        this.assert = function() {
+            if(cancelled) {
+                throw new Error("Subscription cancelled");
+            }
+        }
     }
 
     function calculateDifference(a, b) {

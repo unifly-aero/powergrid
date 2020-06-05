@@ -61,9 +61,10 @@ define(['../utils'], function (utils) {
                 }
 
                 self.view = self.shadowTree.concat([]); // initial (unexpanded) view is copy of root shadow tree
-                self.viewPromise = undefined;
 
                 return self.view;
+            }).finally(function() {
+                self.viewPromise = undefined;
             });
         },
 

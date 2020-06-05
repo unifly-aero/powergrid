@@ -23,6 +23,10 @@ define(["../utils"], function(utils) {
 
     BufferedAsyncTreeSource.prototype = {
         reset: function() {
+            if(this.dataSubscriptions) {
+                this.dataSubscriptions.cancel();
+            }
+            this.dataSubscriptions = new utils.SubscriptionQueue();
             this.childrenCache = undefined;
             this.rootCache = undefined;
             this.rootCount = undefined;
@@ -35,7 +39,9 @@ define(["../utils"], function(utils) {
             if(this.childrenCache && this.rootCache) {
                 return Promise.resolve();
             } else {
+                var subscription = this.dataSubscriptions;
                 return Promise.resolve(this.countRootNodes()).then(function (rootCount) {
+                    subscription.assert();
                     self.childrenCache = {};
                     self.rootCache = new Array(rootCount);
                 });
@@ -49,7 +55,9 @@ define(["../utils"], function(utils) {
         getRecordCount: function() {
             var self = this;
             if(this.rootCount === undefined) {
+                var subscription = this.dataSubscriptions;
                 return utils.map(this.delegate.getRecordCount(), function(count) {
+                    subscription.assert();
                     return self.rootCount = count;
                 });
             } else {
@@ -98,6 +106,7 @@ define(["../utils"], function(utils) {
             // check if requested window is fully in cache
             var queryNeeded = false;
             var promises = [];
+            var subscription = this.dataSubscriptions;
 
             for(var x=start;x<end;x++) {
                 if(cache[x] === undefined) {
@@ -125,6 +134,8 @@ define(["../utils"], function(utils) {
             // query resulting window and add to cache
             if(fetchEnd > fetchStart) {
                 var promise = queryFunction(fetchStart, fetchEnd).then(function (results) {
+                    subscription.assert();
+
                     for (var x = 0, l = results.length; x < l; x++) {
                         cache[fetchStart + x] = results[x];
                     }
@@ -151,7 +162,9 @@ define(["../utils"], function(utils) {
         countChildren: function(parent) {
             var self = this;
             if(!(parent.id in this.childCount)) {
+                var subscription = this.dataSubscriptions;
                 return utils.map(this.delegate.countChildren(parent), function(count) {
+                    subscription.assert();
                     return self.childCount[parent.id] = count;
                 });
             } else {
@@ -162,7 +175,9 @@ define(["../utils"], function(utils) {
         countRootNodes: function() {
             var self = this;
             if(this.rootCount === undefined) {
+                var subscription = this.dataSubscriptions;
                 return utils.map(this.delegate.countRootNodes(), function(count) {
+                    subscription.assert();
                     return self.rootCount = count;
                 });
             } else {

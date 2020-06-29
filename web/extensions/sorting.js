@@ -1,4 +1,4 @@
-define(['../override', '../jquery', '../utils', '../datasources/sortingdatasource'], function(override, $, utils, SortingDataSource) {
+define(['../override', 'jquery', '../utils', '../datasources/sortingdatasource'], function(override, $, utils, SortingDataSource) {
     "use strict";
 
     return {

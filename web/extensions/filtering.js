@@ -1,4 +1,4 @@
-define(['../override', '../jquery', '../utils',
+define(['../override', 'jquery', '../utils',
     '../datasources/filteringdatasource',
     '../templates/filterPane',
     '../templates/filterBox'], function(override, $, utils, FilteringDataSource, filterPane, filterBox) {

@@ -1,4 +1,4 @@
-define(['../override', '../jquery', 'jsrender', '../utils', '../templates/statistics'],
+define(['../override', 'jquery', 'jsrender', '../utils', '../templates/statistics'],
     function(override, $, jsrender, utils, statisticsTemplate) {
     
     "use strict";

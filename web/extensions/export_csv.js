@@ -1,4 +1,4 @@
-define(['../jquery','../override', '../utils', '../promise'], function($, override, utils, Promise) {
+define(['jquery','../override', '../utils', '../promise'], function($, override, utils, Promise) {
     "use strict";
 
     return function(grid) {

@@ -1,7 +1,7 @@
 /**
  * Allows rows to have different heights
  */
-define(['../override', '../jquery', '../utils'], function(override, $) {
+define(['../override', 'jquery', '../utils'], function(override, $) {
     "use strict";
 
     return function(grid, pluginOptions) {

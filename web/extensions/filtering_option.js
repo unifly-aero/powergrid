@@ -4,7 +4,7 @@
  * Generates a simple html select / option list
  */
 
-define(['../override', '../jquery', '../utils'], function(override, $, utils) {
+define(['../override', 'jquery', '../utils'], function(override, $, utils) {
 
     "use strict";
 

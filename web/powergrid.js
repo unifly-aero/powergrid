@@ -200,10 +200,11 @@ define(['jquery', 'vein', './utils', './promise', 'require', './translations'], 
 
             var newkeys = [];
             for (let key of keys) {
-                plugins[key] = require('./extensions/' + key);
-                pluginList.push(plugins[key]);
+                const plugin = require('./extensions/' + key);
+                plugins[key] = plugin;
+                pluginList.push(key);
 
-                var reqs = arguments[key].requires;
+                var reqs = plugin.requires;
                 if (reqs) {
                     for(var req in reqs) {
                         if(!grid.options.extensions[req]) {

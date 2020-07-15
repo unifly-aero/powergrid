@@ -12,6 +12,9 @@ define(['../override', 'vein', '../utils', 'jquery'], function(override, vein, u
                         var cells, oX, oY, dragstarted, tracking, col, startX, idx, offset, header, key, dragTarget, offsetX, offsetY;
 
                         function startDrag(event) {
+                            // disable drag preview
+                            event.preventDefault();
+
                             if($(this).parents(".powergrid")[0] !== grid.container[0]) return;
                             header = this;
                             key = $(header).attr("data-column-key");
@@ -23,8 +26,8 @@ define(['../override', 'vein', '../utils', 'jquery'], function(override, vein, u
                                 return;
                             }
                             
-                            var positions = grid.adjustColumnPositions();
-                            startX = positions[idx];
+                            var columns = grid.options.columns;
+                            startX = columns[idx].offsetLeft;
 
                             oX = event.pageX;
                             oY = event.pageY;

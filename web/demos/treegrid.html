@@ -9,7 +9,7 @@
 
     <link href="../powergrid.css" rel="stylesheet"/>
     <script>
-        require(['jquery', 'powergrid', 'datasources/jsondatasource'], function ($, powergrid, JSONDataSource) {
+        require(['../jquery', 'powergrid', 'datasources/jsondatasource'], function ($, powergrid, JSONDataSource) {
             if (window.requestAnimationFrame === undefined) {
                 requestAnimationFrame = function (f) {
                     setTimeout(f, 0);

@@ -17,7 +17,7 @@ System.config({
     "babel": "npm:babel-core@5.8.23",
     "babel-runtime": "npm:babel-runtime@5.8.20",
     "core-js": "npm:core-js@1.1.3",
-    "es6-promise": "github:components/es6-promise@3.0.2",
+    "es6-promise": "github:components/es6-promise@4.2.4",
     "jquery": "npm:jquery@3.4.1",
     "jsrender": "github:BorisMoore/jsrender@1.0.0-rc.68",
     "systemjs/plugin-text": "github:systemjs/plugin-text@0.0.2",

@@ -1,4 +1,4 @@
-define(['jquery', 'vein', './utils', './promise', 'require', './translations'], function($, vein, utils, Promise, require, translations) {
+define(['./jquery', 'vein', './utils', './promise', 'require', './translations'], function($, vein, utils, Promise, require, translations) {
     "use strict";
 
     /**
@@ -198,33 +198,40 @@ define(['jquery', 'vein', './utils', './promise', 'require', './translations'], 
                 pluginList = [];
             }
 
-            var newkeys = [];
-            for (let key of keys) {
-                const plugin = require('./extensions/' + key);
-                plugins[key] = plugin;
-                pluginList.push(key);
+            var files = keys.map(function(e) {
+                return Promise.resolve(function(cb) {
+                    return require('./extensions/' + e, cb);
+                });
+            });
 
-                var reqs = plugin.requires;
-                if (reqs) {
-                    for(var req in reqs) {
-                        if(!grid.options.extensions[req]) {
-                            newkeys.push(req);
-                        }
+            Promise.all(files).then(function() {
+                var newkeys = [];
+                for(var x = 0; x < arguments.length; x++) {
+                    plugins[keys[x]] = arguments[x];
+                    pluginList.push(keys[x]);
 
-                        if(!grid.options.extensions[req] || grid.options.extensions[req] === true) {
-                            grid.options.extensions[req] = reqs[req];
-                        } else {
-                            $.extend(true, grid.options.extensions[req], reqs[req]);
+                    var reqs = arguments[x].requires;
+                    if(reqs) {
+                        for(var req in reqs) {
+                            if(!grid.options.extensions[req]) {
+                                newkeys.push(req);
+                            }
+
+                            if(!grid.options.extensions[req] || grid.options.extensions[req] === true) {
+                                grid.options.extensions[req] = reqs[req];
+                            } else {
+                                $.extend(true, grid.options.extensions[req], reqs[req]);
+                            }
                         }
                     }
                 }
-            };
 
-            if(newkeys.length) {
-                grid.loadExtensions(callback, newkeys, plugins, pluginList);
-            } else {
-                callback(pluginList, plugins);
-            }
+                if(newkeys.length) {
+                    grid.loadExtensions(callback, newkeys, plugins, pluginList);
+                } else {
+                    callback(pluginList, plugins);
+                }
+            });
         },
 
         sortByLoadOrder: function(pluginList, plugins) {

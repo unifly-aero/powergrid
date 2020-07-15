@@ -8,7 +8,7 @@
 
     <link href="../powergrid.css" rel="stylesheet"/>
     <script>
-        require(['jquery', 'powergrid', 'datasources/asynctreegriddatasource', 'datasources/bufferedasynctreesource', '../utils'], function ($, powergrid, AsyncTreeGridDataSource, BufferedAsyncTreeSource, utils) {
+        require(['../jquery', 'powergrid', 'datasources/asynctreegriddatasource', 'datasources/bufferedasynctreesource', '../utils'], function ($, powergrid, AsyncTreeGridDataSource, BufferedAsyncTreeSource, utils) {
             if (window.requestAnimationFrame === undefined) {
                 requestAnimationFrame = function(f) {
                     setTimeout(f, 0);

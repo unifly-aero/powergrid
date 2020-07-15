@@ -8,7 +8,7 @@
 
     <link href="../powergrid.css" rel="stylesheet"/>
     <script>
-        require(['jquery', 'powergrid', 'datasources/csvdatasource'], function ($, powergrid, CSVDataSource) {
+        require(['../jquery', 'powergrid', 'datasources/csvdatasource'], function ($, powergrid, CSVDataSource) {
             var datasource = new CSVDataSource({url: 'airports-extended.dat'});
 
             function formatDegrees(deg, record, column) {

@@ -1,4 +1,4 @@
-define(['../override', 'jquery', '../datasources/synctreegriddatasource', '../datasources/defaulttreesource'], function(override, $, SyncTreeGridDataSource, DefaultTreeSource) {
+define(['../override', '../jquery', '../datasources/synctreegriddatasource', '../datasources/defaulttreesource'], function(override, $, SyncTreeGridDataSource, DefaultTreeSource) {
     
     "use strict";
     

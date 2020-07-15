@@ -8,7 +8,7 @@
 
     <link href="../powergrid.css" rel="stylesheet"/>
     <script>
-        require(['jquery', 'powergrid', 'datasources/jsondatasource', 'datasources/sortingdatasource', 'datasources/filteringdatasource'], function($, powergrid, JSONDataSource, SortingDataSource, FilteringDataSource) {
+        require(['../jquery', 'powergrid', 'datasources/jsondatasource', 'datasources/sortingdatasource', 'datasources/filteringdatasource'], function($, powergrid, JSONDataSource, SortingDataSource, FilteringDataSource) {
             if (window.requestAnimationFrame === undefined) {
                 requestAnimationFrame = function(f) {
                     setTimeout(f, 0);

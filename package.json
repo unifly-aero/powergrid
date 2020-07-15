@@ -16,9 +16,6 @@
     "jquery": "*"
   },
   "devDependencies": {
-    "babel": "npm:babel-core@^5.8.24",
-    "babel-runtime": "npm:babel-runtime@^5.8.20",
-    "core-js": "npm:core-js@^1.0.0",
     "bower": "^1.3.10",
     "grunt": "^0.4.5",
     "grunt-bower": "^0.14.0",

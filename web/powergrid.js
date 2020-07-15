@@ -1,4 +1,4 @@
-define(['jquery', 'vein', './utils', './promise', 'require', './translations'], function($, vein, utils, Promise, require, translations) {
+define(['./jquery', 'vein', './utils', './promise', 'require', './translations'], function($, vein, utils, Promise, require, translations) {
     "use strict";
 
     /**
@@ -199,8 +199,9 @@ define(['jquery', 'vein', './utils', './promise', 'require', './translations'], 
             }
 
             var newkeys = [];
-            for (let key of keys) {
-                const plugin = require('./extensions/' + key);
+            for (var i = 0, n = keys.length; i < n; i++) {
+                var key = keys[i];
+                var plugin = require('./extensions/' + key);
                 plugins[key] = plugin;
                 pluginList.push(key);
 

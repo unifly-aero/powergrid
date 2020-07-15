@@ -1,4 +1,4 @@
-define(['../override', 'vein', '../utils', 'jquery'], function(override, vein, utils, $) {
+define(['../override', 'vein', '../utils', '../jquery'], function(override, vein, utils, $) {
     "use strict";
     
     return {

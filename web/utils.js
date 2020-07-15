@@ -337,7 +337,7 @@
         return true;
     }
 
-    define(['jquery'], function($) {
+    define(['./jquery'], function($) {
         return {
             inAnimationFrame: function(f, queue) {
                 if(inAnimFrame && !queue) {

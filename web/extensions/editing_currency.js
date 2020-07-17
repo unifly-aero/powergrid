@@ -18,7 +18,7 @@ define(['../override', '../jquery', '../utils', 'w2ui'], function(override, $) {
                     currency: function(record, column, value) {
                         var input = $("<input>").w2field('money', {
                             autoFormat: true,
-                            currencyPrefix: '€',
+                            currencyPrefix: 'â‚¬',
                             currencyPrecision: column.precision,
                             precision: column.precision
                         });

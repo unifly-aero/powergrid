@@ -27,6 +27,8 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                 return {
                     init: function () {
                         var start, end, idx, oidx, startconfig, wasOutOfBounds;
+                        var columnMoved = false;
+
                         loadColumnOrder(grid);
                         $super.init();
                         grid.on("columndragstart", function (event) {
@@ -46,6 +48,7 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
 
                             startconfig = $.extend([], grid.options.columns);
                             wasOutOfBounds = false;
+                            columnMoved = false;
                         }).on("columndragmove", function (event, ui) {
                             if (event.outOfViewPort) {
                                 if (!wasOutOfBounds) {
@@ -72,12 +75,18 @@ define(['../override', 'vein', '../utils'], function(override, vein, utils) {
                                     grid.options.columns.splice(newIdx, 0, c[0]);
                                     grid.adjustColumnPositions(true);
                                     idx = newIdx;
+                                    columnMoved = true;
                                     storeColumnOrder(grid);
                                 }
                             }
                         }).on("columndragend", function (event, ui) {
                             startconfig = null;
-                            grid.adjustColumnPositions(false);
+
+                            // don't call adjustColumnPositions unless the column was actually moved
+                            if (columnMoved) {
+                                columnMoved = false;
+                                grid.adjustColumnPositions(false);
+                            }
                         });
                     }
                 }

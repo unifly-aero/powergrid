@@ -146,8 +146,8 @@ export interface OptionFilterSetting extends FilterSetting {
 }
 
 export interface ScalarFilterSetting<T> extends FilterSetting {
-    minimum: T,
-    maximum: T,
+    minimum: T | null,
+    maximum: T | null,
     method: 'scalar',
     dataType: 'number'|'date'|'datetime'
 }

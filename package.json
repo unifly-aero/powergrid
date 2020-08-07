@@ -1,6 +1,6 @@
 {
   "name": "powergrid",
-  "version": "0.0.1",
+  "version": "2.4.2",
   "main": "web/main.js",
   "types": "web/main.d.ts",
   "devDependencies": {

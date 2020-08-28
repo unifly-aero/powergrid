@@ -128,9 +128,15 @@ export interface PowerGridOptions<T extends RecordType> {
     rowHeight?: number; // Default height of each row in pixels. Can be overridden in extensions on a per row basis.
     extensions: PowerGridExtensionOptions<T>; // Object listing which extensions to load and their options
     settingsId?: string;
+    settingsProvider?: SettingsProvider;
     autoResize?: boolean;
     languageCode?: string;
 }
+
+export interface SettingsProvider {
+    loadSetting(id: string): unknown;
+    saveSetting(id: string, value: unknown): void;
+} 
 
 export interface FilterSetting {
 }

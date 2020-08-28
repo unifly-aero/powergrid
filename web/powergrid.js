@@ -1901,7 +1901,13 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * @param {*} value
          */
         saveSetting: function (id, value) {
-            localStorage[this.options.settingsId + "_" + id] = JSON.stringify(value);
+            var settingsProvider = this.options.settingsProvider;
+            if (settingsProvider) {
+                settingsProvider.saveSetting(id, value);
+            } else {
+                // fallback to localStorage if no settingsProvider provided
+                localStorage[this.options.settingsId + "_" + id] = JSON.stringify(value);
+            }
         },
 
         /**
@@ -1910,9 +1916,15 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * @returns {any}
          */
         loadSetting: function(id) {
-            var s = localStorage[this.options.settingsId + "_" + id];
-            if (s) {
-                return JSON.parse(s);
+            var settingsProvider = this.options.settingsProvider;
+            if (settingsProvider) {
+                return settingsProvider.loadSetting(id);
+            } else {
+                // fallback to localStorage if no settingsProvider provided
+                var s = localStorage[this.options.settingsId + "_" + id];
+                if (s) {
+                    return JSON.parse(s);
+                }
             }
         },
 

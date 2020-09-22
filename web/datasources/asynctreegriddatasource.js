@@ -201,6 +201,7 @@ define(['../utils'], function (utils) {
             this.recordByIdMap = {};
 
             this.view = undefined;
+            this.viewPromise = undefined;
             this.shadowTree = undefined;
 
             self.trigger("dataloaded");

@@ -212,6 +212,7 @@ export class PowerGrid<T extends RecordType> extends Evented<{
     getCellFor(rowId: IdOf<T>, key: keyof T): Node;
     saveSetting(id: string, value: any);
     loadSetting(id: string): any;
+    updateColumns(): void;
 
     options: Readonly<PowerGridOptions<T>>;
 

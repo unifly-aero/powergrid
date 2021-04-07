@@ -792,7 +792,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             }
 
             function populateRows(dataSubset) {
-                for(var x = start; x < end; x++) {
+                for(var x = Math.max(start, self.viewport.begin), vpEnd = Math.min(end, self.viewport.end); x < vpEnd; x++) {
                     var record = dataSubset[x-start],
                         row = rows[x],
                         rowFixedPartLeft = row.rowFixedPartLeft,

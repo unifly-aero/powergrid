@@ -617,7 +617,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * @returns {object}
          */
         getRow: function(index) {
-            return this.workingSet[index];
+            var workingSetElement = this.workingSet[index];
+            return workingSetElement && workingSetElement.ref;
         },
 
         /**
@@ -626,7 +627,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * @returns {number}
          */
         indexOfRow: function(row) {
-            return this.workingSet.indexOf(row);
+            return this.workingSet.findIndex(function(r) { return r && (r.ref === row); });
         },
 
         /**
@@ -650,9 +651,17 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             var self = this;
             var data = this.dataSource.getData(start, end);
 
+            var workingDataSubset;
+            if(start !==undefined) {
+                workingDataSubset = new Array((end || this.getRecordCount()) - start);
+                for(var x = start; x < end; x++) {
+                    workingDataSubset[x-start] = self.workingSet[x] = {};
+                }
+            }
+
             function processData(result) {
                 for (var x = 0, l = result.length; x < l; x++) {
-                    self.workingSet[(start || 0) + x] = result[x];
+                    workingDataSubset[x].ref = result[x];
                 }
                 return result;
             }
@@ -675,7 +684,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             var result = this.dataSource.getData(start, end);
             if (Array.isArray(result)) {
                 for (var x = 0, l = result.length; x < l; x++) {
-                    this.workingSet[(start || 0) + x] = result[x];
+                    this.workingSet[(start || 0) + x] = {ref: result[x]};
                 }
                 return result;
             } else {
@@ -2011,7 +2020,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
                 } else {
                     for (var r = 0; r < rows.length; r++) {
                         var row = rows[r];
-                        var record = this.workingSet[this.viewport.begin + r];
+                        var record = this.workingSet[this.viewport.begin + r].ref;
                         if (parseInt(row.getAttribute("data-row-idx")) != this.viewport.begin + r) {
                             debugger;
                             hasError = true;

@@ -1198,31 +1198,34 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
                 start = this.options.frozenRowsTop,
                 end = this.getRecordCount() - this.options.frozenRowsBottom,
                 group = this.scrollinggroup,
-                allParts = group.all;
+                allParts = group.all,
+                previousViewport = this.viewport;
 
-            if(!this.viewport || range.begin != this.viewport.begin || range.end != this.viewport.end) {
+            this.viewport = range;
+
+            if(!this.previousViewport || range.begin != previousViewport.begin || range.end != previousViewport.end) {
                 var leadingHeight = this.rowHeight(start, range.begin),
                     trailingHeight = this.rowHeight(range.end, end);
 
-                if(utils.overlap(range, this.viewport)) {
-                    if(range.begin < this.viewport.begin) {
+                if(utils.overlap(range, previousViewport)) {
+                    if(range.begin < previousViewport.begin) {
                         // have to add rows to beginning
-                        this.renderRowGroupContents(Math.max(start, range.begin), Math.min(range.end, this.viewport.begin), this.scrollinggroup, true);
-                    } else if(range.begin > this.viewport.begin) {
+                        this.renderRowGroupContents(Math.max(start, range.begin), Math.min(range.end, previousViewport.begin), this.scrollinggroup, true);
+                    } else if(range.begin > previousViewport.begin) {
                         // have to remove rows from beginning
                         allParts.each(function(i,part) {
-                            self.destroyRows($(part).children('.pg-row:lt(' + (range.begin - self.viewport.begin) + ')'));
+                            self.destroyRows($(part).children('.pg-row:lt(' + (range.begin - previousViewport.begin) + ')'));
                         });
                     }
 
-                    if(range.end < this.viewport.end && range.end > this.viewport.begin) {
+                    if(range.end < previousViewport.end && range.end > previousViewport.begin) {
                         // have to remove rows from end
                         allParts.each(function(i,part) {
                             self.destroyRows($(part).children('.pg-row:gt(' + (range.end - range.begin - 1) + ')'));
                         });
-                    } else if(range.end > this.viewport.end) {
+                    } else if(range.end > previousViewport.end) {
                         // have to add rows to end
-                        this.renderRowGroupContents(Math.max(this.viewport.end, range.begin), Math.min(range.end, end), this.scrollinggroup, false);
+                        this.renderRowGroupContents(Math.max(previousViewport.end, range.begin), Math.min(range.end, end), this.scrollinggroup, false);
                     }
                 } else {
                     // no overlap, just clear the entire thing and rebuild
@@ -1239,8 +1242,6 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
                 allParts.css('padding-top', leadingHeight + 'px');
                 allParts.css('padding-bottom', trailingHeight + 'px');
-
-                this.viewport = range;
             }
 
             if (debug) this.verify();

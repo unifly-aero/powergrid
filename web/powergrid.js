@@ -618,7 +618,8 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * @returns {object}
          */
         getRow: function(index) {
-            return this.workingSet[index];
+            var workingSetElement = this.workingSet[index];
+            return workingSetElement && workingSetElement.record;
         },
 
         /**
@@ -627,7 +628,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
          * @returns {number}
          */
         indexOfRow: function(row) {
-            return this.workingSet.indexOf(row);
+            return this.workingSet.findIndex(function(r) { return r && (r.record === row); });
         },
 
         /**
@@ -651,9 +652,17 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             var self = this;
             var data = this.dataSource.getData(start, end);
 
+            var workingDataSubset;
+            if(start !==undefined) {
+                workingDataSubset = new Array((end || this.getRecordCount()) - start);
+                for(var x = start; x < end; x++) {
+                    workingDataSubset[x-start] = self.workingSet[x] = {};
+                }
+            }
+
             function processData(result) {
                 for (var x = 0, l = result.length; x < l; x++) {
-                    self.workingSet[(start || 0) + x] = result[x];
+                    workingDataSubset[x].record = result[x];
                 }
                 return result;
             }
@@ -676,7 +685,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             var result = this.dataSource.getData(start, end);
             if (Array.isArray(result)) {
                 for (var x = 0, l = result.length; x < l; x++) {
-                    this.workingSet[(start || 0) + x] = result[x];
+                    this.workingSet[(start || 0) + x] = {record: result[x]};
                 }
                 return result;
             } else {
@@ -793,7 +802,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
             }
 
             function populateRows(dataSubset) {
-                for(var x = start; x < end; x++) {
+                for(var x = Math.max(start, self.viewport.begin), vpEnd = Math.min(end, self.viewport.end); x < vpEnd; x++) {
                     var record = dataSubset[x-start],
                         row = rows[x],
                         rowFixedPartLeft = row.rowFixedPartLeft,
@@ -1198,31 +1207,34 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
                 start = this.options.frozenRowsTop,
                 end = this.getRecordCount() - this.options.frozenRowsBottom,
                 group = this.scrollinggroup,
-                allParts = group.all;
+                allParts = group.all,
+                previousViewport = this.viewport;
 
-            if(!this.viewport || range.begin != this.viewport.begin || range.end != this.viewport.end) {
+            this.viewport = range;
+
+            if(!this.previousViewport || range.begin != previousViewport.begin || range.end != previousViewport.end) {
                 var leadingHeight = this.rowHeight(start, range.begin),
                     trailingHeight = this.rowHeight(range.end, end);
 
-                if(utils.overlap(range, this.viewport)) {
-                    if(range.begin < this.viewport.begin) {
+                if(utils.overlap(range, previousViewport)) {
+                    if(range.begin < previousViewport.begin) {
                         // have to add rows to beginning
-                        this.renderRowGroupContents(Math.max(start, range.begin), Math.min(range.end, this.viewport.begin), this.scrollinggroup, true);
-                    } else if(range.begin > this.viewport.begin) {
+                        this.renderRowGroupContents(Math.max(start, range.begin), Math.min(range.end, previousViewport.begin), this.scrollinggroup, true);
+                    } else if(range.begin > previousViewport.begin) {
                         // have to remove rows from beginning
                         allParts.each(function(i,part) {
-                            self.destroyRows($(part).children('.pg-row:lt(' + (range.begin - self.viewport.begin) + ')'));
+                            self.destroyRows($(part).children('.pg-row:lt(' + (range.begin - previousViewport.begin) + ')'));
                         });
                     }
 
-                    if(range.end < this.viewport.end && range.end > this.viewport.begin) {
+                    if(range.end < previousViewport.end && range.end > previousViewport.begin) {
                         // have to remove rows from end
                         allParts.each(function(i,part) {
                             self.destroyRows($(part).children('.pg-row:gt(' + (range.end - range.begin - 1) + ')'));
                         });
-                    } else if(range.end > this.viewport.end) {
+                    } else if(range.end > previousViewport.end) {
                         // have to add rows to end
-                        this.renderRowGroupContents(Math.max(this.viewport.end, range.begin), Math.min(range.end, end), this.scrollinggroup, false);
+                        this.renderRowGroupContents(Math.max(previousViewport.end, range.begin), Math.min(range.end, end), this.scrollinggroup, false);
                     }
                 } else {
                     // no overlap, just clear the entire thing and rebuild
@@ -1239,8 +1251,6 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
 
                 allParts.css('padding-top', leadingHeight + 'px');
                 allParts.css('padding-bottom', trailingHeight + 'px');
-
-                this.viewport = range;
             }
 
             if (debug) this.verify();
@@ -2023,7 +2033,7 @@ define(['./jquery', 'vein', './utils', './promise', 'require', './translations']
                 } else {
                     for (var r = 0; r < rows.length; r++) {
                         var row = rows[r];
-                        var record = this.workingSet[this.viewport.begin + r];
+                        var record = this.workingSet[this.viewport.begin + r].record;
                         if (parseInt(row.getAttribute("data-row-idx")) != this.viewport.begin + r) {
                             debugger;
                             hasError = true;

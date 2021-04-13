@@ -1,52 +1,52 @@
 import utils from "../utils.js";
 
-function SortingDataSource(delegate) {
-    utils.Evented.apply(this);
+class SortingDataSource {
+    constructor(delegate) {
+        utils.Evented.apply(this);
 
-    var self = this;
-    this.delegate = delegate;
+        var self = this;
+        this.delegate = delegate;
 
-    if (typeof delegate.applyFilter === 'function') {
-        this.applyFilter = delegate.applyFilter.bind(delegate);
+        if (typeof delegate.applyFilter === 'function') {
+            this.applyFilter = delegate.applyFilter.bind(delegate);
+        }
+
+        delegate.on("dataloaded", function () {
+            self.reload();
+            self.trigger("dataloaded");
+        });
+
+        delegate.on("datachanged", function (data) {
+            self.reload();
+            self.trigger("datachanged", data);
+        });
+
+        delegate.on("rowsadded", function (data) {
+            if (!self.handleDataChanges()) {
+                self.trigger('rowsadded', data);
+            }
+        });
+
+        delegate.on("rowsremoved", function (data) {
+            if (!self.handleDataChanges()) {
+                self.trigger('rowsremoved', data);
+            }
+        });
+
+        if (delegate.isReady()) {
+            this.reload();
+        }
+
+        utils.passthrough(this, delegate, ['commitRow', 'startEdit', 'rollbackRow', 'replace']);
     }
 
-    delegate.on("dataloaded", function () {
-        self.reload();
-        self.trigger("dataloaded");
-    });
+    view = null;
 
-    delegate.on("datachanged", function (data) {
-        self.reload();
-        self.trigger("datachanged", data);
-    });
-
-    delegate.on("rowsadded", function (data) {
-        if (!self.handleDataChanges()) {
-            self.trigger('rowsadded', data);
-        }
-    });
-
-    delegate.on("rowsremoved", function (data) {
-        if (!self.handleDataChanges()) {
-            self.trigger('rowsremoved', data);
-        }
-    });
-
-    if (delegate.isReady()) {
-        this.reload();
-    }
-
-    utils.passthrough(this, delegate, ['commitRow', 'startEdit', 'rollbackRow', 'replace']);
-}
-
-SortingDataSource.prototype = {
-    view: null,
-
-    isReady: function () {
+    isReady() {
         return this.view != null;
-    },
+    }
 
-    reload: function () {
+    reload() {
         this.delegate.assertReady();
         if (this.comparator) {
             var data = this.delegate.getData();
@@ -75,48 +75,48 @@ SortingDataSource.prototype = {
         } else {
             this.view = this.delegate.getData().concat([]);
         }
-    },
+    }
 
-    recordCount: function () {
+    recordCount() {
         this.assertReady();
         return this.view.length;
-    },
+    }
 
-    getData: function (start, end) {
+    getData(start, end) {
         this.assertReady();
         if (start === undefined && end === undefined) return this.view;
         if (start === undefined) start = 0;
         if (end === undefined) end = this.recordCount();
         return this.view.slice(start, end);
-    },
+    }
 
-    getValue: function (rowId, key) {
+    getValue(rowId, key) {
         return this.delegate.getValue(rowId, key);
-    },
+    }
 
-    setValue: function (rowId, key, value) {
+    setValue(rowId, key, value) {
         this.delegate.setValue(rowId, key, value);
-    },
+    }
 
-    assertReady: function () {
+    assertReady() {
         if (!this.isReady()) throw Error("Datasource not ready yet");
-    },
+    }
 
-    buildStatistics: function () {
+    buildStatistics() {
         return this.delegate.buildStatistics();
-    },
+    }
 
-    getRecordById: function (id) {
+    getRecordById(id) {
         return this.delegate.getRecordById(id);
-    },
+    }
 
-    sort: function (comparator) {
+    sort(comparator) {
         this.comparator = comparator;
         this.reload();
         this.trigger("dataloaded");
-    },
+    }
 
-    handleDataChanges: function () {
+    handleDataChanges() {
         if (this.comparator) {
             var oldView = this.view;
             this.reload();
@@ -126,6 +126,6 @@ SortingDataSource.prototype = {
             return false;
         }
     }
-};
+}
 
 export default SortingDataSource;

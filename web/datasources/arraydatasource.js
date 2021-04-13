@@ -1,19 +1,19 @@
 import utils from "../utils.js";
 
-function ArrayDataSource(data, delay) {
-    utils.Evented.apply(this);
+class ArrayDataSource {
+    constructor(data, delay) {
+        utils.Evented.apply(this);
 
-    if (delay) {
-        setTimeout(this.load.bind(this, data), delay);
-    } else {
-        if (data) {
-            this.load(data);
+        if (delay) {
+            setTimeout(this.load.bind(this, data), delay);
+        } else {
+            if (data) {
+                this.load(data);
+            }
         }
     }
-}
 
-ArrayDataSource.prototype = {
-    load: function (data) {
+    load(data) {
         if (data !== undefined) {
             this.data = data;
         }
@@ -26,64 +26,64 @@ ArrayDataSource.prototype = {
 
         this.ready = true;
         this.trigger("dataloaded");
-    },
+    }
 
-    recordCount: function () {
+    recordCount() {
         this.assertReady();
         return this.data.length;
-    },
+    }
 
-    getRowByIndex: function (idx) {
+    getRowByIndex(idx) {
         this.assertReady();
         return this.data[idx];
-    },
+    }
 
-    getRecordById: function (id) {
+    getRecordById(id) {
         this.assertReady();
         for (var x = 0, l = this.data.length; x < l; x++) {
             if (this.data[x].id == id) return this.data[x];
         }
-    },
+    }
 
-    insert: function (index, rows) {
+    insert(index, rows) {
         this.data.splice.apply(this.data, [index, 0].concat(rows));
         this.trigger('rowsadded', {start: index, end: index + rows.length});
-    },
+    }
 
-    remove: function (start, end) {
+    remove(start, end) {
         this.data.splice(start, (end === undefined ? 1 : end - start));
         this.trigger('rowsremoved', {start: start, end: end});
-    },
+    }
 
-    getData: function (start, end) {
+    getData(start, end) {
         this.assertReady();
         if (start === undefined && end === undefined) return this.data;
         if (start === undefined || start === null) start = 0;
         if (end === undefined) end = this.recordCount();
         return this.data.slice(start, end);
-    },
+    }
 
-    setValue: function (rowId, key, value) {
+    setValue(rowId, key, value) {
         this.assertReady();
         utils.setValue(this.getRecordById(rowId), key, value);
         this.trigger("datachanged", {values: [{id: rowId, key: key}]});
-    },
+    }
 
-    assertReady: function () {
+    assertReady() {
         if (!this.isReady()) throw Error("Datasource not ready yet");
-    },
+    }
 
-    isReady: function () {
+    isReady() {
         return this.ready;
-    },
+    }
 
-    sort: function (comparator) {
+    sort(comparator) {
         this.assertReady();
         this.data.sort(comparator);
         this.trigger("dataloaded");
-    },
+    }
 
-    replace: function (record) {
+    replace(record) {
         var data = this.data,
             existingRow = data.find(function (r) {
                 return r.id == record.id;
@@ -93,6 +93,6 @@ ArrayDataSource.prototype = {
             this.trigger("datachanged", {rows: [record]})
         }
     }
-};
+}
 
 export default ArrayDataSource;

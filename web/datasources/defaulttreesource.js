@@ -9,25 +9,25 @@ import utils from "../utils.js";
  * @param delegate
  * @constructor
  */
-function DefaultTreeSource(delegate) {
-    utils.Evented.apply(this);
-    this.delegate = delegate;
+class DefaultTreeSource {
+    constructor(delegate) {
+        utils.Evented.apply(this);
+        this.delegate = delegate;
 
-    if (delegate.isReady()) {
-        this.load();
+        if (delegate.isReady()) {
+            this.load();
+        }
+
+        delegate.on("dataloaded", this.load.bind(this));
+
+        this.passthroughFrom(delegate, "datachanged", "editabilitychanged", "validationresultchanged");
     }
 
-    delegate.on("dataloaded", this.load.bind(this));
-
-    this.passthroughFrom(delegate, "datachanged", "editabilitychanged", "validationresultchanged");
-}
-
-DefaultTreeSource.prototype = {
-    isReady: function () {
+    isReady() {
         return this.tree !== undefined;
-    },
+    }
 
-    load: function () {
+    load() {
         var self = this;
         if (this.delegate) {
             if (this.delegate.buildTree) {
@@ -41,10 +41,10 @@ DefaultTreeSource.prototype = {
                 this.buildTree(this.delegate.getData());
             }
         }
-    },
+    }
 
-    sort: function (comparator) {
-        if (arguments.length == 1) {
+    sort(comparator) {
+        if (arguments.length === 1) {
             this.comparator = comparator;
         }
 
@@ -62,9 +62,9 @@ DefaultTreeSource.prototype = {
 
         sort(this.tree);
         this.trigger('dataloaded');
-    },
+    }
 
-    buildTree: function (data) {
+    buildTree(data) {
         var rootNodes = [],
             nodesPerId = {};
 
@@ -103,9 +103,9 @@ DefaultTreeSource.prototype = {
         this.nodesPerId = nodesPerId;
         this.tree = rootNodes;
         this.trigger('dataloaded');
-    },
+    }
 
-    getRootNodes: function (start, end) {
+    getRootNodes(start, end) {
         if (this.predicate) {
             return this.tree.filter(function (node) {
                 return node.isFilterMatch;
@@ -113,22 +113,22 @@ DefaultTreeSource.prototype = {
         } else {
             return this.tree.slice(start || 0, end)
         }
-    },
+    }
 
-    getRecordById: function (id) {
+    getRecordById(id) {
         return this.delegate.getRecordById(id);
-    },
+    }
 
-    hasChildren: function (row) {
+    hasChildren(row) {
         if (this.delegate && this.delegate.hasChildren) {
             return this.delegate.hasChildren.apply(this.delegate, arguments);
         }
 
         var node = this.nodesPerId[row.id];
         return node.children.length > 0;
-    },
+    }
 
-    children: function (row, start, end) {
+    children(row, start, end) {
         var node = this.nodesPerId[row.id];
         if (this.predicate) {
             return node.children.filter(function (child) {
@@ -137,9 +137,9 @@ DefaultTreeSource.prototype = {
         } else {
             return node.children.slice(start || 0, end);
         }
-    },
+    }
 
-    countChildren: function (row) {
+    countChildren(row) {
         var node = this.nodesPerId[row.id];
         if (this.predicate) {
             // filtering is enabled
@@ -150,9 +150,9 @@ DefaultTreeSource.prototype = {
         } else {
             return node.children.length;
         }
-    },
+    }
 
-    countRootNodes: function () {
+    countRootNodes() {
         if (this.predicate) {
             return this.getRootNodes().reduce(function (total, node) {
                 if (node.isFilterMatch) return total + 1;
@@ -160,13 +160,13 @@ DefaultTreeSource.prototype = {
             }, 0);
         }
         return this.getRootNodes().length;
-    },
+    }
 
-    rowOrAncestorMatches: function (row) {
+    rowOrAncestorMatches(row) {
         return !this.filter || this.filter(row) || (this.parent(row) !== undefined && this.rowOrAncestorMatches(this.getRecordById(this.parent(row))));
-    },
+    }
 
-    buildStatistics: function () {
+    buildStatistics() {
         var stats = this.delegate &&
             this.delegate.statistics &&
             this.delegate.statistics();
@@ -178,15 +178,15 @@ DefaultTreeSource.prototype = {
         } else {
             return stats;
         }
-    },
+    }
 
-    filter: function (columnSettings, predicate) {
+    filter(columnSettings, predicate) {
         this.predicate = predicate;
         this.refreshFilterAttributes();
         this.trigger('dataloaded');
-    },
+    }
 
-    refreshFilterAttributes: function () {
+    refreshFilterAttributes() {
         var predicate = this.predicate;
 
         function matches(node) {
@@ -232,15 +232,15 @@ DefaultTreeSource.prototype = {
         }
 
         apply(this.tree, false);
-    },
+    }
 
-    statistics: function () {
+    statistics() {
         return this._statistics;
-    },
+    }
 
-    setValue: function (rowId, key, value) {
+    setValue(rowId, key, value) {
         this.delegate.setValue(rowId, key, value);
     }
-};
+}
 
 export default DefaultTreeSource;

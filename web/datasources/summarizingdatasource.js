@@ -2,42 +2,42 @@ import utils from "../utils.js";
 
 var SUMMARY_ROW_ID = "summary_row";
 
-function SummarizingDataSource(delegate, summaryFactory) {
-    utils.Evented.apply(this);
+class SummarizingDataSource {
+    constructor(delegate, summaryFactory) {
+        utils.Evented.apply(this);
 
-    var self = this;
-    this.delegate = delegate;
-    this.summaryFactory = summaryFactory;
+        var self = this;
+        this.delegate = delegate;
+        this.summaryFactory = summaryFactory;
 
-    delegate.on("dataloaded", function () {
-        self.trigger("dataloaded");
-    });
+        delegate.on("dataloaded", function () {
+            self.trigger("dataloaded");
+        });
 
-    delegate.on("datachanged", function (data) {
-        self.trigger("datachanged", data);
-    });
+        delegate.on("datachanged", function (data) {
+            self.trigger("datachanged", data);
+        });
 
-    utils.passthrough(this, delegate, ['sort', 'group', 'applyFilter', 'commitRow', 'startEdit', 'rollbackRow', 'replace']);
-}
+        utils.passthrough(this, delegate, ['sort', 'group', 'applyFilter', 'commitRow', 'startEdit', 'rollbackRow', 'replace']);
+    }
 
-SummarizingDataSource.prototype = {
-    view: null,
+    view = null;
 
-    isReady: function () {
+    isReady() {
         return this.delegate.isReady();
-    },
+    }
 
-    reload: function () {
+    reload() {
         this.delegate.reload();
-    },
+    }
 
-    recordCount: function () {
+    recordCount() {
         return utils.map(this.delegate.recordCount(), function (rc) {
             return rc + 1
         });
-    },
+    }
 
-    getData: function (start, end) {
+    getData(start, end) {
         var rc = this.delegate.recordCount(),
             self = this;
         return utils.map(rc, function (rc) {
@@ -63,25 +63,25 @@ SummarizingDataSource.prototype = {
                 return self.delegate.getData(start, end);
             }
         });
-    },
+    }
 
-    setValue: function (rowId, key, value) {
+    setValue(rowId, key, value) {
         this.delegate.setValue(rowId, key, value);
-    },
+    }
 
-    assertReady: function () {
+    assertReady() {
         this.delegate.assertReady();
-    },
+    }
 
-    getRecordById: function (id) {
+    getRecordById(id) {
         if (id == SUMMARY_ROW_ID) {
             return this.getSummaryRow();
         } else {
             return this.delegate.getRecordById(id);
         }
-    },
+    }
 
-    getSummaryRow: function () {
+    getSummaryRow() {
         var sr;
         if (this.summaryFactory) {
             sr = this.summaryFactory(this.delegate);
@@ -100,6 +100,6 @@ SummarizingDataSource.prototype = {
             return sr;
         }
     }
-};
+}
 
 export default SummarizingDataSource;

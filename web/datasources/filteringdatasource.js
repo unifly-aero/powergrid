@@ -26,77 +26,77 @@ function arrayEqual(a, b) {
     return true;
 }
 
-function FilteringDataSource(delegate) {
-    utils.Evented.apply(this);
+class FilteringDataSource {
+    constructor(delegate) {
+        utils.Evented.apply(this);
 
-    var self = this;
-    this.delegate = delegate;
+        var self = this;
+        this.delegate = delegate;
 
-    delegate.on("dataloaded", function () {
-        self.reload();
-        self.trigger("dataloaded");
-    });
+        delegate.on("dataloaded", function () {
+            self.reload();
+            self.trigger("dataloaded");
+        });
 
-    delegate.on("datachanged", function (data) {
-        self.reload();
-        self.trigger("datachanged", data);
-    });
+        delegate.on("datachanged", function (data) {
+            self.reload();
+            self.trigger("datachanged", data);
+        });
 
-    delegate.on("rowsadded", function (data) {
-        self._handleRowsAdded(data.start, data.end);
-    });
-    delegate.on("rowsremoved", function (data) {
-        self._handleRowsRemoved(data.start, data.end);
-    });
+        delegate.on("rowsadded", function (data) {
+            self._handleRowsAdded(data.start, data.end);
+        });
+        delegate.on("rowsremoved", function (data) {
+            self._handleRowsRemoved(data.start, data.end);
+        });
 
-    if (delegate.isReady()) {
-        this.reload();
+        if (delegate.isReady()) {
+            this.reload();
+        }
+
+        utils.passthrough(this, delegate, ['sort', 'commitRow', 'startEdit', 'rollbackRow', 'replace']);
     }
 
-    utils.passthrough(this, delegate, ['sort', 'commitRow', 'startEdit', 'rollbackRow', 'replace']);
-}
+    view = null;
 
-FilteringDataSource.prototype = {
-    view: null,
-
-    isReady: function () {
+    isReady() {
         return this.view != null;
-    },
+    }
 
-    reload: function () {
+    reload() {
         this.delegate.assertReady();
         var data = this.delegate.getData();
         this.updateView();
-    },
+    }
 
-    recordCount: function () {
+    recordCount() {
         this.assertReady();
         return this.view.length;
-    },
+    }
 
-    getData: function (start, end) {
+    getData(start, end) {
         this.assertReady();
         if (start === undefined && end === undefined) return this.view;
         if (start === undefined) start = 0;
         if (end === undefined) end = this.recordCount();
         return this.view.slice(start, end);
-    },
+    }
 
-    setValue: function (rowId, key, value) {
+    setValue(rowId, key, value) {
         this.delegate.setValue(rowId, key, value);
-    },
+    }
 
-    assertReady: function () {
+    assertReady() {
         if (!this.isReady()) throw Error("Datasource not ready yet");
-    },
+    }
 
-    buildStatistics: function () {
+    buildStatistics() {
         return {
             actualRecordCount: this.delegate && this.delegate.recordCount()
         };
-    },
+    }
 
-    updateView: function () {
+    updateView() {
         var sourceData = this.delegate.getData();
 
         if (this.filter) {
@@ -118,9 +118,9 @@ FilteringDataSource.prototype = {
             this.indexMap = null;
         }
         return this.view;
-    },
+    }
 
-    applyFilter: function (settings, filter) {
+    applyFilter(settings, filter) {
         var oldView = this.view;
         this.filter = filter;
         this.settings = settings;
@@ -130,13 +130,13 @@ FilteringDataSource.prototype = {
         if (!arrayEqual(oldView, newView)) {
             utils.incrementalUpdate(this, oldView, newView);
         }
-    },
+    }
 
-    getRecordById: function (id) {
+    getRecordById(id) {
         return this.delegate.getRecordById(id);
-    },
+    }
 
-    _handleRowsAdded: function (start, end) {
+    _handleRowsAdded(start, end) {
         var newData = this.delegate.getData(start, end);
         if (this.filter) {
             var targetStart = findIndex(this.indexMap, start);
@@ -153,9 +153,9 @@ FilteringDataSource.prototype = {
             this.view.splice.apply(this.view, [start, 0].concat(newData));
             this.trigger('rowsadded', {start: start, end: end});
         }
-    },
+    }
 
-    _handleRowsRemoved: function (start, end) {
+    _handleRowsRemoved(start, end) {
         if (this.filter) {
             var targetStart = findIndex(this.indexMap, start),
                 targetEnd = findIndex(this.indexMap, end);
@@ -170,6 +170,6 @@ FilteringDataSource.prototype = {
             this.trigger('rowsremoved', {start: start, end: end});
         }
     }
-};
+}
 
 export default FilteringDataSource;

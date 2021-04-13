@@ -7,36 +7,36 @@ import utils from "../utils.js";
  * @param {TreeSource} treesource
  * @constructor
  */
-function SyncTreeGridDataSource(treesource) {
-    utils.Evented.apply(this);
+class SyncTreeGridDataSource {
+    constructor(treesource) {
+        utils.Evented.apply(this);
 
-    this.treesource = treesource;
+        this.treesource = treesource;
 
-    this.expandedById = {};
+        this.expandedById = {};
 
-    if (this.treesource.isReady()) {
-        this.load();
+        if (this.treesource.isReady()) {
+            this.load();
+        }
+
+        this.treesource.on("dataloaded", this.load.bind(this));
+
+        this.passthroughFrom(this.treesource, "datachanged", "editabilitychanged", "validationresultchanged");
+
+        utils.passthrough(this, treesource, ['hasSubView', 'getSummaryRow', 'queryForExport']);
     }
 
-    this.treesource.on("dataloaded", this.load.bind(this));
-
-    this.passthroughFrom(this.treesource, "datachanged", "editabilitychanged", "validationresultchanged");
-
-    utils.passthrough(this, treesource, ['hasSubView', 'getSummaryRow', 'queryForExport']);
-}
-
-SyncTreeGridDataSource.prototype = /** @lends SyncTreeGridDataSource.prototype */ {
-    load: function () {
+    load() {
         this.nodesById = {};
         this.view = this.flattenTree(this.treesource.getRootNodes(), 0);
         this.trigger("dataloaded");
-    },
+    }
 
-    isReady: function () {
+    isReady() {
         return this.view && true;
-    },
+    }
 
-    flattenTree: function (nodes, level) {
+    flattenTree(nodes, level) {
         var self = this, treesource = this.treesource;
 
         var list = [];
@@ -57,31 +57,31 @@ SyncTreeGridDataSource.prototype = /** @lends SyncTreeGridDataSource.prototype *
         flatten(nodes, level);
 
         return list;
-    },
+    }
 
-    isExpanded: function (row) {
+    isExpanded(row) {
         return this.expandedById[row.id] === true;
-    },
+    }
 
-    findNodeForRowId: function (id) {
+    findNodeForRowId(id) {
         return this.nodesById[id];
-    },
+    }
 
-    getTreeLevel: function (row) {
+    getTreeLevel(row) {
         return this.findNodeForRowId(row.id).level;
-    },
+    }
 
-    hasChildren: function (row) {
+    hasChildren(row) {
         return this.treesource.hasChildren(row);
-    },
+    }
 
-    getData: function (start, end) {
+    getData(start, end) {
         return this.view.slice(start || 0, end).map(function (node) {
             return node.record;
         });
-    },
+    }
 
-    expand: function (row) {
+    expand(row) {
         if (!this.isExpanded(row)) {
             this.expandedById[row.id] = true;
 
@@ -95,9 +95,9 @@ SyncTreeGridDataSource.prototype = /** @lends SyncTreeGridDataSource.prototype *
             }
             this.trigger('treetoggled', {id: row.id, index: idx, state: true});
         }
-    },
+    }
 
-    expandAll: function (rowId) {
+    expandAll(rowId) {
         var self = this;
 
         function expand(nodes) {
@@ -110,9 +110,9 @@ SyncTreeGridDataSource.prototype = /** @lends SyncTreeGridDataSource.prototype *
         }
 
         expand(rowId ? [this.getRecordById(rowId)] : this.treesource.getRootNodes());
-    },
+    }
 
-    collapse: function (row) {
+    collapse(row) {
         if (this.isExpanded(row)) {
             this.expandedById[row.id] = false;
 
@@ -127,18 +127,18 @@ SyncTreeGridDataSource.prototype = /** @lends SyncTreeGridDataSource.prototype *
             }
             this.trigger('treetoggled', {id: row.id, index: startIdx, state: false});
         }
-    },
+    }
 
-    toggle: function (rowId) {
+    toggle(rowId) {
         var row = this.getRecordById(rowId);
         if (this.isExpanded(row)) {
             this.collapse(row);
         } else {
             this.expand(row);
         }
-    },
+    }
 
-    expandToLevel: function (depth) {
+    expandToLevel(depth) {
         var self = this;
 
         function expand(nodes, depth) {
@@ -151,27 +151,27 @@ SyncTreeGridDataSource.prototype = /** @lends SyncTreeGridDataSource.prototype *
         }
 
         expand(this.treesource.getRootNodes(), depth);
-    },
+    }
 
-    getRecordById: function (id) {
+    getRecordById(id) {
         return this.treesource.getRecordById(id);
-    },
+    }
 
-    sort: function (comparator) {
+    sort(comparator) {
         this.treesource.sort(comparator);
-    },
+    }
 
-    applyFilter: function (columnSettings, filterFunction) {
+    applyFilter(columnSettings, filterFunction) {
         this.treesource.filter(columnSettings, filterFunction);
-    },
+    }
 
-    setValue: function (rowId, key, value) {
+    setValue(rowId, key, value) {
         this.treesource.setValue(rowId, key, value);
-    },
+    }
 
-    recordCount: function () {
+    recordCount() {
         return this.view.length;
     }
-};
+}
 
 export default SyncTreeGridDataSource;

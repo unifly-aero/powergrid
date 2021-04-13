@@ -1,58 +1,58 @@
 import utils from "../utils.js";
 
-function JSONDataSource(settings) {
-    utils.Evented.apply(this);
+class JSONDataSource {
+    constructor(settings) {
+        utils.Evented.apply(this);
 
-    this.settings = settings;
-    this.load();
-    this.data = undefined;
-}
+        this.settings = settings;
+        this.load();
+        this.data = undefined;
+    }
 
-JSONDataSource.prototype = {
-    assertReady: function () {
+    assertReady() {
         if (!this.isReady()) {
             throw "Datasource not yet ready";
         }
-    },
+    }
 
-    isReady: function () {
+    isReady() {
         return this.data !== undefined;
-    },
+    }
 
-    load: function () {
+    load() {
         var self = this;
         $.getJSON(this.settings.url)
             .done(function (data) {
                 self.data = data.data;
                 self.trigger("dataloaded");
             });
-    },
+    }
 
-    recordCount: function () {
+    recordCount() {
         this.assertReady();
         return this.data.length;
-    },
+    }
 
-    getData: function (start, end) {
+    getData(start, end) {
         this.assertReady();
         if (!start && !end) {
             return this.data;
         } else {
             return this.data.slice(start, end);
         }
-    },
+    }
 
-    getRecordById: function (rowId) {
+    getRecordById(rowId) {
         this.assertReady();
         return this.data.filter(function (e) {
             return e.id == rowId;
         })[0];
-    },
+    }
 
-    setValue: function (rowId, key, value) {
+    setValue(rowId, key, value) {
         this.assertReady();
         this.getRecordById(rowId)[key] = value;
     }
-};
+}
 
 export default JSONDataSource

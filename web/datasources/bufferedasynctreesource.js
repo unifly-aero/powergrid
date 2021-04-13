@@ -1,29 +1,28 @@
-import override from "../override.js";
 import utils from "../utils.js";
 
-function BufferedAsyncTreeSource(delegate) {
-    utils.Evented.apply(this);
+class BufferedAsyncTreeSource {
+    constructor(delegate) {
+        utils.Evented.apply(this);
 
-    this.delegate = delegate;
+        this.delegate = delegate;
 
-    this.windowBuffer = 50; // number of records to fetch ahead. effective excess fetching could be twice this in certain cases
+        this.windowBuffer = 50; // number of records to fetch ahead. effective excess fetching could be twice this in certain cases
 
-    var self = this;
+        var self = this;
 
-    if (delegate.isReady()) {
-        this.reset();
+        if (delegate.isReady()) {
+            this.reset();
+        }
+
+        delegate.on('dataloaded', function () {
+            self.reset();
+            self.trigger('dataloaded');
+        });
+
+        utils.passthrough(this, delegate, ['hasSubView', 'getSummaryRow', 'queryForExport']);
     }
 
-    delegate.on('dataloaded', function () {
-        self.reset();
-        self.trigger('dataloaded');
-    });
-
-    utils.passthrough(this, delegate, ['hasSubView', 'getSummaryRow', 'queryForExport']);
-}
-
-BufferedAsyncTreeSource.prototype = {
-    reset: function () {
+    reset() {
         if (this.dataSubscriptions) {
             this.dataSubscriptions.cancel();
         }
@@ -33,9 +32,9 @@ BufferedAsyncTreeSource.prototype = {
         this.rootCount = undefined;
         this.childCount = {};
         this.recordCount = undefined;
-    },
+    }
 
-    initCache: function () {
+    initCache() {
         var self = this;
         if (this.childrenCache && this.rootCache) {
             return Promise.resolve();
@@ -47,13 +46,13 @@ BufferedAsyncTreeSource.prototype = {
                 self.rootCache = new Array(rootCount);
             });
         }
-    },
+    }
 
-    isReady: function () {
+    isReady() {
         return this.delegate.isReady();
-    },
+    }
 
-    getRecordCount: function () {
+    getRecordCount() {
         var self = this;
         if (this.rootCount === undefined) {
             var subscription = this.dataSubscriptions;
@@ -64,9 +63,9 @@ BufferedAsyncTreeSource.prototype = {
         } else {
             return this.rootCount;
         }
-    },
+    }
 
-    getRootNodes: function (start, end) {
+    getRootNodes(start, end) {
         var self = this;
         return this.initCache().then(function () {
             var cache = self.rootCache;
@@ -77,13 +76,13 @@ BufferedAsyncTreeSource.prototype = {
 
             return self.bufferQuery(query, start, end, cache);
         });
-    },
+    }
 
-    hasChildren: function (row) {
+    hasChildren(row) {
         return this.delegate.hasChildren(row);
-    },
+    }
 
-    children: function (parent, start, end) {
+    children(parent, start, end) {
         var self = this;
         return this.initCache().then(function () {
             var totalChildCount = self.countChildren(parent),
@@ -101,9 +100,9 @@ BufferedAsyncTreeSource.prototype = {
 
             return self.bufferQuery(query, start, end, childCache);
         });
-    },
+    }
 
-    bufferQuery: function (queryFunction, start, end, cache) {
+    bufferQuery(queryFunction, start, end, cache) {
         // check if requested window is fully in cache
         var queryNeeded = false;
         var promises = [];
@@ -158,9 +157,9 @@ BufferedAsyncTreeSource.prototype = {
         return Promise.all(promises).then(function () {
             return cache.slice(start, end);
         });
-    },
+    }
 
-    countChildren: function (parent) {
+    countChildren(parent) {
         var self = this;
         if (!(parent.id in this.childCount)) {
             var subscription = this.dataSubscriptions;
@@ -171,9 +170,9 @@ BufferedAsyncTreeSource.prototype = {
         } else {
             return this.childCount[parent.id];
         }
-    },
+    }
 
-    countRootNodes: function () {
+    countRootNodes() {
         var self = this;
         if (this.rootCount === undefined) {
             var subscription = this.dataSubscriptions;
@@ -184,27 +183,27 @@ BufferedAsyncTreeSource.prototype = {
         } else {
             return this.rootCount;
         }
-    },
+    }
 
-    filter: function (settings, predicate) {
+    filter(settings, predicate) {
         return this.delegate.filter(settings, predicate);
-    },
+    }
 
-    sort: function (comparator, settings) {
+    sort(comparator, settings) {
         return this.delegate.sort(comparator, settings);
-    },
+    }
 
-    group: function (settings) {
+    group(settings) {
         return this.delegate.group(settings);
-    },
+    }
 
-    getStatistics: function () {
+    getStatistics() {
         return this.delegate.getStatistics();
-    },
+    }
 
-    getRecordById: function (id) {
+    getRecordById(id) {
         return this.delegate.getRecordById(id);
     }
-};
+}
 
 export default BufferedAsyncTreeSource;

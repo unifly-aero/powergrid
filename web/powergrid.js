@@ -212,7 +212,7 @@ class PowerGrid {
         }
 
         if(newkeys.length) {
-            grid.loadExtensions(callback, newkeys, plugins, pluginList);
+            await grid.loadExtensions(callback, newkeys, plugins, pluginList);
         } else {
             callback(pluginList, plugins);
         }

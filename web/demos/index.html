@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>PowerGrid proof of concept</title>
 
@@ -10,30 +10,31 @@
         import PowerGrid from "../powergrid.js";
         import utils from "../utils.js";
 
-        var numbers = (function (s) {
-            var l, x = [];
+        const numbers = (function (s) {
+            let l;
+            const x = [];
             while (s > (l = x.length)) x[l] = l;
             return x
         })(30);
 
-        var columns = numbers.map(function (e) {
+        const columns = numbers.map(function (e) {
             return {
                 title: "Column " + e,
-                width: e == 0 ? 150 : e == 6 ? 250 : 100,
+                width: e === 0 ? 150 : e === 6 ? 250 : 100,
                 editable: e > 5 && e < 10 || e === 1
             };
         });
 
-        var data = new Array(2500);
+        const data = new Array(2500);
 
-        var dataSource = {
+        const dataSource = {
             recordCount: function () {
                 return data.length;
             },
 
             getRowByIndex: function (idx) {
                 if (data[idx] === undefined) {
-                    var row = columns.map(function (e, i) {
+                    const row = columns.map(function (e, i) {
                         return "Cell " + idx + ", " + i;
                     });
                     row.id = idx + "";
@@ -50,8 +51,8 @@
             getData: function (start, end) {
                 if (!start) start = 0;
                 if (!end) end = this.recordCount();
-                var d = new Array(end - start);
-                for (var x = start; x < end; x++) {
+                const d = new Array(end - start);
+                for (let x = start; x < end; x++) {
                     d[x - start] = this.getRowByIndex(x);
                 }
                 return d;
@@ -82,7 +83,7 @@
             extensions: {
                 'columnsizing': {},
                 'columnmoving': {},
-                // 'editing': true
+                'editing': true
             }
         });
     </script>
@@ -108,8 +109,6 @@
     </style>
 </head>
 <body>
-<form action="error.html">
     <div id="test"></div>
-</form>
 </body>
 </html>

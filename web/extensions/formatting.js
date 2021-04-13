@@ -16,27 +16,26 @@
  *   - format: Column specific options for the formatter
  *
  */
-define(['../override', '../jquery', '../utils'], function(override, $) {
-    "use strict";
+import override from "../override.js";
+import utils from "../utils.js";
 
-    return function(grid, pluginOptions) {
-        override(grid, function($super) {
-            return {
-                getCellTextValue: function (value, record, column) {
-                    var formatter = column.formatter;
-                    if (typeof column.formatter === "string") {
-                        formatter = pluginOptions[column.formatter];
-                    } else if(column.formatter == null && column.type) {
-                        formatter = pluginOptions[column.type];
-                    }
+export default function (grid, pluginOptions) {
+    override(grid, function ($super) {
+        return {
+            getCellTextValue: function (value, record, column) {
+                var formatter = column.formatter;
+                if (typeof column.formatter === "string") {
+                    formatter = pluginOptions[column.formatter];
+                } else if (column.formatter == null && column.type) {
+                    formatter = pluginOptions[column.type];
+                }
 
-                    if (formatter) {
-                        return formatter.apply(grid, [value, record, column]);
-                    } else {
-                        return $super.getCellTextValue.apply(this, arguments);
-                    }
+                if (formatter) {
+                    return formatter.apply(grid, [value, record, column]);
+                } else {
+                    return $super.getCellTextValue.apply(this, arguments);
                 }
             }
-        });
-    };
-});
+        }
+    });
+}

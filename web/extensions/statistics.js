@@ -1,3 +1,6 @@
+import override from "../override.js";
+import utils from "../utils.js";
+
 define(['../override', '../jquery', 'jsrender', '../utils', '../templates/statistics'],
     function(override, $, jsrender, utils, statisticsTemplate) {
     

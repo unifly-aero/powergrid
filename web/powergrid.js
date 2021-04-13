@@ -176,7 +176,7 @@ class PowerGrid {
      * @param plugins
      * @param pluginList
      */
-    loadExtensions(callback, keys, plugins, pluginList) {
+    async loadExtensions(callback, keys, plugins, pluginList) {
         const grid = this;
         if(arguments.length < 4) {
             keys = Object.keys(this.options.extensions),
@@ -184,13 +184,14 @@ class PowerGrid {
             pluginList = [];
         }
 
-        const ctx = require.context('./extensions/');
+        const pluginArr = await Promise.all(keys.map(k => import((`./extensions/${k}.js`))));
+
         const newkeys = [];
         let i = 0;
         const n = keys.length;
         for (; i < n; i++) {
             const key = keys[i];
-            const plugin = ctx('./' + key);
+            const plugin = pluginArr[i].default;
             plugins[key] = plugin;
             pluginList.push(key);
 

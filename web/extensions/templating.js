@@ -13,34 +13,27 @@
  *
  */
 
-define(['../override', '../jquery', 'jsrender'], function(override, $, jsrender) {
-    "use strict";
+import override from "../override.js";
 
-    return function(grid, pluginOptions) {
-        override(grid, function($super) {
-            return {
+export default function (grid, pluginOptions) {
+    override(grid, function ($super) {
+        return {
 
-                init: function init() {
-                    $super.init.apply(this, arguments);
-                    this.options.columns.forEach(function(column) {
-                        if(column.template !== undefined && column.template !== null) {
-                            column.compiledTemplate = jsrender.templates(column.template);
-                        }
-                    });
-                },
+            init: function init() {
+                $super.init.apply(this, arguments);
+            },
 
-                renderCellValue: function renderCellValue (record, column, value) {
-                    if (column.template !== undefined && column.template !== null) {
-                        var data = $.extend({}, record);
-                        data[column.key] = value;
-                        var element = document.createElement("span");
-                        element.innerHTML = column.compiledTemplate.render(data, {record: record, column: column});
-                        return element;
-                    } else {
-                        return $super.renderCellValue.apply(this, arguments);
-                    }
+            renderCellValue: function renderCellValue(record, column, value) {
+                if (column.template !== undefined && column.template !== null) {
+                    var data = $.extend({}, record);
+                    data[column.key] = value;
+                    var element = document.createElement("span");
+                    element.innerHTML = column.template(record, column);
+                    return element;
+                } else {
+                    return $super.renderCellValue.apply(this, arguments);
                 }
             }
-        });
-    };
-});
+        }
+    });
+}

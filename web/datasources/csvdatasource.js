@@ -1,5 +1,5 @@
-define(["../jquery", "../utils"], function($, utils) {
-    "use strict";
+import override from "../override.js";
+import utils from "../utils.js";
 
     function CSVDataSource(settings) {
         utils.Evented.apply(this);
@@ -90,5 +90,4 @@ define(["../jquery", "../utils"], function($, utils) {
         }
     };
 
-    return CSVDataSource;
-});
+    export default CSVDataSource;

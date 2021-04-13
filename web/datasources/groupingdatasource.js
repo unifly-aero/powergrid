@@ -1,260 +1,261 @@
 /**
  * Datasource for client-side grouping of an in-memory datasource.
  */
+import utils from "../utils.js";
 
-define(['../utils'], function (utils) {
-    function GroupingDataSource(delegate, options) {
-        utils.Evented.apply(this);
+function GroupingDataSource(delegate, options) {
+    utils.Evented.apply(this);
 
-        this.delegate = delegate;
-        this.options = options;
+    this.delegate = delegate;
+    this.options = options;
 
-        for (var x in this.delegate) {
-            if (!this[x] && (typeof this.delegate[x] === "function")) {
-                this[x] = this.delegate[x].bind(this.delegate);
-            }
+    for (var x in this.delegate) {
+        if (!this[x] && (typeof this.delegate[x] === "function")) {
+            this[x] = this.delegate[x].bind(this.delegate);
         }
-
-        this.passthroughFrom(delegate, "datachanged");
-
-        delegate.on("dataloaded", this.load.bind(this));
-        this.groups = [];
-
-        utils.passthrough(this, delegate, ['commitRow','startEdit','rollbackRow','replace']);
     }
 
-    GroupingDataSource.prototype = {
-        load: function () {
-            this.updateView();
-        },
+    this.passthroughFrom(delegate, "datachanged");
 
-        getRecordCount: function() {
-            return this.delegate.recordCount();
-        },
+    delegate.on("dataloaded", this.load.bind(this));
+    this.groups = [];
 
-        getRootNodes: function(start, end) {
-            return this.view.slice(start || 0, end);
-        },
+    utils.passthrough(this, delegate, ['commitRow', 'startEdit', 'rollbackRow', 'replace']);
+}
 
-        children: function(row, start, end) {
-            switch(arguments.length) {
-                case 1: return row.children;
-                case 2: return row.children.slice(start);
-                case 3: return row.children.slice(start, end);
+GroupingDataSource.prototype = {
+    load: function () {
+        this.updateView();
+    },
+
+    getRecordCount: function () {
+        return this.delegate.recordCount();
+    },
+
+    getRootNodes: function (start, end) {
+        return this.view.slice(start || 0, end);
+    },
+
+    children: function (row, start, end) {
+        switch (arguments.length) {
+            case 1:
+                return row.children;
+            case 2:
+                return row.children.slice(start);
+            case 3:
+                return row.children.slice(start, end);
+        }
+    },
+
+    countRootNodes: function () {
+        return this.view.length;
+    },
+
+    countChildren: function (row) {
+        return row.recordCount;
+    },
+
+    filter: function (settings, predicate) {
+        this.filterPredicate = predicate;
+        this.updateView();
+    },
+
+    _applySorting: function (nodes) {
+        nodes.sort(this.sortComparator);
+        if (nodes.length && nodes[0].groupRow === true) {
+            for (var x = 0, l = nodes.length; x < l; x++) {
+                this._applySorting(nodes[x].children);
             }
-        },
+        }
+    },
 
-        countRootNodes: function() {
-            return this.view.length;
-        },
+    sort: function (comparator, settings) {
+        var self = this;
+        this.sortComparator = comparator;
 
-        countChildren: function(row) {
-            return row.recordCount;
-        },
+        if (this.view) {
+            this._applySorting(this.view);
+            this.trigger('dataloaded');
+        }
+    },
 
-        filter: function(settings, predicate) {
-            this.filterPredicate = predicate;
-            this.updateView();
-        },
+    updateView: function () {
+        var ds = this;
+        var groupRows = this.groupRows = {};
+        var rowToGroupMap = {};
+        var DISCARD_GROUP = {};
 
-        _applySorting: function(nodes) {
-            nodes.sort(this.sortComparator);
-            if(nodes.length && nodes[0].groupRow === true) {
-                for(var x=0,l=nodes.length;x<l;x++) {
-                    this._applySorting(nodes[x].children);
-                }
-            }
-        },
+        this.parentByIdMap = {};
 
-        sort: function(comparator, settings) {
-            var self = this;
-            this.sortComparator = comparator;
+        function group(nodes, groupings, parentGroupId, level) {
+            if (groupings && groupings.length) {
+                var groupMap = {},
+                    groups = [],
+                    col = groupings[0],
+                    groupProjection = col.groupProjection && col.groupProjection(nodes),
+                    nextGroupings = groupings.slice(1);
 
-            if(this.view) {
-                this._applySorting(this.view);
-                this.trigger('dataloaded');
-            }
-        },
+                for (var x = 0, l = nodes.length; x < l; x++) {
+                    var baseValue = utils.getValue(nodes[x], col.key);
+                    var g = groupProjection ? groupProjection(baseValue) : baseValue;
+                    var r = groupMap[g];
 
-        updateView: function () {
-            var ds = this;
-            var groupRows = this.groupRows = {};
-            var rowToGroupMap = {};
-            var DISCARD_GROUP = {};
+                    if (r === DISCARD_GROUP) {
+                        continue;
+                    }
 
-            this.parentByIdMap = {};
-
-            function group(nodes, groupings, parentGroupId, level) {
-                if (groupings && groupings.length) {
-                    var groupMap = {},
-                        groups = [],
-                        col = groupings[0],
-                        groupProjection = col.groupProjection && col.groupProjection(nodes),
-                        nextGroupings = groupings.slice(1);
-
-                    for (var x = 0, l = nodes.length; x < l; x++) {
-                        var baseValue = utils.getValue(nodes[x], col.key);
-                        var g = groupProjection ? groupProjection(baseValue) : baseValue;
-                        var r = groupMap[g];
-
-                        if(r === DISCARD_GROUP) {
+                    if (ds.filterPredicate) {
+                        var filterResult = ds.filterPredicate(nodes[x]);
+                        if (filterResult < 0) {
+                            if (r) {
+                                groups.splice(groups.indexOf(r), 1);
+                            }
+                            groupMap[g] = DISCARD_GROUP;
+                            continue;
+                        } else if (filterResult == 0) {
                             continue;
                         }
-
-                        if(ds.filterPredicate) {
-                            var filterResult = ds.filterPredicate(nodes[x]);
-                            if(filterResult < 0) {
-                                if(r) {
-                                    groups.splice(groups.indexOf(r), 1);
-                                }
-                                groupMap[g] = DISCARD_GROUP;
-                                continue;
-                            } else if(filterResult == 0) {
-                                continue;
-                            }
-                        }
-
-                        if (!r) {
-                            groups.push(groupMap[g] = r = {
-                                groupRow: true,
-                                id: parentGroupId + g + ":",
-                                description: g,
-                                children: [],
-                                _groupColumn: col,
-                                _groupLevel: level,
-                                parent: level > 0 ? parentGroupId : null
-                            });
-
-                            r[col.key] = baseValue;
-                        }
-                        r.children.push(nodes[x]);
-                        ds.parentByIdMap[nodes[x].id] = r;
-                        groupRows[r.id] = r;
                     }
 
-                    groups = groups.filter(function(g) {
-                        return g !== DISCARD_GROUP;
-                    });
+                    if (!r) {
+                        groups.push(groupMap[g] = r = {
+                            groupRow: true,
+                            id: parentGroupId + g + ":",
+                            description: g,
+                            children: [],
+                            _groupColumn: col,
+                            _groupLevel: level,
+                            parent: level > 0 ? parentGroupId : null
+                        });
 
-                    for (var x = 0, l = groups.length; x < l; x++) {
-                        groups[x].recordCount = ds.groupRecordCount(groups[x]);
-                        groups[x].children = group(groups[x].children, nextGroupings, groups[x].id, level + 1);
-                        ds.processGroup(groups[x]);
+                        r[col.key] = baseValue;
                     }
-
-                    groups.sort(this.comparator);
-
-                    return groups;
-                } else {
-                    for (var x = 0, l = nodes.length; x < l; x++) {
-                        rowToGroupMap[nodes[x].id] = parentGroupId;
-                    }
-
-                    if(ds.filterPredicate) {
-                        nodes = nodes.filter(ds.filterPredicate);
-                    }
-
-                    return nodes;
+                    r.children.push(nodes[x]);
+                    ds.parentByIdMap[nodes[x].id] = r;
+                    groupRows[r.id] = r;
                 }
-            }
 
-            if(this.groups && this.groups.length) {
-                this.view = group(this.delegate.getData(), this.groups, "group:", 0);
-            } else {
-                this.view = this.delegate.getData().filter(function(row) {
-                    return !ds.filterPredicate || ds.filterPredicate(row) > 0;
+                groups = groups.filter(function (g) {
+                    return g !== DISCARD_GROUP;
                 });
-            }
 
-            if(this.sortComparator) {
-                this._applySorting(this.view);
-            }
+                for (var x = 0, l = groups.length; x < l; x++) {
+                    groups[x].recordCount = ds.groupRecordCount(groups[x]);
+                    groups[x].children = group(groups[x].children, nextGroupings, groups[x].id, level + 1);
+                    ds.processGroup(groups[x]);
+                }
 
-            this.trigger("dataloaded");
-        },
+                groups.sort(ds.comparator);
 
-        groupRecordCount: function (group) {
-            return group.children.length;
-        },
-
-        group: function (groupings) {
-            this.groups = groupings;
-            if (this.isReady()) {
-                this.updateView();
-            }
-        },
-
-        getRecordById: function (id) {
-            return this.groupRows[id] || this.delegate.getRecordById(id);
-        },
-
-        recordCount: function () {
-            this.assertReady();
-            return this.view.length;
-        },
-
-        isReady: function () {
-            return this.view !== undefined;
-        },
-
-        assertReady: function () {
-            if (!this.isReady()) {
-                throw "Datasource not ready yet";
-            }
-        },
-
-        parent: function (row) {
-            var parentRow = this.parentByIdMap[row.id];
-            if(parentRow) {
-                return parentRow.id;
-            }
-        },
-
-        hasChildren: function (row) {
-            var groupRow = this.groupRows[row.id];
-            if (groupRow) {
-                return groupRow.children && groupRow.children.length > 0;
+                return groups;
             } else {
-                return false;
+                for (var x = 0, l = nodes.length; x < l; x++) {
+                    rowToGroupMap[nodes[x].id] = parentGroupId;
+                }
+
+                if (ds.filterPredicate) {
+                    nodes = nodes.filter(ds.filterPredicate);
+                }
+
+                return nodes;
             }
-        },
-
-        /**
-         * Invoked after a group is created, for optional postprocessing in a subclass.
-         * @param group the group that was created
-         */
-        processGroup: function(group) {
-
-        },
-
-        hasSubView: function(record) {
-            if(record.groupRow) {
-                return false;
-            } else if(typeof this.delegate.hasSubView === 'function') {
-                return this.delegate.hasSubView(record);
-            }
-        },
-
-        /**
-         * Returns the whole data set, ordered and filtered, but without regard for grouping.
-         * @returns {*}
-         */
-        queryForExport: function() {
-            var data = this.delegate.getData();
-            if(this.filterPredicate) {
-                data = data.filter(this.filterPredicate);
-            } else {
-                data = ([]).concat(data);
-            }
-
-            if(this.sortComparator) {
-                data.sort(this.sortComparator);
-            }
-
-            return data;
         }
-    };
 
-    return GroupingDataSource;
+        if (this.groups && this.groups.length) {
+            this.view = group(this.delegate.getData(), this.groups, "group:", 0);
+        } else {
+            this.view = this.delegate.getData().filter(function (row) {
+                return !ds.filterPredicate || ds.filterPredicate(row) > 0;
+            });
+        }
 
-});
+        if (this.sortComparator) {
+            this._applySorting(this.view);
+        }
+
+        this.trigger("dataloaded");
+    },
+
+    groupRecordCount: function (group) {
+        return group.children.length;
+    },
+
+    group: function (groupings) {
+        this.groups = groupings;
+        if (this.isReady()) {
+            this.updateView();
+        }
+    },
+
+    getRecordById: function (id) {
+        return this.groupRows[id] || this.delegate.getRecordById(id);
+    },
+
+    recordCount: function () {
+        this.assertReady();
+        return this.view.length;
+    },
+
+    isReady: function () {
+        return this.view !== undefined;
+    },
+
+    assertReady: function () {
+        if (!this.isReady()) {
+            throw "Datasource not ready yet";
+        }
+    },
+
+    parent: function (row) {
+        var parentRow = this.parentByIdMap[row.id];
+        if (parentRow) {
+            return parentRow.id;
+        }
+    },
+
+    hasChildren: function (row) {
+        var groupRow = this.groupRows[row.id];
+        if (groupRow) {
+            return groupRow.children && groupRow.children.length > 0;
+        } else {
+            return false;
+        }
+    },
+
+    /**
+     * Invoked after a group is created, for optional postprocessing in a subclass.
+     * @param group the group that was created
+     */
+    processGroup: function (group) {
+
+    },
+
+    hasSubView: function (record) {
+        if (record.groupRow) {
+            return false;
+        } else if (typeof this.delegate.hasSubView === 'function') {
+            return this.delegate.hasSubView(record);
+        }
+    },
+
+    /**
+     * Returns the whole data set, ordered and filtered, but without regard for grouping.
+     * @returns {*}
+     */
+    queryForExport: function () {
+        var data = this.delegate.getData();
+        if (this.filterPredicate) {
+            data = data.filter(this.filterPredicate);
+        } else {
+            data = ([]).concat(data);
+        }
+
+        if (this.sortComparator) {
+            data.sort(this.sortComparator);
+        }
+
+        return data;
+    }
+};
+
+export default GroupingDataSource;

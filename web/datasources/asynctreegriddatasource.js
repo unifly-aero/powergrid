@@ -1,56 +1,57 @@
-define(['../utils'], function (utils) {
-    /*
-     * Shadow node object description:
-     * {
-     *   level: tree level (0 for root rows)
-     *   index: index of this node within its parents children
-     *   expanded: true if node is expanded in tree
-     *   id: id of the row associated with this shadow node. undefined if not yet known (i.e. row is not yet loaded)
-     *   parentId: id of the parent row. undefined for root rows
-     */
+import utils from "../utils.js";
 
-    /**
-     * Takes a TreeSource and adapts it to represent the flat list of expanded nodes. This is a generic implementation
-     * that can work with both asynchronous and synchronous TreeSources. See {@link SyncTreeGridDataSource} for an
-     * implementation that is optimised to work with synchronous TreeSources.
-     * @module AsyncTreeGridDataSource
-     * @param {TreeSource} treesource
-     * @param options
-     * @constructor
-     */
-    function AsyncTreeGridDataSource(treesource, options) {
-        utils.Evented.apply(this);
+/*
+ * Shadow node object description:
+ * {
+ *   level: tree level (0 for root rows)
+ *   index: index of this node within its parents children
+ *   expanded: true if node is expanded in tree
+ *   id: id of the row associated with this shadow node. undefined if not yet known (i.e. row is not yet loaded)
+ *   parentId: id of the parent row. undefined for root rows
+ */
 
-        this.options = options;
-        this.expandedById = {};
+/**
+ * Takes a TreeSource and adapts it to represent the flat list of expanded nodes. This is a generic implementation
+ * that can work with both asynchronous and synchronous TreeSources. See {@link SyncTreeGridDataSource} for an
+ * implementation that is optimised to work with synchronous TreeSources.
+ * @module AsyncTreeGridDataSource
+ * @param {TreeSource} treesource
+ * @param options
+ * @constructor
+ */
+function AsyncTreeGridDataSource(treesource, options) {
+    utils.Evented.apply(this);
 
-        this.treesource = treesource;
+    this.options = options;
+    this.expandedById = {};
 
-        if(this.treesource.isReady()) {
-            this.load();
-        }
+    this.treesource = treesource;
 
-        this.treesource.on("dataloaded", this.load.bind(this));
-
-        this.passthroughFrom(this.treesource, "datachanged", "editabilitychanged", "validationresultchanged");
-
-        utils.passthrough(this, treesource, ['hasSubView', 'getSummaryRow', 'queryForExport']);
-
+    if (this.treesource.isReady()) {
+        this.load();
     }
 
-    AsyncTreeGridDataSource.prototype =
-        /**
-         * @lends AsyncTreeGridDataSource.prototype
-         */
-        {
+    this.treesource.on("dataloaded", this.load.bind(this));
+
+    this.passthroughFrom(this.treesource, "datachanged", "editabilitychanged", "validationresultchanged");
+
+    utils.passthrough(this, treesource, ['hasSubView', 'getSummaryRow', 'queryForExport']);
+
+}
+
+AsyncTreeGridDataSource.prototype =
+    /**
+     * @lends AsyncTreeGridDataSource.prototype
+     */
+    {
         initShadowTree: function () {
-            if(!this.treesource.isReady()) {
+            if (!this.treesource.isReady()) {
                 throw new Error("Treesource is not ready yet.");
             }
 
             var self = this;
 
-            return Promise.resolve(this.treesource.countRootNodes()).then(function(rootNodeCount) {
+            return Promise.resolve(this.treesource.countRootNodes()).then(function (rootNodeCount) {
                 self.shadowTree = [];
                 for (var x = 0, l = rootNodeCount; x < l; x++) {
                     self.shadowTree[x] = {
@@ -63,20 +64,20 @@ define(['../utils'], function (utils) {
                 self.view = self.shadowTree.concat([]); // initial (unexpanded) view is copy of root shadow tree
 
                 return self.view;
-            }).finally(function() {
+            }).finally(function () {
                 self.viewPromise = undefined;
             });
         },
 
-        findShadowNodeForId: function(id, searchIn) {
-            if(arguments.length === 1) {
+        findShadowNodeForId: function (id, searchIn) {
+            if (arguments.length === 1) {
                 return this.findShadowNodeForId(id, this.shadowTree);
             } else {
-                for(var x=0,l=searchIn.length;x<l;x++) {
-                    if(searchIn[x].id === id) return searchIn[x];
-                    if(searchIn[x].children) {
+                for (var x = 0, l = searchIn.length; x < l; x++) {
+                    if (searchIn[x].id === id) return searchIn[x];
+                    if (searchIn[x].children) {
                         var result = this.findShadowNodeForId(id, searchIn[x].children);
-                        if(result !== null) {
+                        if (result !== null) {
                             return result;
                         }
                     }
@@ -90,26 +91,26 @@ define(['../utils'], function (utils) {
          * @param shadowNode
          * @returns number
          */
-        getShadowNodeSubTreeSize: function(shadowNode) {
+        getShadowNodeSubTreeSize: function (shadowNode) {
             var self = this;
 
-            if(shadowNode.children === undefined) {
+            if (shadowNode.children === undefined) {
                 throw new Error("Shadow Node children expected to be known (as shadow nodes) when it is expanded");
             }
 
-            return shadowNode.children.reduce(function(count, child) {
+            return shadowNode.children.reduce(function (count, child) {
                 return count + (child.expanded ? self.getShadowNodeSubTreeSize(child) : 0);
             }, shadowNode.children.length);
         },
 
-        loadShadowEntries: function(shadowNodes) {
+        loadShadowEntries: function (shadowNodes) {
             var rootNodes = [],
                 nodesPerParentId = {},
                 self = this;
 
-            for(var x=0,l=shadowNodes.length;x<l;x++) {
+            for (var x = 0, l = shadowNodes.length; x < l; x++) {
                 var node = shadowNodes[x];
-                if(node.id === undefined) {
+                if (node.id === undefined) {
                     if (node.parentId !== undefined) {
                         if (!(node.parentId in nodesPerParentId)) {
                             nodesPerParentId[node.parentId] = [node];
@@ -126,7 +127,7 @@ define(['../utils'], function (utils) {
 
             function createLUT(shadowNodes) {
                 var index = [];
-                for(var x=0,l=shadowNodes.length;x<l;x++) {
+                for (var x = 0, l = shadowNodes.length; x < l; x++) {
                     index[shadowNodes[x].index] = shadowNodes[x];
                 }
                 return index;
@@ -136,23 +137,23 @@ define(['../utils'], function (utils) {
                 return node.index;
             }
 
-            if(rootNodes.length) {
+            if (rootNodes.length) {
                 var rootNodeRanges = utils.findRanges(rootNodes.map(toIndex)),
                     lut = createLUT(rootNodes);
 
-                promises = promises.concat(rootNodeRanges.map(function(range) {
-                    return Promise.resolve(self.treesource.getRootNodes(range.start, range.start + range.count)).then(function(result) {
-                        if(result.length != range.count) {
+                promises = promises.concat(rootNodeRanges.map(function (range) {
+                    return Promise.resolve(self.treesource.getRootNodes(range.start, range.start + range.count)).then(function (result) {
+                        if (result.length != range.count) {
                             throw new Error("Treesource returned incorrect amount of root nodes");
                         }
                         var promises = [];
-                        for(var x=0, l = result.length; x < l; x++) {
+                        for (var x = 0, l = result.length; x < l; x++) {
                             var row = result[x];
                             self.recordByIdMap[row.id] = row;
                             var shadowNode = lut[range.start + x];
                             shadowNode.id = row.id;
 
-                            if(self.expandedById[row.id]) {
+                            if (self.expandedById[row.id]) {
                                 promises.push(self._expandShadowNode(shadowNode, row));
                             }
                         }
@@ -161,25 +162,25 @@ define(['../utils'], function (utils) {
                 }));
             }
 
-            for(var parentId in nodesPerParentId) {
-                (function() {
+            for (var parentId in nodesPerParentId) {
+                (function () {
                     var childNodeRanges = utils.findRanges(nodesPerParentId[parentId].map(toIndex)),
                         parent = self.getRecordById(parentId),
                         lut = createLUT(nodesPerParentId[parentId]);
 
-                    promises = promises.concat(childNodeRanges.map(function(range) {
-                        return Promise.resolve(self.treesource.children(parent, range.start, range.start + range.count)).then(function(result) {
-                            if(result.length != range.count) {
+                    promises = promises.concat(childNodeRanges.map(function (range) {
+                        return Promise.resolve(self.treesource.children(parent, range.start, range.start + range.count)).then(function (result) {
+                            if (result.length != range.count) {
                                 throw new Error("Treesource returned incorrect amount of child nodes");
                             }
                             var promises = [];
-                            for(var x=0, l = result.length; x < l; x++) {
+                            for (var x = 0, l = result.length; x < l; x++) {
                                 var row = result[x];
                                 self.recordByIdMap[row.id] = row;
                                 var shadowNode = lut[range.start + x];
                                 shadowNode.id = row.id;
 
-                                if(self.expandedById[row.id]) {
+                                if (self.expandedById[row.id]) {
                                     promises.push(self._expandShadowNode(shadowNode, row));
                                 }
                             }
@@ -189,12 +190,12 @@ define(['../utils'], function (utils) {
                 })();
             }
 
-            return Promise.all(promises).then(function(ranges) {
+            return Promise.all(promises).then(function (ranges) {
                 return shadowNodes;
             });
         },
 
-        load: function() {
+        load: function () {
             var self = this;
             this.parentByIdMap = {};
             this.childrenByIdMap = {};
@@ -219,7 +220,7 @@ define(['../utils'], function (utils) {
 
         getData: function (start, end) {
             var self = this;
-            return this.getView().then(function(view) {
+            return this.getView().then(function (view) {
                 var shadowRows;
                 if (start !== undefined || end !== undefined) {
                     shadowRows = view.slice(start, end);
@@ -227,8 +228,8 @@ define(['../utils'], function (utils) {
                     shadowRows = view;
                 }
 
-                return self.loadShadowEntries(shadowRows).then(function() {
-                    return shadowRows.map(function(shadowRow) {
+                return self.loadShadowEntries(shadowRows).then(function () {
+                    return shadowRows.map(function (shadowRow) {
                         return self.getRecordById(shadowRow.id);
                     });
                 });
@@ -237,12 +238,14 @@ define(['../utils'], function (utils) {
 
         recordCount: function () {
             this.assertReady();
-            return this.getView().then(function(view) { return view.length; });
+            return this.getView().then(function (view) {
+                return view.length;
+            });
         },
 
         toggle: function (rowId) {
             var shadowNode = this.findShadowNodeForId(rowId);
-            if(shadowNode) {
+            if (shadowNode) {
                 /** If no shadow node could be found, then that means the node isn't visible yet and we'll do nothing */
                 var row = this.getRecordById(rowId);
                 if (this.isExpanded(row)) {
@@ -258,24 +261,24 @@ define(['../utils'], function (utils) {
             return this._expandShadowNode(shadowNode, row);
         },
 
-        _expandShadowNode: function(shadowNode, row) {
-            if(this.view === undefined) {
+        _expandShadowNode: function (shadowNode, row) {
+            if (this.view === undefined) {
                 throw "Collapse node but view isn't loaded";
             }
 
             var self = this;
 
-            if(shadowNode.expanded) {
+            if (shadowNode.expanded) {
                 // already expanded, don't do anything
                 return Promise.resolve();
             }
 
             this.expandedById[row.id] = true;
 
-            return (shadowNode.children === undefined ? Promise.resolve(this.treesource.countChildren(row)).then(function(rowCount) {
+            return (shadowNode.children === undefined ? Promise.resolve(this.treesource.countChildren(row)).then(function (rowCount) {
                 // generate shadow children
                 shadowNode.children = new Array(rowCount);
-                for(var x=0;x<rowCount;x++) {
+                for (var x = 0; x < rowCount; x++) {
                     shadowNode.children[x] = {
                         parentId: row.id,
                         index: x,
@@ -283,7 +286,7 @@ define(['../utils'], function (utils) {
                         expanded: false
                     };
                 }
-            }) : Promise.resolve()).then(function() {
+            }) : Promise.resolve()).then(function () {
                 // expand it. then we must insert rows
                 shadowNode.expanded = true;
 
@@ -305,8 +308,8 @@ define(['../utils'], function (utils) {
             this._collapseShadowNode(shadowNode);
         },
 
-        _collapseShadowNode: function(shadowNode) {
-            if(this.view === undefined) {
+        _collapseShadowNode: function (shadowNode) {
+            if (this.view === undefined) {
                 throw "Collapse node but view isn't loaded";
             }
             if (!shadowNode.expanded) {
@@ -336,38 +339,40 @@ define(['../utils'], function (utils) {
             return nodeForId && nodeForId.expanded;
         },
 
-        getTreeLevel: function(row) {
+        getTreeLevel: function (row) {
             var nodeForId = this.findShadowNodeForId(row.id);
             return nodeForId && nodeForId.level;
         },
 
         expandAll: function (rowId, depth) {
             var self = this;
+
             function expand(nodes, depth) {
-                return self.loadShadowEntries(nodes).then(function() {
-                    return Promise.all(nodes.map(function(node) {
+                return self.loadShadowEntries(nodes).then(function () {
+                    return Promise.all(nodes.map(function (node) {
                         var record = self.getRecordById(node.id);
-                        return self._expandShadowNode(node, record).then(function() {
-                            if(node.children && (depth === undefined || depth > 1)) {
+                        return self._expandShadowNode(node, record).then(function () {
+                            if (node.children && (depth === undefined || depth > 1)) {
                                 return expand(node.children, depth === undefined ? undefined : depth - 1);
                             }
                         });
                     }));
                 });
             }
+
             var nodes;
-            if(rowId) {
+            if (rowId) {
                 nodes = [this.findShadowNodeForId(rowId)];
                 return expand(nodes, depth);
             } else {
-                return this.initShadowTree().then(function() {
+                return this.initShadowTree().then(function () {
                     nodes = self.shadowTree;
                     return expand(nodes, depth);
                 });
             }
         },
 
-        expandToLevel: function(depth) {
+        expandToLevel: function (depth) {
             return this.expandAll(false, depth);
         },
 
@@ -390,10 +395,10 @@ define(['../utils'], function (utils) {
             });
         },
 
-        flattenShadowSubTree: function(shadowNode) {
-            if(shadowNode.expanded) {
+        flattenShadowSubTree: function (shadowNode) {
+            if (shadowNode.expanded) {
                 var flat = [];
-                for(var x=0,l=shadowNode.children.length;x<l;x++) {
+                for (var x = 0, l = shadowNode.children.length; x < l; x++) {
                     flat.push(shadowNode.children[x]);
                     flat = flat.concat(this.flattenShadowSubTree(shadowNode.children[x]));
                 }
@@ -403,14 +408,14 @@ define(['../utils'], function (utils) {
             }
         },
 
-        hasChildren: function(row) {
+        hasChildren: function (row) {
             return this.treesource.hasChildren(row);
         },
 
         children: function (row) {
             var self = this;
             if (!this.childrenByIdMap[row.id]) {
-                return Promise.resolve(this.treesource.children(row)).then(function(children) {
+                return Promise.resolve(this.treesource.children(row)).then(function (children) {
                     self.childrenByIdMap[row.id] = children;
                     if (children !== undefined) {
                         for (var x = 0, l = children.length; x < l; x++) {
@@ -424,8 +429,8 @@ define(['../utils'], function (utils) {
             }
         },
 
-        getRecordById: function(id) {
-            if(!(id in this.recordByIdMap)) {
+        getRecordById: function (id) {
+            if (!(id in this.recordByIdMap)) {
                 throw new Error("Record with id " + id + " not yet loaded or does not exist. This is likely a bug or incorrect usage.");
             }
             return this.recordByIdMap[id];
@@ -442,7 +447,7 @@ define(['../utils'], function (utils) {
             this.treesource.sort(comparator, settings);
         },
 
-        group: function(settings) {
+        group: function (settings) {
             return this.treesource.group(settings);
         },
 
@@ -450,14 +455,14 @@ define(['../utils'], function (utils) {
             this.treesource.filter(columnSettings, filterFunction);
         },
 
-        setValue: function(rowId, key, value) {
+        setValue: function (rowId, key, value) {
             this.treesource.setValue(rowId, key, value);
         },
 
-        getView: function() {
-            if(this.view) {
+        getView: function () {
+            if (this.view) {
                 return Promise.resolve(this.view);
-            } else if(this.viewPromise) {
+            } else if (this.viewPromise) {
                 return this.viewPromise;
             } else {
                 return this.viewPromise = this.initShadowTree();
@@ -466,5 +471,4 @@ define(['../utils'], function (utils) {
 
     };
 
-    return AsyncTreeGridDataSource;
-});
+export default AsyncTreeGridDataSource;

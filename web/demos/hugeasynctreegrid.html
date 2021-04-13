@@ -2,83 +2,77 @@
 <html>
 <head>
     <title>PowerGrid: Asynchronously loaded tree</title>
-    <script>var require = { baseUrl: '../' };</script>
-    <script src="../../bower_components/requirejs/require.js" type="text/javascript"></script>
-    <script src="../config.js" type="text/javascript"></script>
-
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <link href="../powergrid.css" rel="stylesheet"/>
-    <script>
-        require(['jquery', 'powergrid', 'datasources/asynctreegriddatasource', 'datasources/bufferedasynctreesource', '../utils'], function ($, powergrid, AsyncTreeGridDataSource, BufferedAsyncTreeSource, utils) {
-            if (window.requestAnimationFrame === undefined) {
-                requestAnimationFrame = function(f) {
-                    setTimeout(f, 0);
-                };
-            }
+    <script type="module">
+        import PowerGrid from "../powergrid.js";
+        import AsyncTreeGridDataSource from "../datasources/asynctreegriddatasource.js";
+        import utils from "../utils.js";
+        import BufferedAsyncTreeSource from "../datasources/bufferedasynctreesource.js";
 
-            function postpone(what, howlong) {
-                return new Promise(function(resolve, reject) {
-                    setTimeout(function() {
-                        resolve(what);
-                    }, howlong);
-                });
-            }
-
-            function range(begin, end, factor, parentId) {
-                var result = new Array(end - begin);
-                for(var x=begin;x<end;x++) {
-                    result[x-begin] = {id: parentId + "-" + x, value: x * factor};
-                }
-                return result;
-            }
-
-            // The following returns a datasource of numbers of 1 to 1000 in the root. Each number contains the factors of that number with its index.
-            // Tree goes infinitely deep
-
-            var treesource = {
-                isReady: function() {
-                    return true;
-                },
-                children: function(row, start, end) {
-                    console.log("Querying children from " + start + " to " + end);
-                    return postpone(range(start || 0, end || this.countChildren(row), row.value, row.id), 1500);
-                },
-                hasChildren: function(row) {
-                    return true;
-                },
-                countChildren: function(row) {
-                    return 1000;
-                },
-                getRootNodes: function(start, end) {
-                    console.log("Querying root nodes from " + start + " to " + end);
-                    return postpone(range(start || 0, end || this.countRootNodes(), 1, "root"), 1500);
-                },
-                countRootNodes: function() {
-                    return 1000;
-                }
-            };
-
-            utils.Evented.apply(treesource);
-
-            var datasource = new AsyncTreeGridDataSource(new BufferedAsyncTreeSource(treesource));
-
-            $("#test").PowerGrid({
-                columns: [
-                    {
-                        key: "value",
-                        title: "Value",
-                        treeColumn: true
-                    }
-                ],
-
-                dataSource: datasource,
-
-                extensions: {
-                    'columnsizing': {},
-                    'columnmoving': {},
-                    'editing': true,
-                    'treegrid': {autoTreeDataSource: false}
-                }
+        function postpone(what, howlong) {
+            return new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    resolve(what);
+                }, howlong);
             });
+        }
+
+        function range(begin, end, factor, parentId) {
+            var result = new Array(end - begin);
+            for (var x = begin; x < end; x++) {
+                result[x - begin] = {id: parentId + "-" + x, value: x * factor};
+            }
+            return result;
+        }
+
+        // The following returns a datasource of numbers of 1 to 1000 in the root. Each number contains the factors of that number with its index.
+        // Tree goes infinitely deep
+
+        var treesource = {
+            isReady: function () {
+                return true;
+            },
+            children: function (row, start, end) {
+                console.log("Querying children from " + start + " to " + end);
+                return postpone(range(start || 0, end || this.countChildren(row), row.value, row.id), 1500);
+            },
+            hasChildren: function (row) {
+                return true;
+            },
+            countChildren: function (row) {
+                return 1000;
+            },
+            getRootNodes: function (start, end) {
+                console.log("Querying root nodes from " + start + " to " + end);
+                return postpone(range(start || 0, end || this.countRootNodes(), 1, "root"), 1500);
+            },
+            countRootNodes: function () {
+                return 1000;
+            }
+        };
+
+        utils.Evented.apply(treesource);
+
+        var datasource = new AsyncTreeGridDataSource(new BufferedAsyncTreeSource(treesource));
+
+        new PowerGrid($("#test"), {
+            columns: [
+                {
+                    key: "value",
+                    title: "Value",
+                    treeColumn: true
+                }
+            ],
+
+            dataSource: datasource,
+
+            extensions: {
+                'columnsizing': {},
+                'columnmoving': {},
+                'editing': true,
+                'treegrid': {autoTreeDataSource: false}
+            }
         });
     </script>
 

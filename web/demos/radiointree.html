@@ -2,80 +2,77 @@
 <html>
 <head>
     <title>PowerGrid proof of concept</title>
-    <script>var require = {baseUrl: '../'};</script>
-    <script src="../../bower_components/requirejs/require.js" type="text/javascript"></script>
-    <script src="../config.js" type="text/javascript"></script>
-
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <link href="../powergrid.css" rel="stylesheet"/>
-    <script>
-        require(['jquery', 'powergrid', 'datasources/arraydatasource', 'promise', '../override'], function ($, powergrid, ArrayDataSource) {
-            var data = [
-                {
-                    id: "F1",
-                    name: "Folder 1",
-                    selected: true,
-                    children: [
-                        {id: "f1", name: "File 1"},
-                        {id: "f2", name: "File 2"},
-                        {id: "f3", name: "File 3"}
-                    ]
+    <script type="module">
+        import PowerGrid from "../powergrid.js";
+        import ArrayDataSource from "../datasources/arraydatasource.js";
+
+        var data = [
+            {
+                id: "F1",
+                name: "Folder 1",
+                selected: true,
+                children: [
+                    {id: "f1", name: "File 1"},
+                    {id: "f2", name: "File 2"},
+                    {id: "f3", name: "File 3"}
+                ]
+            },
+            {
+                id: "F2",
+                name: "Folder 2",
+                selected: false,
+                children: [
+                    {id: "f4", name: "File 1"},
+                    {id: "f5", name: "File 2"}
+                ]
+            },
+            {
+                id: "F3",
+                name: "Folder 3",
+                selected: false,
+                children: [
+                    {id: "f6", name: "File 1"},
+                    {id: "f7", name: "File 2"}
+                ]
+            }
+
+        ];
+
+        var columns = [
+            {
+                title: "Description",
+                type: "radio",
+                template: record => record.name,
+                key: "selected",
+                editable: true,
+                treeColumn: true
+            }
+        ];
+
+        var ds = new ArrayDataSource(data);
+
+        new PowerGrid($("#test"), {
+            columns: columns,
+
+            dataSource: ds,
+
+            extensions: {
+                directinput: true,
+                columnsizing: {},
+                columnmoving: {},
+                editing: {
+                    isEditable: function (record, column) {
+                        if (column.key === 'selected')
+                        return true;
+                    }
                 },
-                {
-                    id: "F2",
-                    name: "Folder 2",
-                    selected: false,
-                    children: [
-                        {id: "f4", name: "File 1"},
-                        {id: "f5", name: "File 2"}
-                    ]
+                treegrid: {
+                    initialTreeDepth: 1
                 },
-                {
-                    id: "F3",
-                    name: "Folder 3",
-                    selected: false,
-                    children: [
-                        {id: "f6", name: "File 1"},
-                        {id: "f7", name: "File 2"}
-                    ]
-                }
-
-            ];
-
-            var columns = [
-                {
-                    title: "Description",
-                    type: "radio",
-                    template: "{{:name}}",
-                    key: "selected",
-                    editable: true,
-                    treeColumn: true
-                }
-            ];
-
-            var ds = new ArrayDataSource(data);
-
-            $("#test").PowerGrid({
-                columns: columns,
-
-                dataSource: ds,
-
-                extensions: {
-                    'directinput': true,
-                    'columnsizing': {},
-                    'columnmoving': {},
-                    'editing': {
-                        isEditable: function (record, column) {
-                            if (column.key === 'selected')
-                                return record.id % 5 != 0;
-                            return true;
-                        }
-                    },
-                    treegrid: {
-                        initialTreeDepth: 1
-                    },
-                    templating: true
-                }
-            });
+                templating: true
+            }
         });
     </script>
 

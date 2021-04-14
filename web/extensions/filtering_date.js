@@ -24,21 +24,27 @@
  *  - fieldName: 'minimum' or 'maximum'
  */
 
-define([], function() {
-
-    "use strict";
-    return {
-        init: function(grid, pluginOptions) {
-            grid.options.extensions.filtering_scalar.types.datetime.createField = pluginOptions.createField;
-            grid.options.extensions.filtering_scalar.types.date.createField = pluginOptions.createField;
-        },
-        requires: {
-            filtering_scalar: {
-                types: {
-                    datetime: {fieldAttribute: 'valueAsDate', fieldType: 'date', minimumLabel: "After", maximumLabel: "Before"},
-                    date: {fieldAttribute: 'valueAsDate', fieldType: 'date', minimumLabel: "After", maximumLabel: "Before"}
+export default {
+    init: function (grid, pluginOptions) {
+        grid.options.extensions.filtering_scalar.types.datetime.createField = pluginOptions.createField;
+        grid.options.extensions.filtering_scalar.types.date.createField = pluginOptions.createField;
+    },
+    requires: {
+        filtering_scalar: {
+            types: {
+                datetime: {
+                    fieldAttribute: 'valueAsDate',
+                    fieldType: 'date',
+                    minimumLabel: "After",
+                    maximumLabel: "Before"
+                },
+                date: {
+                    fieldAttribute: 'valueAsDate',
+                    fieldType: 'date',
+                    minimumLabel: "After",
+                    maximumLabel: "Before"
                 }
             }
         }
-    };
-});
+    }
+}

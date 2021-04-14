@@ -4,15 +4,15 @@ define(['./powergrid', './datasources/arraydatasource', './datasources/jsondatas
         './datasources/bufferedasynctreesource', './utils'],
     function (PowerGrid, ArrayDataSource, JsonDataSource, GroupingDataSource, SortingDataSource, FilteringDataSource, AsyncTreeGridDataSource, BufferedAsyncTreeSource, utils) {
         return {
-            PowerGrid: PowerGrid,
-            ArrayDataSource: ArrayDataSource,
-            JsonDataSource: JsonDataSource,
-            GroupingDataSource: GroupingDataSource,
-            SortingDataSource: SortingDataSource,
-            FilteringDataSource: FilteringDataSource,
-            AsyncTreeGridDataSource: AsyncTreeGridDataSource,
-            BufferedAsyncTreeSource: BufferedAsyncTreeSource,
-            Evented: utils.Evented,
-            PowerGridUtilities: utils
+            PowerGrid: PowerGrid.default,
+            ArrayDataSource: ArrayDataSource.default,
+            JsonDataSource: JsonDataSource.default,
+            GroupingDataSource: GroupingDataSource.default,
+            SortingDataSource: SortingDataSource.default,
+            FilteringDataSource: FilteringDataSource.default,
+            AsyncTreeGridDataSource: AsyncTreeGridDataSource.default,
+            BufferedAsyncTreeSource: BufferedAsyncTreeSource.default,
+            Evented: utils.default.Evented,
+            PowerGridUtilities: utils.default
         };
     });

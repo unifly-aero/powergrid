@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PowerGrid proof of concept</title>
+
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+
+    <link href="../powergrid.css" rel="stylesheet"/>
+    <script type="module">
+        import PowerGrid from "../powergrid.js";
+        import utils from "../utils.js";
+
+        const numbers = (function (s) {
+            let l;
+            const x = [];
+            while (s > (l = x.length)) x[l] = l;
+            return x
+        })(30);
+
+        const columns = numbers.map(function (e) {
+            return {
+                title: "Column " + e,
+                width: e === 0 ? 150 : e === 6 ? 250 : 100,
+                editable: e > 5 && e < 10 || e === 1
+            };
+        });
+
+        const data = new Array(2500);
+
+        const dataSource = {
+            recordCount: function () {
+                return data.length;
+            },
+
+            getRowByIndex: function (idx) {
+                if (data[idx] === undefined) {
+                    const row = columns.map(function (e, i) {
+                        return "Cell " + idx + ", " + i;
+                    });
+                    row.id = idx + "";
+                    return data[idx] = row;
+                } else {
+                    return data[idx];
+                }
+            },
+
+            getRecordById: function (id) {
+                return this.getRowByIndex(parseInt(id));
+            },
+
+            getData: function (start, end) {
+                if (!start) start = 0;
+                if (!end) end = this.recordCount();
+                const d = new Array(end - start);
+                for (let x = start; x < end; x++) {
+                    d[x - start] = this.getRowByIndex(x);
+                }
+                return d;
+            },
+
+            setValue: function (rowIdx, key, value) {
+                data[rowIdx][key] = value;
+            },
+
+            isReady: function () {
+                return true;
+            }
+        };
+
+        utils.Evented.apply(dataSource);
+
+        new PowerGrid($("#test"), {
+            columns: columns,
+
+            frozenColumnsLeft: 4,
+            frozenColumnsRight: 2,
+
+            frozenRowsTop: 2,
+            frozenRowsBottom: 1,
+
+            dataSource: dataSource,
+
+            extensions: {
+                'columnsizing': {},
+                'columnmoving': {},
+                'editing': true
+            }
+        });
+    </script>
+
+    <style>
+        * {
+            font-family: sans-serif;
+            font-size: 12pt;
+        }
+
+        body, form {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #test {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="test"></div>
+</body>
+</html>

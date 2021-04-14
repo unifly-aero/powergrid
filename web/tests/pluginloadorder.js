@@ -1,29 +1,24 @@
-"use strict";
-define(
-    ['QUnit', '../powergrid', '../extensions/dragging', '../extensions/columnmoving', '../extensions/columnsizing', '../extensions/sorting'],
-    function(QUnit, PowerGrid, dragging, columnmoving, columnsizing, sorting) {
-        return function() {
-            QUnit.asyncTest("Plugin load order", function(assert) {
-                var pg = new PowerGrid(false, {
-                    extensions: {
-                        'columnsizing': {},
-                        'columnmoving': {},
-                        'editing': true,
-                        'grouping': {},
-                        'sorting': true,
-                        'filtering': {}
-                    }
-                });
+import PowerGrid from "../powergrid.js";
 
-                assert.expect(1);
+describe("PowerGrid", function () {
+    it("It sorts plugins in the right order", function () {
+        var pg = new PowerGrid(false, {
+            extensions: {
+                'columnsizing': {},
+                'columnmoving': {},
+                'editing': true,
+                'grouping': {},
+                'sorting': true,
+                'filtering': {}
+            }
+        });
 
-                pg.loadExtensions(function(pluginList, plugins) {
-                    var sorted = pg.sortByLoadOrder(pluginList, plugins);
-                    assert.ok(sorted.indexOf("dragging") < sorted.indexOf("sorting"), "Dragging should come before sorting");
-
-                    QUnit.start();
-                });
+        return new Promise((resolve, reject) => {
+            pg.loadExtensions(function (pluginList, plugins) {
+                var sorted = pg.sortByLoadOrder(pluginList, plugins);
+                expect(sorted.indexOf("dragging") < sorted.indexOf("sorting")).toBeTrue();
+                resolve();
             });
-        };
-    }
-);
+        });
+    });
+});

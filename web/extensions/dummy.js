@@ -3,10 +3,8 @@
  *
  * Usage:
  */
-define(['../override'], function(override, $) {
-  "use strict";
+import override from "../override.js";
 
-  return function(grid, pluginOptions) {
+export default function (grid, pluginOptions) {
     override(grid, pluginOptions.bind(this, override));
-  };
-});
+}

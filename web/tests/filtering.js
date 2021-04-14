@@ -1,11 +1,14 @@
-"use strict";
+import SyncTreeGridDataSource from "../datasources/synctreegriddatasource.js";
+import filtering from "../extensions/filtering.js";
+import ArrayDataSource from "../datasources/arraydatasource.js";
+import DefaultTreeSource from "../datasources/defaulttreesource.js";
+import FilteringDataSource from "../datasources/filteringdatasource.js";
 
-define(
-    ['QUnit', '../datasources/synctreegriddatasource', '../extensions/filtering', '../datasources/arraydatasource', '../datasources/defaulttreesource',
-    '../datasources/filteringdatasource'],
-    function (QUnit, SyncTreeGridDataSource, filtering, ArrayDataSource, DefaultTreeSource, FilteringDataSource) {
-        return function () {
-            QUnit.test("3 deep treegrid filtering with inclusive and exclusive", function (assert) {
+const assert = {}
+
+
+describe("Filtering", function() {
+            it("3 deep treegrid filtering with inclusive and exclusive", function () {
                 var tree = [
                     {
                         id: 1, d: "Cruft foods", e: "B", children: [
@@ -62,19 +65,17 @@ define(
                 function test(settings, expectedIds, name) {
                     mockgrid.filtering.filter(settings);
                     return Promise.resolve(ds.getData()).then(function (data) {
-                        assert.deepEqual(
+                        expect(
                             data.map(function (r) {
                                 return r.id;
-                            }),
-                            expectedIds,
-                            name
-                        );
+                            })).toEqual(expectedIds);
                     });
                 }
 
                 return Promise.resolve(ds.expandToLevel(3)).then(function () {
                     return test(null, [1, 2, 21, 3, 31, 4, 5, 51, 52, 6, 61, 7, 8], "no filter");
-                }).then(function () {
+                })
+                    .then(function () {
                     return test({
                         d: {
                             type: "exclusive",
@@ -119,7 +120,7 @@ define(
                 });
             });
 
-            QUnit.test("Treegrid filtering with inclusive and exclusive", function (assert) {
+            it("Treegrid filtering with inclusive and exclusive", function () {
 
                 var tree = [
                     {
@@ -160,13 +161,11 @@ define(
                 function test(settings, expectedIds, name) {
                     mockgrid.filtering.filter(settings);
                     return Promise.resolve(ds.getData()).then(function (data) {
-                        assert.deepEqual(
+                        expect(
                             data.map(function (r) {
                                 return r.id;
-                            }),
-                            expectedIds,
-                            name
-                        )
+                            })).toEqual(
+                            expectedIds)
                     });
                 }
 
@@ -217,7 +216,7 @@ define(
                 });
             });
 
-            QUnit.test("Test data change event handling", function(assert) {
+            it("Test data change event handling", function() {
                 var arrayDataSource = new ArrayDataSource([]);
                 var filteringDataSource = new FilteringDataSource(arrayDataSource);
 
@@ -233,12 +232,10 @@ define(
                 function expectEvent(event, description, after) {
                     return new Promise(function(resolve, reject) {
                         var timeout = setTimeout(function() {
-                            assert.ok(false, description);
                             reject(description);
                         }, 100);
                         filteringDataSource.one(event, function(event) {
                             clearTimeout(timeout);
-                            assert.ok(true, description);
                             resolve(event);
                         });
 
@@ -258,7 +255,6 @@ define(
                         eventSubscriptions = events.map(function(eventName) {
                             return filteringDataSource.on(eventName, function(evt) {
                                 clearTimeout(timeout);
-                                assert.ok(false, description);
                                 reject("Unexpected event " + eventName + " in " + description);
                             });
                         });
@@ -279,19 +275,19 @@ define(
                         row2
                     ])
                 }).then(function event(event) {
-                    assert.deepEqual(event, {
+                    expect(event).toEqual({
                         start: 0, end: 2
-                    }, 'No filtering, two rows added, event contents');
+                    });
 
-                    assert.deepEqual(filteringDataSource.getData(), [row1, row2], 'No filtering, two rows added, datasource contents');
-                    assert.equal(filteringDataSource.getData().length, 2);
+                    expect(filteringDataSource.getData()).toEqual([row1, row2]);
+                    expect(filteringDataSource.getData()).toHaveSize(2);
 
                     return expectNoEvent(['rowsadded','datachanged','rowsremoved'], 'Apply filter, no changes expected', function() {
                         filter('BB');
                     });
                 }).then(function () {
-                    assert.deepEqual(filteringDataSource.getData(), [row1, row2], 'Filtering, no changes expected');
-                    assert.equal(filteringDataSource.getData().length, 2);
+                    expect(filteringDataSource.getData()).toEqual([row1, row2]);
+                    expect(filteringDataSource.getData()).toHaveSize(2);
 
                     return expectEvent('rowsadded', 'Adding 4 rows, two match filter', function () {
                         arrayDataSource.insert(1, [
@@ -299,39 +295,39 @@ define(
                         ]);
                     });
                 }).then(function(event) {
-                    assert.deepEqual(event, {start: 1, end: 3}, 'Two new rows in filtered datasource');
-                    assert.deepEqual(arrayDataSource.getData(), [row1,row3,row4,row5,row6,row2]);
-                    assert.deepEqual(filteringDataSource.getData(), [row1,row4,row5,row2]);
-                    assert.equal(filteringDataSource.getData().length, 4);
+                    expect(event).toEqual({start: 1, end: 3});
+                    expect(arrayDataSource.getData()).toEqual([row1, row3, row4, row5, row6, row2]);
+                    expect(filteringDataSource.getData()).toEqual([row1, row4, row5, row2]);
+                    expect(filteringDataSource.getData()).toHaveSize(4);
                     return expectNoEvent(['rowsadded','rowsremoved'], 'Removing row that wasn\'t in filtered result, expecting no event', function() {
                         arrayDataSource.remove(1, 2);
                     });
                 }).then(function() {
-                    assert.deepEqual(arrayDataSource.getData(), [row1, row4, row5, row6, row2]);
-                    assert.deepEqual(filteringDataSource.getData(), [row1, row4, row5, row2]);
+                    expect(arrayDataSource.getData()).toEqual([row1, row4, row5, row6, row2]);
+                    expect(filteringDataSource.getData()).toEqual([row1, row4, row5, row2]);
 
                     return expectEvent('rowsadded', 'Adding two rows of which one is in filtered result, at end of list', function () {
                         arrayDataSource.insert(5, [row7, row8]);
                     });
                 }).then(function(event) {
-                    assert.deepEqual(event, {start: 4, end: 5});
+                    expect(event).toEqual({start: 4, end: 5});
 
-                    assert.deepEqual(arrayDataSource.getData(), [row1, row4, row5, row6, row2, row7, row8]);
-                    assert.deepEqual(filteringDataSource.getData(), [row1, row4, row5, row2, row7]);
-                    assert.equal(filteringDataSource.getData().length, 5);
+                    expect(arrayDataSource.getData()).toEqual([row1, row4, row5, row6, row2, row7, row8]);
+                    expect(filteringDataSource.getData()).toEqual([row1, row4, row5, row2, row7]);
+                    expect(filteringDataSource.getData()).toHaveSize(5);
 
                     return expectEvent('rowsremoved','Removing two rows of which one is in filtered result, expecting 1 rowsremoved', function() {
                         arrayDataSource.remove(5, 7);
                     });
                }).then(function(event) {
-                    assert.deepEqual({start: 4, end: 5}, event);
-                    assert.deepEqual(arrayDataSource.getData(), [row1, row4, row5, row6, row2]);
-                    assert.deepEqual(filteringDataSource.getData(), [row1, row4, row5, row2]);
-                    assert.equal(filteringDataSource.getData().length, 4);
+                    expect({start: 4, end: 5}).toEqual(event);
+                    expect(arrayDataSource.getData()).toEqual([row1, row4, row5, row6, row2]);
+                    expect(filteringDataSource.getData()).toEqual([row1, row4, row5, row2]);
+                    expect(filteringDataSource.getData()).toHaveSize(4);;
                 });
             });
 
-            QUnit.test("Test filter changing", function(assert) {
+            it("Test filter changing", function() {
                 var row1 = {id: 0,name: 'AABB'};
                 var row2 = {id: 1,name: 'BBBB'};
                 var row3 = {id: 3,name: 'AAAA'};
@@ -363,12 +359,7 @@ define(
                         });
                         var timeout = setTimeout(function () {
                             subsc.cancel();
-                            assert.pushResult({
-                                result: c == count,
-                                actual: c,
-                                expected: count,
-                                message: description
-                            });
+                            expect(c).toEqual(count);
                             resolve(events);
                         }, 100);
 
@@ -376,7 +367,7 @@ define(
                     });
                 }
 
-                assert.deepEqual(filteringDataSource.getData(), [
+                expect(filteringDataSource.getData()).toEqual([
                     row1,
                     row2,
                     row3,
@@ -390,12 +381,12 @@ define(
                 return expectEvents("rowsremoved", 3, "Expecting three rows removed", function() {
                     filteringDataSource.applyFilter(null, function(x) { return x.name.indexOf('BB') > -1; });
                 }).then(function(events) {
-                    assert.deepEqual(events, [
+                    expect(events).toEqual([
                         {start: 7, end: 8},
                         {start: 5, end: 6},
                         {start: 2, end: 3}
                     ]);
-                    assert.deepEqual(filteringDataSource.getData(), [
+                    expect(filteringDataSource.getData()).toEqual([
                         row1,
                         row2,
                         row4,
@@ -406,12 +397,12 @@ define(
                     return expectEvents("rowsadded", 3, "Expecting three rows added", function() {
                         filteringDataSource.applyFilter(null, null);
                     }).then(function(events) {
-                        assert.deepEqual(events, [
+                        expect(events).toEqual([
                             {start: 2, end: 3},
                             {start: 5, end: 6},
                             {start: 7, end: 8}
                         ]);
-                        assert.deepEqual(filteringDataSource.getData(), [
+                        expect(filteringDataSource.getData()).toEqual([
                             row1,
                             row2,
                             row3,
@@ -424,6 +415,6 @@ define(
                     })
                 });
             });
-        };
-    }
-);
+
+
+})

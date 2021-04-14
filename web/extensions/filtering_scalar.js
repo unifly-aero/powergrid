@@ -23,134 +23,131 @@
  *  - callback: callback to invoke when the value of the field changes
  *  - fieldName: 'before' or 'after'
  */
+import override from "../override.js";
+import utils from "../utils.js";
 
-define(['../override', '../utils'], function(override, utils) {
+var defaults = {
+    filterBoxClass: "pg-filter-box",
+    filterClass: "pg-filter",
+    filterInputClass: "pg-filter-input",
+    filterOptionsClass: "pg-filter-optionpane",
+    filterDropDownClass: "pg-filter-dropdown",
+    filterOpenDropDownClass: "pg-filter-dropdown-open",
+    filterFormClass: "pg-filter-form",
+    fieldType: "number"
+};
 
-    "use strict";
+function createEditor(type, options) {
+    return function (column, grid) {
+        var
+            pluginOptions = Object.assign({}, defaults, grid.options.extensions.filtering_scalar.defaults, grid.options.extensions.filtering_scalar.types[type]),
+            filterBox = utils.createElement("div", {"class": pluginOptions.filterBoxClass}),
+            filter = utils.createElement("div", {"class": pluginOptions.filterClass}),
+            select = utils.createElement("div", {"class": pluginOptions.filterInputClass}),
+            listener = new utils.Evented(),
+            filterSettings = {
+                minimum: null,
+                maximum: null,
+                method: 'scalar',
+                dataType: column.type
+            },
+            filterObj = {
+                filterBox: filterBox,
+                on: listener.on,
+                trigger: listener.trigger,
+                valueMatches: function (value, columnSettings) {
+                    return value && (columnSettings.minimum === null || value >= columnSettings.minimum) && (columnSettings.maximum === null || columnSettings.maximum > value);
+                }
+            };
 
-    var defaults = {
-        filterBoxClass: "pg-filter-box",
-        filterClass: "pg-filter",
-        filterInputClass: "pg-filter-input",
-        filterOptionsClass: "pg-filter-optionpane",
-        filterDropDownClass: "pg-filter-dropdown",
-        filterOpenDropDownClass: "pg-filter-dropdown-open",
-        filterFormClass: "pg-filter-form",
-        fieldType: "number"
-    };
+        function format(value) {
+            return grid.getCellTextValue(value, null, column);
+        }
 
-    function createEditor(type, options) {
-        return function(column, grid) {
-            var
-                pluginOptions = Object.assign({}, defaults, grid.options.extensions.filtering_scalar.defaults, grid.options.extensions.filtering_scalar.types[type]),
-                filterBox = utils.createElement("div", {"class": pluginOptions.filterBoxClass}),
-                filter = utils.createElement("div", {"class": pluginOptions.filterClass}),
-                select = utils.createElement("div", {"class": pluginOptions.filterInputClass}),
-                listener = new utils.Evented(),
-                filterSettings = {
-                    minimum: null,
-                    maximum: null,
-                    method: 'scalar',
-                    dataType: column.type
-                },
-                filterObj = {
-                    filterBox: filterBox,
-                    on: listener.on,
-                    trigger : listener.trigger,
-                    valueMatches: function(value, columnSettings) {
-                        return value && (columnSettings.minimum === null || value >= columnSettings.minimum) && (columnSettings.maximum === null || columnSettings.maximum > value);
+        function updateFilter() {
+            if (filterSettings.minimum !== null && filterSettings.maximum !== null) {
+                select.textContent = format(filterSettings.minimum) + " - " + format(filterSettings.maximum);
+            } else if (filterSettings.minimum !== null) {
+                select.textContent = ">= " + format(filterSettings.minimum);
+            } else if (filterSettings.maximum !== null) {
+                select.textContent = "< " + format(filterSettings.maximum);
+            } else {
+                select.textContent = "";
+            }
+            filterObj.trigger("change", (filterSettings.minimum !== null || filterSettings.maximum !== null) ? filterSettings : null);
+        }
+
+        function createField(value, callback, fieldName) {
+            if (pluginOptions.createField) {
+                return pluginOptions.createField(value, type, callback, fieldName);
+            } else {
+                var dateField = utils.createElement("input", {type: (options && options.fieldType || 'number')});
+                var fieldAttribute = options && options.fieldAttribute || 'value';
+                dateField[fieldAttribute] = value;
+                dateField.addEventListener("change", function (event) {
+                    var val = dateField[fieldAttribute];
+                    if (val === "") {
+                        val = null;
                     }
-                };
-
-            function format(value) {
-                return grid.getCellTextValue(value, null, column);
-            }
-
-            function updateFilter() {
-                if(filterSettings.minimum !== null && filterSettings.maximum !== null) {
-                    select.textContent = format(filterSettings.minimum) + " - " + format(filterSettings.maximum);
-                } else if(filterSettings.minimum !== null) {
-                    select.textContent = ">= " + format(filterSettings.minimum);
-                } else if(filterSettings.maximum !== null) {
-                    select.textContent = "< " + format(filterSettings.maximum);
-                } else {
-                    select.textContent = "";
-                }
-                filterObj.trigger("change", (filterSettings.minimum !== null || filterSettings.maximum !== null) ? filterSettings : null);
-            }
-
-            function createField(value, callback, fieldName) {
-                if(pluginOptions.createField) {
-                    return pluginOptions.createField(value, type, callback, fieldName);
-                } else {
-                    var dateField = utils.createElement("input", {type: (options && options.fieldType || 'number')});
-                    var fieldAttribute = options && options.fieldAttribute || 'value';
-                    dateField[fieldAttribute] = value;
-                    dateField.addEventListener("change", function(event) {
-                        var val = dateField[fieldAttribute];
-                        if(val === "") {
-                            val = null;
-                        }
-                        callback(val);
-                    });
-                    return dateField;
-                }
-            }
-
-            function createOptionPane() {
-                var maximumField = createField(filterSettings.maximum, function(value) {
-                        filterSettings.maximum = value;
-                        updateFilter();
-                    }, 'maximum'),
-                    minimumField = createField(filterSettings.minimum, function(value) {
-                        filterSettings.minimum = value;
-                        updateFilter();
-                    }, 'minimum'),
-                    minimumLabel = utils.createElement("label", [utils.createElement("span", options.minimumLabel ? options.minimumLabel : grid.translate('filtering.min')), minimumField]),
-                    maximumLabel = utils.createElement("label", [utils.createElement("span", options.maximumLabel ? options.maximumLabel : grid.translate('filtering.max')), maximumField]),
-                    form = utils.createElement("form", {"class": pluginOptions.filterFormClass},
-                        [ minimumLabel, maximumLabel ]),
-                    pane = utils.createElement("div", {"class": pluginOptions.filterOptionsClass},
-                        [ form ]
-                    ),
-                    optionsDropDown = utils.createElement("div", {"class": pluginOptions.filterDropDownClass}, [pane]);
-                return optionsDropDown;
-            }
-
-            filterBox.addEventListener('click', function() {
-                var optionDropDown = createOptionPane();
-                optionDropDown.classList.add(pluginOptions.filterOpenDropDownClass);
-                document.body.appendChild(optionDropDown);
-                var offset = utils.offset(this);
-                Object.assign(optionDropDown.style, {
-                    left: offset.left + "px",
-                    position: 'absolute',
-                    top: (offset.top + this.offsetHeight) + "px"
+                    callback(val);
                 });
+                return dateField;
+            }
+        }
 
-                optionDropDown.addEventListener("mousedown", function(event) {
-                    event.stopPropagation();
-                });
-                utils.addSingleUseEventListener(document.body, "mousedown", function() {
-                    optionDropDown.remove();
-                });
+        function createOptionPane() {
+            var maximumField = createField(filterSettings.maximum, function (value) {
+                    filterSettings.maximum = value;
+                    updateFilter();
+                }, 'maximum'),
+                minimumField = createField(filterSettings.minimum, function (value) {
+                    filterSettings.minimum = value;
+                    updateFilter();
+                }, 'minimum'),
+                minimumLabel = utils.createElement("label", [utils.createElement("span", options.minimumLabel ? options.minimumLabel : grid.translate('filtering.min')), minimumField]),
+                maximumLabel = utils.createElement("label", [utils.createElement("span", options.maximumLabel ? options.maximumLabel : grid.translate('filtering.max')), maximumField]),
+                form = utils.createElement("form", {"class": pluginOptions.filterFormClass},
+                    [minimumLabel, maximumLabel]),
+                pane = utils.createElement("div", {"class": pluginOptions.filterOptionsClass},
+                    [form]
+                ),
+                optionsDropDown = utils.createElement("div", {"class": pluginOptions.filterDropDownClass}, [pane]);
+            return optionsDropDown;
+        }
+
+        filterBox.addEventListener('click', function () {
+            var optionDropDown = createOptionPane();
+            optionDropDown.classList.add(pluginOptions.filterOpenDropDownClass);
+            document.body.appendChild(optionDropDown);
+            var offset = utils.offset(this);
+            Object.assign(optionDropDown.style, {
+                left: offset.left + "px",
+                position: 'absolute',
+                top: (offset.top + this.offsetHeight) + "px"
             });
 
-            filterBox.appendChild(filter);
-            filterBox.appendChild(select);
+            optionDropDown.addEventListener("mousedown", function (event) {
+                event.stopPropagation();
+            });
+            utils.addSingleUseEventListener(document.body, "mousedown", function () {
+                optionDropDown.remove();
+            });
+        });
 
-            return filterObj;
-        }
+        filterBox.appendChild(filter);
+        filterBox.appendChild(select);
+
+        return filterObj;
     }
+}
 
-    return {
-        init: function(grid, pluginOptions) {
-            for(var type in pluginOptions.types) {
-                grid.options.extensions.filtering.filterFactories[type] = createEditor(type, pluginOptions.types[type]);
-            }
-        },
-        requires: {
-            filtering: true
+export default {
+    init: function (grid, pluginOptions) {
+        for (var type in pluginOptions.types) {
+            grid.options.extensions.filtering.filterFactories[type] = createEditor(type, pluginOptions.types[type]);
         }
-    };
-});
+    },
+    requires: {
+        filtering: true
+    }
+}

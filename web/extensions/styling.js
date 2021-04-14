@@ -20,42 +20,40 @@
  *      }
  * }
  */
-define(['../override'], function(override) {
+import override from "../override.js";
 
-    var whitespace = /\s+/;
+var whitespace = /\s+/;
 
-    return function(grid, pluginOptions) {
-        override(grid, function($super) {
-            return {
-                renderCell: function(record, column, rowIdx, columnIdx) {
-                    var cell = $super.renderCell.apply(this, arguments),
-                        oldClasses, oldClassUnparsed;
-                    var cleanup = pluginOptions.applyClasses(record, column, function(className) {
-                        if(className == oldClassUnparsed) {
-                            return;
-                        }
-                        var currentClasses = cell.className;
-                        if(oldClasses) {
-                            currentClasses = currentClasses.split(whitespace).filter(function(e) {
-                                return oldClasses.indexOf(e) == -1;
-                            }).join(" ");
-                        }
-                        if(className) {
-                            cell.className = currentClasses + " " + className;
-                            oldClasses = className.split(whitespace);
-                        } else {
-                            cell.className = currentClasses;
-                            oldClasses = null;
-                        }
-                        oldClassUnparsed = className;
-                    });
+export default function (grid, pluginOptions) {
+    override(grid, function ($super) {
+        return {
+            renderCell: function (record, column, rowIdx, columnIdx) {
+                var cell = $super.renderCell.apply(this, arguments),
+                    oldClasses, oldClassUnparsed;
+                var cleanup = pluginOptions.applyClasses(record, column, function (className) {
+                    if (className == oldClassUnparsed) {
+                        return;
+                    }
+                    var currentClasses = cell.className;
+                    if (oldClasses) {
+                        currentClasses = currentClasses.split(whitespace).filter(function (e) {
+                            return oldClasses.indexOf(e) == -1;
+                        }).join(" ");
+                    }
+                    if (className) {
+                        cell.className = currentClasses + " " + className;
+                        oldClasses = className.split(whitespace);
+                    } else {
+                        cell.className = currentClasses;
+                        oldClasses = null;
+                    }
+                    oldClassUnparsed = className;
+                });
 
-                    // TODO handle clean up (remove observers when cell is destroyed)
+                // TODO handle clean up (remove observers when cell is destroyed)
 
-                    return cell;
-                }
+                return cell;
             }
-        });
-    }
-
-});
+        }
+    });
+}

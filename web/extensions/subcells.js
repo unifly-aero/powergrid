@@ -19,86 +19,90 @@
  * Each subcell is a div with class "pg-subcell". Its height is fixed using inline style to the one provided in the
  * plugin options.
  */
-define(['../override', '../utils'], function(override, utils) {
-    return {
-        conflictsWith: ['variablerowheight'],
+import override from "../override.js";
+import utils from "../utils.js";
 
-        init: function(grid, pluginOptions) {
-            var MULTIROWKEY = /^(.*)\[\*\]\.(.*)$/,
-                subcelltemplate = utils.createElement("div", {'class': 'pg-subcell', 'style': 'height: ' + pluginOptions.cellheight + 'px'});
+export default {
+    conflictsWith: ['variablerowheight'],
 
-            override(grid, function($super) {
-                return {
-                    init: function() {
-                        $super.init();
+    init: function (grid, pluginOptions) {
+        var MULTIROWKEY = /^(.*)\[\*\]\.(.*)$/,
+            subcelltemplate = utils.createElement("div", {
+                'class': 'pg-subcell',
+                'style': 'height: ' + pluginOptions.cellheight + 'px'
+            });
 
-                        // Parse the keys and store the result
-                        this.options.columns.forEach(function(column, index) {
-                            column.keySubrowDecomp = column.key.match(MULTIROWKEY);
-                        });
-                    },
+        override(grid, function ($super) {
+            return {
+                init: function () {
+                    $super.init();
 
-                    renderCellContent: function(record, column) {
-                        if(column.keySubrowDecomp) {
-                            var collectionKey = column.keySubrowDecomp[1],
-                                childKey = column.keySubrowDecomp[2],
-                                collection = utils.getValue(record, collectionKey),
-                                fragment = document.createDocumentFragment();
+                    // Parse the keys and store the result
+                    this.options.columns.forEach(function (column, index) {
+                        column.keySubrowDecomp = column.key.match(MULTIROWKEY);
+                    });
+                },
 
-                            if(collection) {
-                                for (var x = 0, l = collection.length; x < l; x++) {
-                                    var subrowvalue = utils.getValue(collection[x], childKey),
-                                        subcellcontent = this.renderCellValue(record, column, this.getCellTextValue(subrowvalue, record, column)),
-                                        subcell = subcelltemplate.cloneNode();
-                                    subcell.appendChild(subcellcontent)
-                                    fragment.appendChild(subcell);
+                renderCellContent: function (record, column) {
+                    if (column.keySubrowDecomp) {
+                        var collectionKey = column.keySubrowDecomp[1],
+                            childKey = column.keySubrowDecomp[2],
+                            collection = utils.getValue(record, collectionKey),
+                            fragment = document.createDocumentFragment();
+
+                        if (collection) {
+                            for (var x = 0, l = collection.length; x < l; x++) {
+                                var subrowvalue = utils.getValue(collection[x], childKey),
+                                    subcellcontent = this.renderCellValue(record, column, this.getCellTextValue(subrowvalue, record, column)),
+                                    subcell = subcelltemplate.cloneNode();
+                                subcell.appendChild(subcellcontent)
+                                fragment.appendChild(subcell);
+                            }
+                        }
+
+                        return fragment;
+                    } else {
+                        return $super.renderCellContent(record, column);
+                    }
+                },
+
+                rowHeight: function (start, end) {
+                    function height(count) {
+                        return pluginOptions.cellpadding + pluginOptions.cellheight * count;
+                    }
+
+                    var h;
+                    if (end === undefined) {
+                        h = height(this.subcells.count(this.getDataSync(start, start + 1)[0]));
+                    } else {
+                        h = this.getDataSync(start, end).reduce(function (total, record) {
+                            return total + height(grid.subcells.count(record));
+                        }, 0);
+                    }
+                    return h;
+                },
+
+                subcells: {
+                    count: function (record, column) {
+                        if (arguments.length == 1) {
+                            // max for all columns
+                            var alreadydone = {};
+                            return grid.options.columns.reduce(function (count, column) {
+                                if (column.keySubrowDecomp && !alreadydone[column.keySubrowDecomp[1]]) {
+                                    alreadydone[column.keySubrowDecomp[1]] = true;
+                                    return Math.max(grid.subcells.count(record, column), count);
+                                } else {
+                                    return count;
                                 }
-                            }
-
-                            return fragment;
-                        } else {
-                            return $super.renderCellContent(record, column);
+                            }, 1);
                         }
-                    },
-
-                    rowHeight: function(start, end) {
-                        function height(count) {
-                            return pluginOptions.cellpadding + pluginOptions.cellheight * count;
-                        }
-                        var h;
-                        if(end === undefined) {
-                            h = height(this.subcells.count(this.getDataSync(start, start+1)[0]));
-                        } else {
-                            h = this.getDataSync(start, end).reduce(function(total, record) {
-                                return total + height(grid.subcells.count(record));
-                            }, 0);
-                        }
-                        return h;
-                    },
-
-                    subcells: {
-                        count: function(record, column) {
-                            if(arguments.length == 1) {
-                                // max for all columns
-                                var alreadydone = {};
-                                return grid.options.columns.reduce(function(count, column) {
-                                    if(column.keySubrowDecomp && !alreadydone[column.keySubrowDecomp[1]]) {
-                                        alreadydone[column.keySubrowDecomp[1]] = true;
-                                        return Math.max(grid.subcells.count(record, column), count);
-                                    } else {
-                                        return count;
-                                    }
-                                }, 1);
-                            }
-                            if(column.keySubrowDecomp) {
-                                var collection = utils.getValue(record, column.keySubrowDecomp[1]);
-                                return collection ? collection.length : 0;
-                            }
+                        if (column.keySubrowDecomp) {
+                            var collection = utils.getValue(record, column.keySubrowDecomp[1]);
+                            return collection ? collection.length : 0;
                         }
                     }
-                };
-            })
-        }
+                }
+            };
+        })
     }
-
-});
+}

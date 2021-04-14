@@ -1,4 +1,4 @@
-define(['jquery'], function(jqlib) {
+define(['jquerydist'], function(jqlib) {
     if(window.$) return window.$;
     return jqlib;
 }); 

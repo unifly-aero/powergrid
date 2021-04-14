@@ -90,7 +90,8 @@ export interface PowerGridExtensionOptions<T extends RecordType> {
     subview?: {
         hasSubView?():boolean,
         prerender?: boolean,
-        renderSubView(grid: PowerGrid<T>, record: T, target: HTMLElement): Promise<void>
+        renderSubView(grid: PowerGrid<T>, record: T, target: HTMLElement): Promise<void>,
+        reopenOnReload?: boolean
     },
     summarize?: {
         summaryFactory(): RecordType
@@ -200,7 +201,7 @@ export class PowerGrid<T extends RecordType> extends Evented<{
     updateRows(records: T[]): void;
     afterCellRendered(record: T, column: PowerGridColumnDefinition<keyof T>, cell: Node): void;
     getRecordById(id: IdOf<T>): T;
-    findRow(id: IdOf<T>): JQuery;
+    findRow(id: IdOf<T>): Node[];
     renderCellValue<K extends keyof T>(record: T, column: PowerGridColumnDefinition<K>, value: T[K]): Node;
     getCellTextValue(value: any, record: T, column: PowerGridColumnDefinition<keyof T>): string;
     getVisibleColumns(): PowerGridColumnDefinition<keyof T>[];

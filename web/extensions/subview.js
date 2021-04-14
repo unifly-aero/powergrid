@@ -8,7 +8,9 @@ export default {
             var subviewsExpanded = {};
 
             grid.dataSource.on("dataloaded", function () {
-                subviewsExpanded = {};
+                if(pluginOptions.reopenOnReload !== true) {
+                    subviewsExpanded = {};
+                }
                 subViewHeights = [];
             });
 
@@ -186,10 +188,16 @@ export default {
 
                         for (var id in subviewsExpanded) {
                             if (subviewsExpanded[id]) {
-                                var record = grid.getRecordById(id);
-                                var idx = grid.indexOfRow(record);
-                                if (idx >= start && idx < end) {
-                                    baseHeight += subViewHeights[record.id];
+                                try {
+                                    var record = grid.getRecordById(id);
+                                    var idx = grid.indexOfRow(record);
+                                    if (idx >= start && idx < end) {
+                                        baseHeight += subViewHeights[record.id];
+                                    }
+                                } catch (e) {
+                                    // Record was not available yet, so ignore its subview for now.
+                                    // When the row becomes available and is rendered, the height
+                                    // will be adjusted
                                 }
                             }
                         }

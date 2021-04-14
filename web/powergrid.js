@@ -41,17 +41,23 @@ const debug = true;
 
 function determineScrollBarSize() {
     // Creates a dummy div just to measure the scrollbar sizes, then deletes it when it's no longer necessary.
-    const dummy = $("<div style='overflow: scroll; width: 100px; height: 100px; visibility: hidden; opacity: 0'></div>");
-    const filler = $("<div style='width:100%; height: 100%;'></div>");
-    dummy.append(filler);
-    $('body').append(dummy);
+    const filler = utils.createElement("div", {
+        style: "width:100%; height: 100%;"
+    })
+    const dummy = utils.createElement("div", {
+            style: "overflow: scroll; width: 100px; height: 100px; visibility: hidden; opacity: 0"
+        },
+        [
+            filler
+        ]);
+    document.body.appendChild(dummy);
 
     const size = {
-        height: dummy.height() - filler.height(),
-        width: dummy.width() - filler.width()
-    };
+        height: dummy.offsetHeight - filler.offsetHeight,
+        width: dummy.offsetWidth - filler.offsetWidth
+    }
 
-    dummy.remove();
+    document.body.removeChild(dummy);
 
     return size;
 }

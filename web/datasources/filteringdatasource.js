@@ -32,6 +32,7 @@ class FilteringDataSource {
 
         var self = this;
         this.delegate = delegate;
+        this.view = null;
 
         delegate.on("dataloaded", function () {
             self.reload();
@@ -56,8 +57,6 @@ class FilteringDataSource {
 
         utils.passthrough(this, delegate, ['sort', 'commitRow', 'startEdit', 'rollbackRow', 'replace']);
     }
-
-    view = null;
 
     isReady() {
         return this.view != null;

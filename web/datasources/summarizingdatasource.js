@@ -8,6 +8,7 @@ class SummarizingDataSource {
 
         var self = this;
         this.delegate = delegate;
+        this.view = null;
         this.summaryFactory = summaryFactory;
 
         delegate.on("dataloaded", function () {
@@ -20,8 +21,6 @@ class SummarizingDataSource {
 
         utils.passthrough(this, delegate, ['sort', 'group', 'applyFilter', 'commitRow', 'startEdit', 'rollbackRow', 'replace']);
     }
-
-    view = null;
 
     isReady() {
         return this.delegate.isReady();

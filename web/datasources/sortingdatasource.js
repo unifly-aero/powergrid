@@ -6,6 +6,7 @@ class SortingDataSource {
 
         var self = this;
         this.delegate = delegate;
+        this.view = null;
 
         if (typeof delegate.applyFilter === 'function') {
             this.applyFilter = delegate.applyFilter.bind(delegate);
@@ -39,8 +40,6 @@ class SortingDataSource {
 
         utils.passthrough(this, delegate, ['commitRow', 'startEdit', 'rollbackRow', 'replace']);
     }
-
-    view = null;
 
     isReady() {
         return this.view != null;

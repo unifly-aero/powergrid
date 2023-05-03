@@ -99,6 +99,18 @@ export default {
                     });
                 },
 
+                destroy: function() {
+                    if (pluginOptions.grouper) {
+                        var grouper = this.grouping.grouper;
+                        grouper.off();
+                        this.grouping.groupColumns().forEach(function (column) {
+                            var indicator = grouper.find(".pg-group-indicator[data-group-key='" + column.key + "']");
+                            indicator.remove();
+                        });
+                    }
+                    $super.destroy();
+                },
+
                 headerContainerHeight: function () {
                     return $super.headerContainerHeight() + (this.target.find(".pg-grouper").outerHeight() || 0);
                 },

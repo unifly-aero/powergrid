@@ -87,6 +87,13 @@ function normalizeOptions(options) {
 function Evented() {
     var handlers = {};
     /**
+     * Removes all registered event handlers
+     */
+    this.clearHandlers = function() {
+        handlers = {};
+    }
+
+    /**
      * Registers an event handler. Use the 'cancel' function in the returned object to remove the event handler.
      * @function EventSource#on
      * @param eventName

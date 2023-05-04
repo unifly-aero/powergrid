@@ -402,6 +402,7 @@ class PowerGrid {
      */
     destroy() {
         this.target.empty();
+        this.options.dataSource.clearHandlers();
     }
 
     /**

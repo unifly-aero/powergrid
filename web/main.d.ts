@@ -1,4 +1,5 @@
 export class Evented<T extends {[eventname: string]: any}> {
+    clearHandlers(): void;
     trigger<E extends keyof(T)>(event: keyof(T), ...args: T[E]): void;
     on<E extends keyof(T)>(event: E, callback: (event: keyof(T), ...args: T[E]) => void);
 }

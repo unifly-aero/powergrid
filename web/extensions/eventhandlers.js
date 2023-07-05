@@ -12,7 +12,7 @@ export default function (grid, pluginOptions) {
                         var row = event.target.closest("[data-row-id]");
                         if (row) {
                             var rowId = row.getAttribute("data-row-id");
-                            pluginOptions.row.click(rowId);
+                            pluginOptions.row.click(rowId, event);
                         }
                     });
                 }

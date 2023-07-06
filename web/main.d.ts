@@ -108,7 +108,7 @@ export interface PowerGridExtensionOptions<T extends RecordType> {
     },
     eventhandlers: {
         row?: {
-            click?(rowId: IdOf<T>): boolean | undefined;
+            click?(rowId: IdOf<T>, event: MouseEvent): boolean | undefined;
         }
     }
 }

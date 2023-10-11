@@ -249,6 +249,7 @@
     font-style: italic;
     font-size: 9pt;
     padding-left: 4px;
+    position: absolute !important;
 }
 
 .pg-grouper > .pg-grouper-placeholder:not(:only-child) {

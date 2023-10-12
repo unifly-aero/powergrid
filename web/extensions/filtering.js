@@ -22,11 +22,12 @@ export default {
                         event.stopPropagation();
                     });
 
+                    var filterFunction = columnSettings && grid.filtering.rowMatches.bind(grid.filtering, columnSettings);
                     if (grid.dataSource.isReady()) {
-                        grid.dataSource.applyFilter(columnSettings);
+                        grid.dataSource.applyFilter(columnSettings, filterFunction);
                     } else {
                         grid.dataSource.one('dataloaded', function () {
-                            grid.dataSource.applyFilter(columnSettings);
+                            grid.dataSource.applyFilter(columnSettings, filterFunction);
                         });
                     }
                 },

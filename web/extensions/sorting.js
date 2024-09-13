@@ -58,9 +58,8 @@ export default {
                         sortColumns = [{
                             key: key,
                             direction: direction
-                        }].concat(sortColumns.filter(function (e) {
-                            return e.key !== key;
-                        }));
+                        }];
+                        
                         grid.sorting.sort(sortColumns);
                         grid.saveSetting("sorting", sortColumns);
 

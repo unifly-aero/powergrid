@@ -157,7 +157,8 @@ export interface ScalarFilterSetting<T> extends FilterSetting {
     minimum: T | null,
     maximum: T | null,
     method: 'scalar',
-    dataType: 'number'|'date'|'datetime'
+    dataType: 'number'|'date'|'datetime',
+    allowEmptyValue: boolean
 }
 
 export type FilterSettings<T> = {[key in keyof(T)]?: FilterSetting};

@@ -49,13 +49,17 @@ function createEditor(type, options) {
                 minimum: null,
                 maximum: null,
                 method: 'scalar',
-                dataType: column.type
+                dataType: column.type,
+                allowEmptyValue: false
             },
             filterObj = {
                 filterBox: filterBox,
                 on: listener.on,
                 trigger: listener.trigger,
                 valueMatches: function (value, columnSettings) {
+                    if (columnSettings.allowEmptyValue && !value) {
+                        return true;
+                    }
                     return value && (columnSettings.minimum === null || value >= columnSettings.minimum) && (columnSettings.maximum === null || columnSettings.maximum > value);
                 }
             };

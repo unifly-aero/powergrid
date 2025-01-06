@@ -144,9 +144,10 @@ export interface FilterSetting {
 }
 
 export interface TextFilterSetting extends FilterSetting {
-    value: string,
+    value?: string,
     type: "inclusive"|"exclusive",
-    method: "beginsWith"|"endsWith"|"contains"
+    method: "beginsWith"|"endsWith"|"contains",
+    existenceCheck?: "exists"|"doesNotExist"
 }
 
 export interface OptionFilterSetting extends FilterSetting {

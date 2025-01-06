@@ -117,6 +117,13 @@ export default {
                                 value: filterValue,
                                 valueMatches: function (value, columnSettings, column) {
                                     var hasValue = value !== undefined && value !== null && value !== "";
+
+                                    if ('exists' === columnSettings.existenceCheck) {
+                                        return hasValue;
+                                    } else if ('doesNotExist' === columnSettings.existenceCheck) {
+                                        return !hasValue;
+                                    }
+
                                     switch (columnSettings.method) {
                                         case "contains":
                                             return (!columnSettings.value || hasValue && (value.toLocaleUpperCase()).indexOf(columnSettings.value.toLocaleUpperCase()) > -1);

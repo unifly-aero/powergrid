@@ -124,6 +124,10 @@ export default {
                                         return !hasValue;
                                     }
 
+                                    if (typeof value !== 'string') {
+                                        value = value?.toString();
+                                    }
+
                                     switch (columnSettings.method) {
                                         case "contains":
                                             return (!columnSettings.value || hasValue && (value.toLocaleUpperCase()).indexOf(columnSettings.value.toLocaleUpperCase()) > -1);

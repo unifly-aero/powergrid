@@ -1,12 +1,15 @@
 import utils from "../utils.js";
 
 class BufferedAsyncTreeSource {
-    constructor(delegate) {
+    constructor(delegate, options) {
         utils.Evented.apply(this);
 
         this.delegate = delegate;
 
-        this.windowBuffer = 50; // number of records to fetch ahead. effective excess fetching could be twice this in certain cases
+         // number of records to fetch ahead. effective excess fetching could be twice this in certain cases
+        this.windowBuffer = options && options.windowBuffer
+            ? options.windowBuffer
+            : 50;
 
         var self = this;
 

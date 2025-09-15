@@ -385,8 +385,12 @@ export class AsyncTreeGridDataSource<T extends RecordType, D extends TreeSource<
     setValue: D["setValue"];
 }
 
+export interface BufferedAsyncTreeSourceOptions {
+    windowBuffer?: number;
+}
+
 export class BufferedAsyncTreeSource<T extends RecordType, D extends TreeSource<T>> implements TreeSource<T> {
-    constructor(treeSource: D);
+    constructor(treeSource: D, options?: BufferedAsyncTreeSourceOptions);
     reset(): void;
     isReady(): boolean;
     getRecordCount(): number | Promise<number>;

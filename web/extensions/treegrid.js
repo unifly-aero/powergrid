@@ -32,7 +32,7 @@ export default {
                     });
 
                     treeDS.on("treetoggled", function (ui) {
-                        grid.target.find(".pg-row[data-row-id='" + ui.id + "']").toggleClass("pg-tree-expanded", ui.state);
+                        grid.target.find(".pg-row[data-row-id='" + CSS.escape(ui.id) + "']").toggleClass("pg-tree-expanded", ui.state);
                     });
                 },
 

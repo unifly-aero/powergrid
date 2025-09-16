@@ -18,7 +18,7 @@ export default function (grid, pluginOptions) {
                     if (this.selectedElements) {
                         this.selectedElements.removeClass("pg-selected");
                     }
-                    this.selectedElements = grid.container.find("> .pg-rowgroup > .pg-container > .pg-row[data-row-id='" + id + "']");
+                    this.selectedElements = grid.container.find("> .pg-rowgroup > .pg-container > .pg-row[data-row-id='" + CSS.escape(id) + "']");
                     this.selectedElements.addClass("pg-selected");
 
                     grid.trigger("rowselected", id);

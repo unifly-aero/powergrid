@@ -91,7 +91,7 @@ export default {
                     },
 
                     subview: function (id) {
-                        return grid.container.find("> .pg-rowgroup > .pg-container > .pg-row.pg-row-has-subview[data-row-id='" + id + "'] > .pg-subview-container > .pg-subview");
+                        return grid.container.find("> .pg-rowgroup > .pg-container > .pg-row.pg-row-has-subview[data-row-id='" + CSS.escape(id) + "'] > .pg-subview-container > .pg-subview");
                     }
                 },
 

@@ -1769,7 +1769,7 @@ class PowerGrid {
      * @returns {jQuery}
      */
     findRow(rowId) {
-        return this.container.find("> .pg-rowgroup > .pg-container > .pg-row[data-row-id='" + rowId + "']");
+        return this.container.find("> .pg-rowgroup > .pg-container > .pg-row[data-row-id='" + CSS.escape(rowId) + "']");
     }
 
     /**
@@ -1856,7 +1856,7 @@ class PowerGrid {
      * @returns {Node}
      */
     getCellFor(rowId, key) {
-        return this.container.find(".pg-row[data-row-id='" + rowId + "'] > .pg-cell[data-column-key='" + key + "']");
+        return this.container.find(".pg-row[data-row-id='" + CSS.escape(rowId) + "'] > .pg-cell[data-column-key='" + key + "']");
     }
 
     /**

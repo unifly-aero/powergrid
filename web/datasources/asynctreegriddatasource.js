@@ -290,8 +290,7 @@ class AsyncTreeGridDataSource {
 
             if (start !== undefined) {
                 var rows = self.flattenShadowSubTree(shadowNode);
-
-                self.view.splice.apply(self.view, [start + 1, 0].concat(rows));
+                self.view = self.insertArrayInto(self.view, start, rows);
 
                 self.trigger('rowsadded', {start: start + 1, end: start + 1 + rows.length});
             }
@@ -391,17 +390,28 @@ class AsyncTreeGridDataSource {
         });
     }
 
+    insertArrayInto(arr, index, inserted) {
+        return arr.slice(0, index).concat(inserted).concat(arr.slice(index));
+    }
+
     flattenShadowSubTree(shadowNode) {
-        if (shadowNode.expanded) {
-            var flat = [];
-            for (var x = 0, l = shadowNode.children.length; x < l; x++) {
-                flat.push(shadowNode.children[x]);
-                flat = flat.concat(this.flattenShadowSubTree(shadowNode.children[x]));
+        var flat = [];
+
+        function fn(node) {
+            for (var i = 0, n = node.children.length; i < n; i++) {
+                var childNode = node.children[i];
+                flat.push(childNode);
+                if (childNode.expanded) {
+                    fn(childNode);
+                }
             }
-            return flat;
-        } else {
-            return [];
         }
+
+        if (shadowNode.expanded) {
+            fn(shadowNode);
+        }
+
+        return flat;
     }
 
     hasChildren(row) {

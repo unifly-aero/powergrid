@@ -290,7 +290,7 @@ class AsyncTreeGridDataSource {
 
             if (start !== undefined) {
                 var rows = self.flattenShadowSubTree(shadowNode);
-                self.view = self.insertArrayInto(self.view, start, rows);
+                self.view = self.insertArrayInto(self.view, start + 1, rows);
 
                 self.trigger('rowsadded', {start: start + 1, end: start + 1 + rows.length});
             }
